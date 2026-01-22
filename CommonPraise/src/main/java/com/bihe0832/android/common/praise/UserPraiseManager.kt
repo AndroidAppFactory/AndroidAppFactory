@@ -40,15 +40,19 @@ object UserPraiseManager {
     init {
         //1_3_3_2_这是一个测试
         val praiseConfig = Config.readConfig(KEY_PRAISE_DONE, "")
-        praiseConfig.split("_".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray().let { temp ->
-            mNeedShow = ConvertUtils.getSafeValueFromArray(temp, 0, "") == "1"
-            mAppUseTimeThreshold = ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 1, "1"))
-            mAppUseDayThreshold = ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 2, "1"))
-            mShowInterval = ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 3, "2"))
-            mHeadTitle = ConvertUtils.getSafeValueFromArray(temp, 4, "")
-            mMarketPackageName = APPMarketHelper.getFirstMarket(ZixieContext.applicationContext)
-            mInit = true
-        }
+        praiseConfig.split("_".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+            .let { temp ->
+                mNeedShow = ConvertUtils.getSafeValueFromArray(temp, 0, "") == "1"
+                mAppUseTimeThreshold =
+                    ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 1, "1"))
+                mAppUseDayThreshold =
+                    ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 2, "1"))
+                mShowInterval =
+                    ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 3, "2"))
+                mHeadTitle = ConvertUtils.getSafeValueFromArray(temp, 4, "")
+                mMarketPackageName = APPMarketHelper.getFirstMarket(ZixieContext.applicationContext)
+                mInit = true
+            }
     }
 
     fun canShowUserPraiseDialog(): Boolean {
@@ -77,9 +81,12 @@ object UserPraiseManager {
             return false
         }
 
-        if (System.currentTimeMillis() - Config.readConfig(KEY_PRAISE_LAST_SHOW_TIME, 0L) < TimeUnit.DAYS.toMillis(
-                    mShowInterval.toLong()
-                )
+        if (System.currentTimeMillis() - Config.readConfig(
+                KEY_PRAISE_LAST_SHOW_TIME,
+                0L
+            ) < TimeUnit.DAYS.toMillis(
+                mShowInterval.toLong()
+            )
         ) {
             return false
         }
@@ -91,13 +98,21 @@ object UserPraiseManager {
         mMarketPackageName = markName;
     }
 
+    fun launchMarket(activity: Activity): Boolean {
+        return APPMarketHelper.launchMarket(activity, mMarketPackageName, activity.packageName)
+    }
+
     fun showUserPraiseDialog(activity: Activity, feedbackRouter: String) {
         showUserPraiseDialog(activity, feedbackRouter) {
-            APPMarketHelper.launchMarket(activity, mMarketPackageName, activity.packageName)
+            launchMarket(activity)
         }
     }
 
-    fun showUserPraiseDialog(activity: Activity, feedbackRouter: String, successAction: () -> Unit) {
+    fun showUserPraiseDialog(
+        activity: Activity,
+        feedbackRouter: String,
+        successAction: () -> Unit
+    ) {
         Config.writeConfig(KEY_PRAISE_LAST_SHOW_TIME, System.currentTimeMillis())
         UserPraiseDialog(activity, feedbackRouter).apply {
             if (mHeadTitle.isNotEmpty()) {
