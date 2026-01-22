@@ -98,6 +98,11 @@ object UserPraiseManager {
         mMarketPackageName = markName;
     }
 
+    fun setMarketPackageName(markName: List<String>) {
+        mMarketPackageName =
+            APPMarketHelper.getFirstMarket(ZixieContext.applicationContext, markName)
+    }
+
     fun launchMarket(activity: Activity): Boolean {
         return APPMarketHelper.launchMarket(activity, mMarketPackageName, activity.packageName)
     }

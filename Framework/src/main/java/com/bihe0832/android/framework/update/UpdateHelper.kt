@@ -112,9 +112,10 @@ object UpdateHelper {
             activity.packageName,
             versionCode,
             canCancel,
-            true,
-            dialogListenerWhenDownload,
-            downloadListener
+            shouldFirstDownload = true,
+            downloadMobile = true,
+            listener = dialogListenerWhenDownload,
+            downloadListener = downloadListener
         )
     }
 

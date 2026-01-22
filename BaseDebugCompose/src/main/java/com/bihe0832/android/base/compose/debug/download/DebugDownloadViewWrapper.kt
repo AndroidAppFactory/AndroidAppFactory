@@ -117,7 +117,7 @@ fun startDownload(context: Context, type: Int, url: String, md5: String) {
             }
         }
     }.let {
-        DownloadFileUtils.startDownload(context, it, it.shouldForceReDownload())
+        DownloadFileUtils.startDownload(context, it)
     }
 }
 
@@ -203,7 +203,7 @@ fun testDownloadProcess(activity: Activity) {
         canCancel = true,
         forceDownloadNew = false,
         useMobile = true,
-        forceDownload = true,
+        shouldFirstDownload = true,
         needRecord = false,
         listener = object : OnDialogListener {
             override fun onPositiveClick() {
