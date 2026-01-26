@@ -3,7 +3,7 @@
 
     <!-- 各个控制控件的通用颜色 -->
     <!-- 有背景时的背景色 -->
-    <color name="com_bihe0832_select_bg">@color/md_theme_surface</color>
+    <color name="com_bihe0832_select_bg">@color/md_theme_TertiaryContainer</color>
     <!-- 控件的默认颜色 -->
     <color name="com_bihe0832_select_default">@color/md_theme_onTertiaryContainer</color>
     <!--  控件被选中时的颜色 -->
