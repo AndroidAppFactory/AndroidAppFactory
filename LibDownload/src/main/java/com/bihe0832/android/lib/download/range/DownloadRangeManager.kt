@@ -161,7 +161,7 @@ object DownloadRangeManager : DownloadManager() {
             }
             info.realURL = realURL
             info.rangeStart = rangeStart
-            info.contentLength = rangeLength
+            info.contentLength = serverContentLength
             info.localStart = localStart
             info.isDownloadWhenAdd = downloadAfterAdd
             ZLog.d(TAG, "获取文件长度 保存信息:${info}")
