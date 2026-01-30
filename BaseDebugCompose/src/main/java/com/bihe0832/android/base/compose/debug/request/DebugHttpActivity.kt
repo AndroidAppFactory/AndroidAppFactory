@@ -24,7 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.bihe0832.android.base.compose.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.compose.debug.request.basic.BasicPostRequest
-import com.bihe0832.android.base.compose.debug.request.okhttp.debugOKHttp
+import com.bihe0832.android.base.compose.debug.request.okhttp.debugOKHttp1
+import com.bihe0832.android.base.compose.debug.request.okhttp.debugOKHttp2
 import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.file.AAFFileWrapper
@@ -72,8 +73,10 @@ class DebugHttpActivity : DebugBaseComposeActivity() {
         val resultText by resultText
 
         val buttonList = listOf(
-            "使用OkHttp库发送POST请求" to {
-                debugOKHttp()
+            "使用OkHttp库发送POST请求1" to {
+                debugOKHttp1()
+            }, "使用OkHttp库发送POST请求2" to {
+                debugOKHttp2()
             },
             "使用Basic库发送GET请求" to {
                 sendGetBasicRequest(inputText)

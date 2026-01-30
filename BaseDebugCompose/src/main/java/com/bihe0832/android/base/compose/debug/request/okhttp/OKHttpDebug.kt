@@ -12,6 +12,8 @@ import com.bihe0832.android.app.api.call.AAFNetworkCallback
 import com.bihe0832.android.app.api.call.BaseResponse
 import com.bihe0832.android.base.compose.debug.request.Constants
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -19,6 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 /**
@@ -40,26 +43,45 @@ interface ApiService {
 //        )
     ): Call<BaseResponse>
 
+    @POST("/AndroidHTTP/post11.php")
+    fun getData2(
+        @Body body: RequestBody,
+//        @Header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DELAY) delay: Int = 300,
+//        @Header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DATA) result: String = URLUtils.encode(
+//            "{\"code\":100,\"message\":\"sdfsfsf\"}"
+//        )
+    ): Call<BaseResponse>
+
     @POST("/article/query/0/json")
     fun getNewData(@Body body: RequestBody): Call<ResponseBody>
 }
 
-fun debugOKHttp() {
+private val mApiServiceForConfig: ApiService =
+    AAFNetWorkApi.getRetrofit(Constants.HTTP_DOMAIN).create(ApiService::class.java)
+
+fun debugOKHttp1() {
     ThreadManager.getInstance().start {
 
-        AAFNetWorkApi
-            .getRetrofit(Constants.HTTP_DOMAIN)
-            .create(ApiService::class.java)
-//                .getData(AAFNetWorkApi.getRequestBody()).apply {
-//
-//                }.enqueue(ResultCall<ResponseBody>())
-            .getData1(AAFNetWorkApi.getRequestBody()).apply {
+        mApiServiceForConfig.getData1(AAFNetWorkApi.getRequestBody()).apply {
 
-            }.enqueue(object : AAFNetworkCallback<BaseResponse>() {
-                override fun onSuccess(result: BaseResponse) {
-                    ZLog.d("NetworkResult", result.toString())
-                }
-            })
+        }.enqueue(object : AAFNetworkCallback<BaseResponse>() {
+            override fun onSuccess(result: BaseResponse) {
+                ZLog.d("NetworkResult", result.toString())
+            }
+        })
+    }
+}
+
+fun debugOKHttp2() {
+    ThreadManager.getInstance().start {
+
+        mApiServiceForConfig.getData2(AAFNetWorkApi.getRequestBody()).apply {
+
+        }.enqueue(object : AAFNetworkCallback<BaseResponse>() {
+            override fun onSuccess(result: BaseResponse) {
+                ZLog.d("NetworkResult", result.toString())
+            }
+        })
     }
 }
 
