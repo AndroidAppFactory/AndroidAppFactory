@@ -45,12 +45,12 @@ class RequestRecord(
     override fun toString(): String {
         val contentData = getRecordContentData()
         val traceTimeRecord = getRecordTraceTimeData()
-        
+
         val requestCost = traceTimeRecord.getEventCostTime(
             RequestTraceTimeRecord.EVENT_CALL_START,
             RequestTraceTimeRecord.EVENT_REQUEST_BODY_END
         )
-        
+
         val totalCost = traceTimeRecord.getEventCostTime(
             RequestTraceTimeRecord.EVENT_CALL_START,
             RequestTraceTimeRecord.EVENT_CALL_END
@@ -61,16 +61,22 @@ class RequestRecord(
                 RequestTraceTimeRecord.EVENT_RESPONSE_BODY_END
             )
         }
-        
+
         // 检测是否为 Mock 请求（没有经过网络拦截器，contentData 内容为空）
-        val isMockRequest = contentData.url.isEmpty() && contentData.requestHeadersMap == null
-        
-        // 使用 RequestRecord 的 url 和 method 填充 contentData（Mock 请求时 contentData 为空）
+        val isMockRequest =
+            contentData.url.isEmpty() && contentData.requestHeadersMap == null && traceTimeRecord.errorMsg.isNullOrEmpty()
+
         if (contentData.url.isEmpty()) {
             contentData.url = url
+            contentData.method = method
+        }
+        if (isMockRequest) {
             contentData.method = "AAFMock"
         }
-        
+        if (traceTimeRecord.errorMsg.isNotEmpty()) {
+            contentData.errorMsg += "\n\n${traceTimeRecord.errorMsg}\n"
+        }
+
         return contentData.toLogString(
             traceRequestId = traceRequestId,
             requestCostMs = requestCost,

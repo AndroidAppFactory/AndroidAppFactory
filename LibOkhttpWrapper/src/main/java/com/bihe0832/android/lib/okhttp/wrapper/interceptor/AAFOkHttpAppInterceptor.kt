@@ -48,9 +48,15 @@ class AAFOkHttpAppInterceptor(
         val originalRequest = chain.request()
         val requestId = generateRequestID()
         ZLog.d(OkHttpWrapper.TAG, "AAFOkHttpAppInterceptor Request ID: $requestId")
-        val newRequest = originalRequest.newBuilder()
+        var requestBuilder = originalRequest.newBuilder()
             .tag(AAFRequestContext::class.java, AAFRequestContext(requestId))
-            .header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId).build()
+            .header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId)
+        // 调试模式下禁用 gzip 压缩，方便查看原始响应内容
+        if (isDebug) {
+            requestBuilder = requestBuilder.header("Accept-Encoding", "identity")
+        }
+        
+        val newRequest = requestBuilder.build()
         if (isDebug) {
             val delayHeader =
                 originalRequest.header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DELAY)

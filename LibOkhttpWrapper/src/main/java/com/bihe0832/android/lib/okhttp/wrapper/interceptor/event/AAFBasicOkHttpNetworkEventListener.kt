@@ -158,6 +158,10 @@ open class AAFBasicOkHttpNetworkEventListener(
         ioe: IOException
     ) {
         super.connectFailed(call, inetSocketAddress, proxy, protocol, ioe)
+        saveEvent(RequestTraceTimeRecord.EVENT_CONNECT_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_BODY_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_CALL_END)
+        mRequestTraceTimeRecord?.errorMsg = ioe.toString()
         listener?.connectFailed(call, inetSocketAddress, proxy, protocol, ioe)
         doLogAction()
     }
@@ -191,6 +195,8 @@ open class AAFBasicOkHttpNetworkEventListener(
 
     override fun callFailed(call: Call, ioe: IOException) {
         super.callFailed(call, ioe)
+        saveEvent(RequestTraceTimeRecord.EVENT_CALL_END)
+        mRequestTraceTimeRecord?.errorMsg = ioe.toString()
         listener?.callFailed(call, ioe)
         doLogAction()
     }

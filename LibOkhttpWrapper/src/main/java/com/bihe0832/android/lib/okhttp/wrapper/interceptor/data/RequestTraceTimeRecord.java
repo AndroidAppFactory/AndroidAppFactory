@@ -45,11 +45,12 @@ public class RequestTraceTimeRecord implements Serializable {
     public static String TRACE_NAME_RESPONSE_HEADERS = "Response Headers";
     public static String TRACE_NAME_RESPONSE_BODY = "Response Body";
 
-    private String mTraceRequestId;
-    private String mContentRequestId;
-    private String mUrl;
-    private Map<String, Long> mNetworkEventTimeMap = new HashMap<>();
-    private Map<String, Long> mTtraceDataItemList = new HashMap<>();
+    private String mTraceRequestId = "";
+    private String mContentRequestId = "";
+    private String mUrl = "";
+    private String mErrorMsg = "";  // 错误信息，在 callFailed 时设置
+    private final Map<String, Long> mNetworkEventTimeMap = new HashMap<>();
+    private final Map<String, Long> mTraceDataItemList = new HashMap<>();
 
     public String getTraceRequestId() {
         return mTraceRequestId;
@@ -75,12 +76,20 @@ public class RequestTraceTimeRecord implements Serializable {
         this.mUrl = url;
     }
 
+    public String getErrorMsg() {
+        return mErrorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.mErrorMsg = errorMsg;
+    }
+
     public Map<String, Long> getNetworkEventTimeMap() {
         return mNetworkEventTimeMap;
     }
 
     public Map<String, Long> getTraceItemList() {
-        return mTtraceDataItemList;
+        return mTraceDataItemList;
     }
 
     public void saveEvent(String eventName) {
@@ -88,15 +97,15 @@ public class RequestTraceTimeRecord implements Serializable {
     }
 
     public void generateTraceData() {
-        mTtraceDataItemList.clear();
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_TOTAL, getEventCostTime(RequestTraceTimeRecord.EVENT_CALL_START, RequestTraceTimeRecord.EVENT_CALL_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_DNS, getEventCostTime(RequestTraceTimeRecord.EVENT_DNS_START, RequestTraceTimeRecord.EVENT_DNS_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_SECURE_CONNECT, getEventCostTime(RequestTraceTimeRecord.EVENT_SECURE_CONNECT_START, RequestTraceTimeRecord.EVENT_SECURE_CONNECT_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_CONNECT, getEventCostTime(RequestTraceTimeRecord.EVENT_CONNECT_START, RequestTraceTimeRecord.EVENT_CONNECT_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_REQUEST_HEADERS, getEventCostTime(RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_START, RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_REQUEST_BODY, getEventCostTime(RequestTraceTimeRecord.EVENT_REQUEST_BODY_START, RequestTraceTimeRecord.EVENT_REQUEST_BODY_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_RESPONSE_HEADERS, getEventCostTime(RequestTraceTimeRecord.EVENT_RESPONSE_HEADERS_START, RequestTraceTimeRecord.EVENT_RESPONSE_HEADERS_END));
-        mTtraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_RESPONSE_BODY, getEventCostTime(RequestTraceTimeRecord.EVENT_RESPONSE_BODY_START, RequestTraceTimeRecord.EVENT_RESPONSE_BODY_END));
+        mTraceDataItemList.clear();
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_TOTAL, getEventCostTime(RequestTraceTimeRecord.EVENT_CALL_START, RequestTraceTimeRecord.EVENT_CALL_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_DNS, getEventCostTime(RequestTraceTimeRecord.EVENT_DNS_START, RequestTraceTimeRecord.EVENT_DNS_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_SECURE_CONNECT, getEventCostTime(RequestTraceTimeRecord.EVENT_SECURE_CONNECT_START, RequestTraceTimeRecord.EVENT_SECURE_CONNECT_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_CONNECT, getEventCostTime(RequestTraceTimeRecord.EVENT_CONNECT_START, RequestTraceTimeRecord.EVENT_CONNECT_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_REQUEST_HEADERS, getEventCostTime(RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_START, RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_REQUEST_BODY, getEventCostTime(RequestTraceTimeRecord.EVENT_REQUEST_BODY_START, RequestTraceTimeRecord.EVENT_REQUEST_BODY_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_RESPONSE_HEADERS, getEventCostTime(RequestTraceTimeRecord.EVENT_RESPONSE_HEADERS_START, RequestTraceTimeRecord.EVENT_RESPONSE_HEADERS_END));
+        mTraceDataItemList.put(RequestTraceTimeRecord.TRACE_NAME_RESPONSE_BODY, getEventCostTime(RequestTraceTimeRecord.EVENT_RESPONSE_BODY_START, RequestTraceTimeRecord.EVENT_RESPONSE_BODY_END));
     }
 
     public long getEventCostTime(String startName, String endName) {

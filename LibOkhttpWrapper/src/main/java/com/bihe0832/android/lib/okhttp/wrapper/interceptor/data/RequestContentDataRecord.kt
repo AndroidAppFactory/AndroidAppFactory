@@ -121,7 +121,9 @@ class RequestContentDataRecord : Serializable {
             if (requestBody.isNotEmpty()) {
                 append("$requestBody\n\n")
             } else if (isMockRequest) {
-                append("\n(Mock Request - No Body)\n\n")
+                append("\n (Mock Request - No Body)\n\n")
+            } else {
+                append("\n (Bad Request - No Body)\n\n")
             }
 
             // 请求结束行
@@ -161,7 +163,6 @@ class RequestContentDataRecord : Serializable {
                 append(" ($responseBodyLength - byte body)")
             }
             if (hasTotalCost) append(" Total Cost: ${totalCostMs}ms")
-            if (hasRequestId) append(" AAFRequestID:$traceRequestId")
             append(" \n")
         }.toString()
     }
