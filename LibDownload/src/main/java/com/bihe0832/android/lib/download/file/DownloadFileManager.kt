@@ -127,8 +127,14 @@ object DownloadFileManager : DownloadManager() {
                 addWaitToDownload()
             }
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
-                getContext()?.getString(ResR.string.download_failed_local_is_new)?.let {
-                    ToastUtil.showLong(context, String.format(it, item.downloadTitle))
+                getContext()?.let { context ->
+                    ToastUtil.showLong(
+                        context,
+                        String.format(
+                            context.getString(ResR.string.download_failed_local_is_new),
+                            item.downloadTitle
+                        )
+                    )
                 }
             }
             item.downloadListener?.onFail(errorCode, msg, item)
