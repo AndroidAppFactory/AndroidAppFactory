@@ -530,8 +530,15 @@ abstract class DownloadManager {
             downloadListener?.let {
                 info.downloadListener = it
             }
-            info.finished = 0
-            info.finishedLengthBefore = 0
+            // 如果任务已经在下载中，只更新 listener 后直接返回，避免无意义的操作
+            if (DownloadingList.isDownloading(info)) {
+                ZLog.d(TAG, "resumeTask: task is already downloading, just update listener")
+                return@let
+            }
+            // 从数据库读取历史下载进度，而不是重置为 0
+            info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)
+            info.finished = info.finishedLengthBefore
+            ZLog.d(TAG, "resumeTask restore progress: finishedLengthBefore=${info.finishedLengthBefore}, finished=${info.finished}")
             getInnerDownloadListener().onWait(info)
             startTask(info, startByUser)
         }
@@ -546,8 +553,9 @@ abstract class DownloadManager {
     fun pauseTask(info: DownloadItem, type: Int, clearHistory: Boolean) {
         ZLog.d(TAG, "pause:$type $clearHistory ${info.downloadURL}")
         ZLog.d(TAG, "pause:$info")
-        getDownloadEngine().closeDownload(info.downloadID, false, clearHistory)
+        // 先设置状态为暂停，避免 checkDownloadProcess 线程竞态触发 onProgress
         info.setPause(type)
+        getDownloadEngine().closeDownload(info.downloadID, false, clearHistory)
         when (type) {
             DownloadPauseType.PAUSED_BY_NETWORK -> {
 

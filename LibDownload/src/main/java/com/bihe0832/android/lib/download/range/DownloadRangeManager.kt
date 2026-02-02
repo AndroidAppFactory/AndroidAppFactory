@@ -49,6 +49,11 @@ object DownloadRangeManager : DownloadManager() {
         }
 
         override fun onProgress(item: DownloadItem) {
+            // 如果已经暂停全部，不再触发进度回调（双重保护，避免竞态）
+            if (hasPauseAll()) {
+                ZLog.d(TAG, "onProgress skip because hasPauseAll")
+                return
+            }
             item.status = DownloadStatus.STATUS_DOWNLOADING
             item.downloadListener?.onProgress(item)
         }

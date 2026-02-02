@@ -103,7 +103,7 @@ public class DownloadRangeUtils {
         if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
-        info.setShouldForceReDownload(true);
+        info.setShouldForceReDownload(false);
         info.setDownloadWhenAdd(downloadAfterAdd);
         DownloadRangeManager.INSTANCE.addTask(info, start, length, localStart);
     }
