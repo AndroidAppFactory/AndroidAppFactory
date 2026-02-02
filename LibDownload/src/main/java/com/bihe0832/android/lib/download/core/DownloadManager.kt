@@ -316,6 +316,13 @@ abstract class DownloadManager {
                 val requestBuilder = Request.Builder()
                     .url(requestURL)
                     .addDownloadHeaders(info.requestHeader)
+                    .apply {
+                        // 分片下载时，添加 Range 头以获取正确的 contentLength
+                        if (rangeLength > 0 && rangeStart >= 0) {
+                            val rangeEnd = rangeStart + rangeLength - 1
+                            addHeader("Range", "bytes=$rangeStart-$rangeEnd")
+                        }
+                    }
                     .get()  // 使用 GET 请求（与签名校验的 method 保持一致）
 
                 val request = requestBuilder.build()
