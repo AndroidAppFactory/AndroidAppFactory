@@ -115,8 +115,12 @@ abstract class DownloadByHttpBase(
         ZLog.e(TAG, "\n")
         val file = File(info.filePath)
         val hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, isDebug)
+         ZLog.e(TAG, "断点续传判断: filePath=${info.filePath}")
+         ZLog.e(TAG, "断点续传判断: file.exists()=${file.exists()}, hasDownload=$hasDownload")
+         ZLog.e(TAG, "断点续传判断: rangeLength=$rangeLength, file.length()=${if (file.exists()) file.length() else -1}")
+         ZLog.e(TAG, "断点续传判断: 条件结果=${file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength}")
         if (file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength) {
-            ZLog.e(TAG, "断点续传逻辑:$info")
+             ZLog.e(TAG, "✅ 进入断点续传逻辑")
             
             // 断点续传：如果协议信息丢失，从缓存查询或使用保守策略
             if (info.protocol == Protocol.HTTP_1_1 && info.realURL.isNotEmpty()) {
@@ -178,8 +182,16 @@ abstract class DownloadByHttpBase(
                 }
             }
         } else {
+             ZLog.e(TAG, "❌ 不走断点续传，原因分析:")
+             ZLog.e(TAG, "  - file.exists()=${file.exists()}")
+             ZLog.e(TAG, "  - hasDownload=$hasDownload")
+             ZLog.e(TAG, "  - rangeLength=$rangeLength (需>0)")
+            if (file.exists()) {
+                 ZLog.e(TAG, "  - file.length()=${file.length()}, rangeLength=$rangeLength (需file.length()<=rangeLength)")
+            }
             //有下载记录，无文件，删除后重新下载
             if (hasDownload) {
+                 ZLog.e(TAG, "清除旧的下载记录，重新下载")
                 DownloadInfoDBManager.clearDownloadPartByID(info.downloadID)
             }
             startNew(info, rangeStart, rangeLength, localStart)
@@ -339,6 +351,8 @@ abstract class DownloadByHttpBase(
                 downloadingSnapshot.forEach { downloadItem ->
                     var notFinished = false
                     var hasFail = false
+                    var hasRealUnrecoverableError = false  // 是否存在不可恢复的错误
+                    var failedPartErrorCode = 0  // 记录失败分片的错误码（优先保留不可恢复的，默认不可恢复）
                     var errorInfo = ""
                     if (downloadItem.status == DownloadStatus.STATUS_DOWNLOADING) {
                         var newFinished = 0L
@@ -360,8 +374,20 @@ abstract class DownloadByHttpBase(
 
                             if (downloadPartItem.getDownloadPartInfo().partStatus == DownloadStatus.STATUS_DOWNLOAD_FAILED) {
                                 hasFail = true
-                                errorInfo =
-                                    "download part exception: ${downloadPartItem.getDownloadPartInfo().downloadPartID}"
+                                // 获取分片的具体错误码，用于判断是否可重试
+                                val partErrorCode = downloadPartItem.getDownloadPartInfo().partErrorCode
+                                val isUnrecoverable = !DownloadExceptionAnalyzer.isRecoverableError(partErrorCode)
+                                
+                                // 策略：优先保留不可恢复的错误码
+                                // - 如果已经有不可恢复错误了，就不再更新（保留第一个不可恢复的）
+                                // - 如果还没有不可恢复错误，就更新（无论当前是可恢复还是不可恢复）
+                                if (!hasRealUnrecoverableError) {
+                                    failedPartErrorCode = partErrorCode
+                                    errorInfo = "download part exception: ${downloadPartItem.getDownloadPartInfo().downloadPartID}, errorCode: $partErrorCode"
+                                    if (isUnrecoverable) {
+                                        hasRealUnrecoverableError = true
+                                    }
+                                }
                             }
                         }
                         if (newFinished - finishedBefore < 1) {
@@ -400,7 +426,10 @@ abstract class DownloadByHttpBase(
                     } else if (downloadItem.contentLength > 0 && downloadItem.finished == downloadItem.contentLength) {
                         notifyDownloadAfterFinish(downloadItem)
                     } else if (hasFail) {
-                        notifyDownloadFailed(downloadItem, DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION, errorInfo)
+                        // 根据分片错误码判断是否可重试
+                        // 如果分片没有设置错误码（0），使用通用的分片异常码
+                        val errorCode = if (failedPartErrorCode != 0) failedPartErrorCode else DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION
+                        notifyDownloadFailed(downloadItem, errorCode, errorInfo)
                     }
                 }
 
@@ -449,13 +478,14 @@ abstract class DownloadByHttpBase(
             } else {
                 // 增加重试轮数，暂停任务等待网络恢复
                 item.incrementNetworkErrorRetryRound()
-                ZLog.e(TAG, "Recoverable error, pause for retry (round ${item.networkErrorRetryRound}/${DownloadItem.MAX_NETWORK_ERROR_RETRY_ROUND})")
+                ZLog.e(TAG, "Recoverable error, pause for retry (round ${item.networkErrorRetryRound}/${DownloadItem.MAX_NETWORK_ERROR_RETRY_ROUND}), pauseType=PAUSED_BY_NETWORK_ERROR(5)")
                 
                 // 保存当前进度（不清除历史）
                 closeDownload(item.downloadID, finishDownload = false, clearDownloadHistory = false)
                 
                 // 设置暂停状态并回调
                 item.setPause(DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
+                ZLog.e(TAG, "任务已暂停: status=${item.status}, pauseType=${item.pauseType}, downloadID=${item.downloadID}")
                 onPause(item, DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
             }
         } else {

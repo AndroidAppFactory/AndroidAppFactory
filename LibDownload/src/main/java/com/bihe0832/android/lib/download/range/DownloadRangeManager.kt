@@ -215,10 +215,7 @@ object DownloadRangeManager : DownloadManager() {
             Thread {
                 if (downloadAfterAdd) {
                     if (isMobileNet() && !info.isDownloadWhenUseMobile) {
-                        pauseTask(
-                            info,
-                            DownloadPauseType.PAUSED_BY_NETWORK
-                        )
+                        pauseTask(info, DownloadPauseType.PAUSED_BY_MOBILE_NETWORK)
                         ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
                     } else {
                         val currentTime = System.currentTimeMillis()

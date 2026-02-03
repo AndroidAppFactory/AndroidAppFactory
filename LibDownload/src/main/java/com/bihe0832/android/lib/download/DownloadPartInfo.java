@@ -24,6 +24,18 @@ public class DownloadPartInfo {
     private long mPartFinishedBefore;
     private int mPartStatus;
     
+    /**
+     * 分片失败时的具体错误码
+     * <p>当 partStatus 为 STATUS_DOWNLOAD_FAILED 时，此字段记录失败的具体原因。
+     * <p>用于任务级汇总时判断是否可以自动重试：
+     * <ul>
+     *   <li>网络相关错误（超时、连接失败等）→ 可重试</li>
+     *   <li>本地错误（存储不足、文件锁定等）→ 不可重试</li>
+     * </ul>
+     * @see com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
+     */
+    private int mPartErrorCode = 0;
+    
     // 实际使用的协议版本，从 DownloadItem 传递过来
     private Protocol mProtocol = Protocol.HTTP_1_1;
 
@@ -70,6 +82,24 @@ public class DownloadPartInfo {
 //            reportDownloadPartStatusChange(this, this.mPartStatus, mPartStatus);
 //        }
         this.mPartStatus = mPartStatus;
+    }
+
+    /**
+     * 获取分片失败的具体错误码
+     * 
+     * @return 错误码，0 表示无错误或未设置
+     */
+    public int getPartErrorCode() {
+        return mPartErrorCode;
+    }
+
+    /**
+     * 设置分片失败的具体错误码
+     * 
+     * @param errorCode 具体的错误码
+     */
+    public void setPartErrorCode(int errorCode) {
+        this.mPartErrorCode = errorCode;
     }
 
     public int getPartID() {
@@ -166,6 +196,7 @@ public class DownloadPartInfo {
                 + ", mPartRangeStart=" + mPartRangeStart + ", mPartLocalStart=" + mPartLocalStart
                 + ", mPartLength=" + mPartLength + ", mPartFinishedBefore=" + mPartFinishedBefore
                 + ", mPartFinished=" + mPartFinished + ", mFinalFileName='" + mFinalFileName
-                + ", mPartStatus=" + mPartStatus + ", mProtocol=" + mProtocol + '}';
+                + ", mPartStatus=" + mPartStatus + ", mPartErrorCode=" + mPartErrorCode
+                + ", mProtocol=" + mProtocol + '}';
     }
 }

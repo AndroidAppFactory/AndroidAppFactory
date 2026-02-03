@@ -51,4 +51,8 @@ public @interface DownloadErrorCode {
     int ERR_RANGE_BAD_DOWNLOAD_LENGTH = -17;
     // 超过最大重试轮数
     int ERR_MAX_RETRY_EXCEEDED = -18;
+    // 存储空间不足
+    int ERR_LOCAL_DISK_FULL = -19;
+    // 本地文件IO错误（权限不足、文件被占用等）
+    int ERR_LOCAL_FILE_IO = -20;
 }

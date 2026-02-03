@@ -227,26 +227,41 @@ abstract class DownloadManager {
     }
 
     fun checkDownloadWhenNetChanged() {
-        if (isMobileNet()) {
+        val isConnected = NetworkUtil.isNetworkConnected(context)
+        ZLog.d(TAG, "checkDownloadWhenNetChanged: isConnected=$isConnected")
+        if (!isConnected) {
+            // 断网时，主动暂停所有正在下载的任务
+            // 好处：1) 避免无意义的网络请求和错误重试
+            //      2) 统一走 PAUSED_BY_NETWORK_ERROR 逻辑，网络恢复后自动重试
+            ZLog.d(TAG, "网络已断开，暂停所有下载任务")
+            getDownloadingTask().forEach { info ->
+                ZLog.d(TAG, "网络断开，暂停任务: ${info.downloadURL}")
+                pauseTask(info.downloadID, DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
+            }
+            return
+        }
+        
+        val isMobile = isMobileNet()
+        if (isMobile) {
+            ZLog.d(TAG, "当前网络切换为移动网络")
+            // 暂停"不允许移动网络下载"的任务
             getDownloadingTask().forEach {
                 if (!it.isDownloadWhenUseMobile) {
-                    ZLog.e(TAG, "当前网络切换为移动网络，任务暂停:$it")
-                    pauseTask(
-                        it.downloadID,
-                        DownloadPauseType.PAUSED_BY_NETWORK
-                    )
+                    ZLog.d(TAG, "当前网络切换为移动网络，任务暂停:$it")
+                    pauseTask(it.downloadID, DownloadPauseType.PAUSED_BY_MOBILE_NETWORK)
                 }
             }
         } else {
             ZLog.d(TAG, "当前网络切换为非移动网络，任务尝试重启")
-            // WiFi→移动→WiFi 切换，立即恢复
-            addPauseByNetworkToDownload()
-            // 网络异常恢复时，延迟再重试，避免网络不稳定时频繁重试
-            ThreadManager.getInstance().start({
-                ZLog.d(TAG, "延迟恢复网络异常任务开始")
-                addPauseByNetworkErrorToDownload()
-            }, NETWORK_CHANGE_DELAY)
+            // 移动网络→WiFi 切换，立即恢复因移动网络限制而暂停的任务
+            resumeTasksPausedByMobileNetwork()
         }
+        // 网络恢复时，延迟恢复因网络异常暂停的任务
+        // 延迟是为了等待网络稳定，避免频繁重试
+        ThreadManager.getInstance().start({
+            ZLog.d(TAG, "延迟恢复网络异常任务, 待恢复数量=${getTasksPausedByNetworkError().size}")
+            resumeTasksPausedByNetworkError()
+        }, NETWORK_CHANGE_DELAY)
     }
 
     fun checkBeforeDownloadFile(info: DownloadItem): String {
@@ -501,14 +516,18 @@ abstract class DownloadManager {
         return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList()
     }
 
-    fun getPauseByNetworkTask(): List<DownloadItem> {
-        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK }
-            .toList()
+    fun getTasksPausedByMobileNetwork(): List<DownloadItem> {
+        return getAllTask().filter { 
+            it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && 
+            it.pauseType == DownloadPauseType.PAUSED_BY_MOBILE_NETWORK 
+        }.toList()
     }
     
-    fun getPauseByNetworkErrorTask(): List<DownloadItem> {
-        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR }
-            .toList()
+    fun getTasksPausedByNetworkError(): List<DownloadItem> {
+        return getAllTask().filter { 
+            it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && 
+            it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR 
+        }.toList()
     }
 
     fun addToDownloadTaskList(info: DownloadItem) {
@@ -537,16 +556,16 @@ abstract class DownloadManager {
     }
 
     /**
-     * 恢复因网络切换（WiFi→移动网络）而暂停的任务
+     * 恢复因切换到移动网络而暂停的任务
      * 
-     * 当网络从移动网络切换回WiFi时调用，按优先级从高到低批量恢复所有因网络暂停的任务。
-     * [startTask] 内部会自动控制并发数，高优先级任务先占用下载槽位，
-     * 超出限制的低优先级任务会进入等待队列。
+     * 当网络从移动网络切换回 WiFi 时调用，按优先级从高到低批量恢复。
+     * 这些任务是因为 isDownloadWhenUseMobile=false 且切换到移动网络而被暂停的。
      */
-    private fun addPauseByNetworkToDownload() {
-        ZLog.d(TAG, "addPauseByNetworkToDownload: 恢复因网络切换暂停的任务")
-        getPauseByNetworkTask().sortedByDescending { it.downloadPriority }.forEach { info ->
-            ZLog.d(TAG, "恢复网络暂停任务(优先级${info.downloadPriority}): ${info.downloadURL}")
+    private fun resumeTasksPausedByMobileNetwork() {
+        val tasks = getTasksPausedByMobileNetwork()
+        ZLog.d(TAG, "resumeTasksPausedByMobileNetwork: 待恢复任务数=${tasks.size}")
+        tasks.sortedByDescending { it.downloadPriority }.forEach { info ->
+            ZLog.d(TAG, "恢复任务(优先级${info.downloadPriority}): ${info.downloadURL}")
             resumeTask(info.downloadID, info.downloadListener, false, info.isDownloadWhenUseMobile)
         }
     }
@@ -554,13 +573,13 @@ abstract class DownloadManager {
     /**
      * 恢复因网络异常（断网/超时等）而暂停的任务
      * 
-     * 当网络恢复时调用，按优先级从高到低批量恢复所有因网络异常暂停的任务。
-     * 高优先级任务先占用下载槽位，低优先级任务进入等待队列。
+     * 当网络恢复时调用，按优先级从高到低批量恢复。
      */
-    private fun addPauseByNetworkErrorToDownload() {
-        ZLog.d(TAG, "addPauseByNetworkErrorToDownload: 恢复因网络异常暂停的任务")
-        getPauseByNetworkErrorTask().sortedByDescending { it.downloadPriority }.forEach { info ->
-            ZLog.d(TAG, "恢复网络异常任务(优先级${info.downloadPriority}): ${info.downloadURL}")
+    private fun resumeTasksPausedByNetworkError() {
+        val tasks = getTasksPausedByNetworkError()
+        ZLog.d(TAG, "resumeTasksPausedByNetworkError: 待恢复任务数=${tasks.size}")
+        tasks.sortedByDescending { it.downloadPriority }.forEach { info ->
+            ZLog.d(TAG, "恢复任务(优先级${info.downloadPriority}): ${info.downloadURL}")
             resumeTask(info.downloadID, info.downloadListener, false, info.isDownloadWhenUseMobile)
         }
     }
@@ -593,7 +612,9 @@ abstract class DownloadManager {
             info.finished = info.finishedLengthBefore
             ZLog.d(TAG, "resumeTask restore progress: finishedLengthBefore=${info.finishedLengthBefore}, finished=${info.finished}")
             getInnerDownloadListener().onWait(info)
-            startTask(info, startByUser)
+            // 使用 info.isDownloadWhenAdd 而不是 startByUser
+            // 因为网络异常暂停时已设置 isDownloadWhenAdd=true，恢复时应该自动下载
+            startTask(info, info.isDownloadWhenAdd)
         }
     }
 
@@ -606,8 +627,8 @@ abstract class DownloadManager {
     fun pauseTask(info: DownloadItem, type: Int) {
         ZLog.d(TAG, "pause:$type ${info.downloadURL}")
         ZLog.d(TAG, "pause:$info")
-        // 网络暂停的任务，恢复时应该自动下载
-        if (type == DownloadPauseType.PAUSED_BY_NETWORK || 
+        // 网络相关暂停的任务，恢复时应该自动下载
+        if (type == DownloadPauseType.PAUSED_BY_MOBILE_NETWORK || 
             type == DownloadPauseType.PAUSED_BY_NETWORK_ERROR) {
             info.isDownloadWhenAdd = true
         }

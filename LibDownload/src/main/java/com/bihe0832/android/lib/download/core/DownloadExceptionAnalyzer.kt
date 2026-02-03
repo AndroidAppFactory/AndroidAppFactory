@@ -299,9 +299,12 @@ object DownloadExceptionAnalyzer {
             INTERNAL_ERR_LOCAL_FILE_NOT_FOUND,
             INTERNAL_ERR_LOCAL_FILE_LOCKED,
             INTERNAL_ERR_LOCAL_OTHER -> false
+            
+            // 外部本地错误码 - 不可恢复
+            DownloadErrorCode.ERR_LOCAL_DISK_FULL,
+            DownloadErrorCode.ERR_LOCAL_FILE_IO -> false
 
-            // 分片汇总失败 - 不自动重试
-            // 分片级别的重试已在 DownloadThread 中处理，这里是汇总结果
+            // 分片汇总失败（无具体错误码）- 保守策略，不自动重试
             DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION -> false
 
             // 以下为防御性代码：正常流程不会到达（analyzeException 不会返回这些错误码）

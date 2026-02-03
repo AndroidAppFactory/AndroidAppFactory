@@ -1,9 +1,11 @@
 package com.bihe0832.android.lib.download.core.part
 
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
 import com.bihe0832.android.lib.download.core.addDownloadHeaders
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.getContentLength
@@ -66,6 +68,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
         if (TextUtils.isEmpty(mDownloadPartInfo.finalFileName)) {
             ZLog.e("分片下载开始  分片信息错误，错误的本地路径：$mDownloadPartInfo")
+            mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             return
         }
@@ -102,6 +105,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         val availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
         val needSpace = mDownloadPartInfo.partLength - mDownloadPartInfo.partFinished
         if (needSpace > 0 && needSpace > availableSpace) {
+            mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_LOCAL_DISK_FULL
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             ZLog.e(
                 TAG,
@@ -119,6 +123,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         } catch (e: Exception) {
             e.printStackTrace()
             ZLog.e(TAG, "RandomAccessFile 创建失败: ${e.message}")
+            mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_LOCAL_FILE_IO
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             return
         }
@@ -149,6 +154,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         TAG,
                         "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片 文件移动异常 :${e.javaClass.name}"
                     )
+                    mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_LOCAL_FILE_IO
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                     break
                 }
@@ -169,6 +175,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         TAG,
                         "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载异常 $retryTimes！！！！:${e.javaClass.name}"
                     )
+                    // 分析异常类型，记录错误码
+                    val errorCode = DownloadExceptionAnalyzer.analyzeException(e)
+                    mDownloadPartInfo.partErrorCode = errorCode
+                    
                     // 保存当前进度（partFinished 已经是最新值）
                     DownloadInfoDBManager.updateDownloadFinished(
                         mDownloadPartInfo.downloadPartID,
@@ -181,7 +191,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     } else {
                         ZLog.e(
                             TAG,
-                            "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载失败 $retryTimes！！！！:${e.javaClass.name}"
+                            "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载失败 $retryTimes！！！！:${e.javaClass.name}, errorCode: $errorCode"
                         )
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                         break
@@ -288,6 +298,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                 } else {
                     DownloadInfoDBManager.clearDownloadPartByID(mDownloadPartInfo.downloadID)
+                    mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_HTTP_LENGTH_FAILED
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 }
                 return false
@@ -299,6 +310,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         "分片下载 第${mDownloadPartInfo.downloadPartID}分片长度为0 ！！！ $retryTimes"
                     )
                     ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                    mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_HTTP_LENGTH_FAILED
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                     return false
                 } else {
@@ -311,6 +323,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     TAG,
                     "分片下载 第${mDownloadPartInfo.downloadPartID}分片: Response body 为空"
                 )
+                mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_HTTP_FAILED
                 mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 response.close()
                 return false
@@ -415,6 +428,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         TAG,
                         "分片下载数据 第${mDownloadPartInfo.downloadPartID}分片下载异常: 本次计划下载：$localContentLength 服务器下发长度: $serverContentLength 服务器实际返回：$hasDownloadLength ",
                     )
+                    mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_RANGE_BAD_DOWNLOAD_LENGTH
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 }
             } else if (serverContentLength < 1L && hasDownloadLength > 0) {
@@ -430,6 +444,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     TAG,
                     "分片下载数据 第${mDownloadPartInfo.downloadPartID}分片下载异常: 本次计划下载：$localContentLength 服务器下发长度: $serverContentLength 服务器实际返回：$hasDownloadLength ",
                 )
+                mDownloadPartInfo.partErrorCode = DownloadErrorCode.ERR_RANGE_BAD_DOWNLOAD_LENGTH
                 mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             }
             // 数据修正后存储

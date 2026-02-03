@@ -48,7 +48,7 @@ import okhttp3.Protocol;
  * <h2>暂停类型体系</h2>
  * 参见 {@link DownloadPauseType}，不同暂停类型有不同的恢复策略：
  * <ul>
- *   <li>PAUSED_BY_NETWORK(1)：WiFi→移动网络切换，WiFi恢复后自动重试</li>
+ *   <li>PAUSED_BY_MOBILE_NETWORK(1)：因切换到移动网络而暂停，切回WiFi后自动恢复</li>
  *   <li>PAUSED_BY_USER(2)：用户主动暂停，只能手动恢复（优先级最高）</li>
  *   <li>PAUSED_BY_ALL(3)：批量暂停，需调用 resumeAll() 恢复</li>
  *   <li>PAUSED_PENDING_START(4)：添加任务时未启动</li>
@@ -221,7 +221,7 @@ public class DownloadItem implements Serializable {
      * <p>默认 false（仅 WiFi 下载）。设为 true 允许在移动网络下下载。
      * <p>当从 WiFi 切换到移动网络时：
      * <ul>
-     *   <li>false：任务暂停，pauseType = PAUSED_BY_NETWORK</li>
+     *   <li>false：任务暂停，pauseType = PAUSED_BY_MOBILE_NETWORK</li>
      *   <li>true：继续下载</li>
      * </ul>
      */
@@ -769,7 +769,7 @@ public class DownloadItem implements Serializable {
     /**
      * 设置是否允许在移动网络下下载
      * 
-     * <p>设为 false 时，从 WiFi 切换到移动网络会触发 PAUSED_BY_NETWORK 暂停。
+     * <p>设为 false 时，从 WiFi 切换到移动网络会触发 PAUSED_BY_MOBILE_NETWORK 暂停。
      * 
      * @param downloadWhenUseMobile true 允许，false 仅 WiFi
      */
