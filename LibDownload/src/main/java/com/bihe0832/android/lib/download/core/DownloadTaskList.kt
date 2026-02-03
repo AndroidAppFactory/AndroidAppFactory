@@ -16,16 +16,25 @@ public object DownloadTaskList {
     private val mDownloadList = ConcurrentHashMap<Long, DownloadItem>()
     private var mDownLoadIdList = CopyOnWriteArrayList<Long>()
 
-    private var listHasChanged = false
-    private var lastCachedList = CopyOnWriteArrayList(mDownloadList.values.toList())
+    private val cachedListMap = ConcurrentHashMap<Int, CopyOnWriteArrayList<DownloadItem>>()
 
+    /**
+     * 使指定类型的缓存失效
+     * @param downloadType 下载类型，为 null 时清空所有缓存
+     */
+    private fun invalidateCache(downloadType: Int? = null) {
+        if (downloadType != null) {
+            cachedListMap.remove(downloadType)
+        } else {
+            cachedListMap.clear()
+        }
+    }
 
     @Synchronized
-    fun getDownloadTasKList(downType:Int): CopyOnWriteArrayList<DownloadItem> {
-        if (listHasChanged) {
-            lastCachedList = CopyOnWriteArrayList(mDownloadList.values.toList())
+    fun getDownloadTasKList(downType: Int): CopyOnWriteArrayList<DownloadItem> {
+        return cachedListMap.getOrPut(downType) {
+            CopyOnWriteArrayList(mDownloadList.values.filter { it.downloadType == downType })
         }
-        return lastCachedList
     }
 
     @Synchronized
@@ -35,7 +44,7 @@ public object DownloadTaskList {
 
     @Synchronized
     fun clear() {
-        listHasChanged = true
+        invalidateCache()
         return mDownloadList.clear()
     }
 
@@ -43,7 +52,7 @@ public object DownloadTaskList {
     @Synchronized
     fun addToDownloadTaskList(item: DownloadItem) {
         if (!hadAddTask(item)) {
-            listHasChanged = true
+            invalidateCache(item.downloadType)
             mDownloadList[item.downloadID] = item
             mDownLoadIdList.add(item.downloadID)
         } else {
@@ -55,14 +64,16 @@ public object DownloadTaskList {
     @Synchronized
     fun updateDownloadTaskListItem(item: DownloadItem) {
         if (hadAddTask(item)) {
-            listHasChanged = true
+            invalidateCache(item.downloadType)
             mDownloadList[item.downloadID]?.update(item)
         }
     }
 
     @Synchronized
     fun removeFromDownloadTaskList(downloadId: Long) {
-        listHasChanged = true
+        // 先获取要删除的 item 的类型，再精准失效
+        val downloadType = mDownloadList[downloadId]?.downloadType
+        invalidateCache(downloadType)
         mDownloadList.remove(downloadId)
         mDownLoadIdList.remove(downloadId)
     }

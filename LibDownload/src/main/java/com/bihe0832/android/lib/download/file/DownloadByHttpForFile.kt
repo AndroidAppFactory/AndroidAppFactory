@@ -2,13 +2,13 @@ package com.bihe0832.android.lib.download.file
 
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadClientConfig
-import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_FILE_RENAME_FAILED
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_MD5_BAD
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
 import com.bihe0832.android.lib.download.range.DownloadByHttpForRange
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -40,8 +40,9 @@ class DownloadByHttpForFile(
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
+                val errorCode = DownloadExceptionAnalyzer.analyzeException(e)
                 notifyDownloadFailed(
-                    info, DownloadErrorCode.ERR_DOWNLOAD_EXCEPTION, "download with exception$e"
+                    info, errorCode, "download with exception: ${e.javaClass.simpleName}: ${e.message}"
                 )
             }
         }

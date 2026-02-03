@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.file.FileUtils
@@ -94,8 +95,8 @@ object DownloadTools {
                 notifyListeners { it.onProgress(item) }
             }
 
-            override fun onPause(item: DownloadItem) {
-                notifyListeners { it.onPause(item) }
+            override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
+                notifyListeners { it.onPause(item, pauseType) }
             }
 
             @Synchronized
@@ -236,7 +237,7 @@ object DownloadTools {
             if (FileUtils.checkFileExist(path)) {
                 return listener.onComplete(path, item)
             } else {
-                item.setDownloadStatus(DownloadStatus.STATUS_DOWNLOAD_FAILED)
+                item.status = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 listener.onFail(
                     DownloadErrorCode.ERR_NOTIFY_EXCEPTION,
                     "new path file not exist",

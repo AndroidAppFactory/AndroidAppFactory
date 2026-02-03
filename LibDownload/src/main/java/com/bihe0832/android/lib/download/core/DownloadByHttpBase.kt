@@ -3,10 +3,10 @@ package com.bihe0832.android.lib.download.core
 import android.annotation.SuppressLint
 import com.bihe0832.android.lib.download.DownloadClientConfig
 import com.bihe0832.android.lib.download.DownloadErrorCode
-import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_DOWNLOAD_PART_START_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.dabase.DownloadPartInfoTableModel
@@ -57,6 +57,8 @@ abstract class DownloadByHttpBase(
     abstract fun notifyStart(info: DownloadItem)
 
     abstract fun onFail(item: DownloadItem, errorCode: Int, msg: String)
+    
+    abstract fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int)
 
     fun startDownload(
         info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long,
@@ -84,8 +86,9 @@ abstract class DownloadByHttpBase(
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
+                val errorCode = DownloadExceptionAnalyzer.analyzeException(e)
                 notifyDownloadFailed(
-                    info, DownloadErrorCode.ERR_DOWNLOAD_EXCEPTION, "download with exception$e"
+                    info, errorCode, "download with exception: ${e.javaClass.simpleName}: ${e.message}"
                 )
             }
         }
@@ -310,7 +313,8 @@ abstract class DownloadByHttpBase(
             ThreadManager.getInstance().start({ checkDownloadProcess() }, 1)
         } catch (e: Throwable) {
             e.printStackTrace()
-            notifyDownloadFailed(info, ERR_DOWNLOAD_PART_START_EXCEPTION, "download with exception:$e")
+            val errorCode = DownloadExceptionAnalyzer.analyzeException(e)
+            notifyDownloadFailed(info, errorCode, "download part start with exception: ${e.javaClass.simpleName}: ${e.message}")
         }
     }
 
@@ -330,7 +334,7 @@ abstract class DownloadByHttpBase(
             while (DownloadingList.getDownloadingNum() > 0) {
                 ZLog.d("checkDownloadProcess work")
                 // 创建快照，避免并发修改异常
-                val downloadingSnapshot = DownloadingList.getDownloadingItemList().toList()
+                val downloadingSnapshot = DownloadingList.getAllDownloadingItemList().toList()
 
                 downloadingSnapshot.forEach { downloadItem ->
                     var notFinished = false
@@ -430,12 +434,50 @@ abstract class DownloadByHttpBase(
     }
 
     fun notifyDownloadFailed(item: DownloadItem, errorCode: Int, msg: String) {
-        ZLog.e(TAG, "notifyDownloadFailed errorCode $errorCode, msg: $msg, item: $item")
-        closeDownload(item.downloadID, finishDownload = true, clearDownloadHistory = true)
-        if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
-            onFail(item, errorCode, msg)
+        ZLog.e(TAG, "notifyDownloadFailed errorCode $errorCode (${DownloadExceptionAnalyzer.getErrorDescription(errorCode)}), msg: $msg, item: $item")
+        
+        // 判断是否是可恢复的错误（使用内部细化错误码判断）
+        if (isRecoverableError(errorCode)) {
+            // 可恢复错误：检查重试轮数
+            if (item.networkErrorRetryRound >= DownloadItem.MAX_NETWORK_ERROR_RETRY_ROUND) {
+                // 超过最大重试轮数，标记为失败
+                ZLog.e(TAG, "Max retry round exceeded (${item.networkErrorRetryRound}/${DownloadItem.MAX_NETWORK_ERROR_RETRY_ROUND}), mark as failed")
+                closeDownload(item.downloadID, finishDownload = true, clearDownloadHistory = true)
+                if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
+                    onFail(item, DownloadErrorCode.ERR_MAX_RETRY_EXCEEDED, "超过最大重试轮数: $msg")
+                }
+            } else {
+                // 增加重试轮数，暂停任务等待网络恢复
+                item.incrementNetworkErrorRetryRound()
+                ZLog.e(TAG, "Recoverable error, pause for retry (round ${item.networkErrorRetryRound}/${DownloadItem.MAX_NETWORK_ERROR_RETRY_ROUND})")
+                
+                // 保存当前进度（不清除历史）
+                closeDownload(item.downloadID, finishDownload = false, clearDownloadHistory = false)
+                
+                // 设置暂停状态并回调
+                item.setPause(DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
+                onPause(item, DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
+            }
+        } else {
+            // 不可恢复错误：直接失败
+            closeDownload(item.downloadID, finishDownload = true, clearDownloadHistory = true)
+            if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
+                // 对外回调时，将内部细化错误码收敛为旧版本错误码
+                val externalErrorCode = DownloadExceptionAnalyzer.toExternalErrorCode(errorCode)
+                onFail(item, externalErrorCode, msg)
+            }
         }
         ZLog.d(TAG, "cancelDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
+    }
+    
+    /**
+     * 判断是否是可恢复的错误（网络相关错误）
+     * 可恢复错误会暂停任务，等待网络恢复后自动重试
+     * 
+     * 委托给 DownloadExceptionAnalyzer 进行精确判断
+     */
+    private fun isRecoverableError(errorCode: Int): Boolean {
+        return DownloadExceptionAnalyzer.isRecoverableError(errorCode)
     }
 
 }

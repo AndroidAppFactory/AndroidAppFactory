@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_BAD_URL
-import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_CONTENT_LENGTH_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_RANGE_BAD_DOWNLOAD_LENGTH
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_RANGE_BAD_PATH
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_THAN_LOACL
@@ -13,6 +12,7 @@ import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
@@ -58,9 +58,9 @@ object DownloadRangeManager : DownloadManager() {
             item.downloadListener?.onProgress(item)
         }
 
-        override fun onPause(item: DownloadItem) {
+        override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
-            item.downloadListener?.onPause(item)
+            item.downloadListener?.onPause(item, pauseType)
             if (!hasPauseAll()) {
                 addWaitToDownload()
             }
@@ -84,6 +84,8 @@ object DownloadRangeManager : DownloadManager() {
                 )
             } else {
                 item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                // 下载成功，重置网络异常重试计数
+                item.resetNetworkErrorRetryRound()
                 addDownloadItemToListAndSaveRecord(item)
                 closeDownloadAndRemoveRecord(item)
                 if (!hasPauseAll()) {
@@ -180,9 +182,12 @@ object DownloadRangeManager : DownloadManager() {
         } catch (e: Exception) {
             e.printStackTrace()
             ZLog.e(TAG, "download:$e")
+            val internalErrorCode = DownloadExceptionAnalyzer.analyzeException(e)
+            // 对外回调时收敛为旧版本错误码
+            val externalErrorCode = DownloadExceptionAnalyzer.toExternalErrorCode(internalErrorCode)
             innerDownloadListener.onFail(
-                ERR_CONTENT_LENGTH_EXCEPTION,
-                "update server content exception",
+                externalErrorCode,
+                "update server content exception: ${e.javaClass.simpleName}: ${e.message}",
                 info
             )
             return false
@@ -212,8 +217,7 @@ object DownloadRangeManager : DownloadManager() {
                     if (isMobileNet() && !info.isDownloadWhenUseMobile) {
                         pauseTask(
                             info,
-                            DownloadPauseType.PAUSED_BY_NETWORK,
-                            clearHistory = false
+                            DownloadPauseType.PAUSED_BY_NETWORK
                         )
                         ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
                     } else {
@@ -236,7 +240,7 @@ object DownloadRangeManager : DownloadManager() {
                     }
                 } else {
                     ZLog.e(TAG, "download paused by downloadAfterAdd")
-                    pauseTask(info, DownloadPauseType.PAUSED_BY_ADD, clearHistory = false)
+                    pauseTask(info, DownloadPauseType.PAUSED_PENDING_START)
                 }
             }.start()
         } catch (e: Exception) {
@@ -286,7 +290,7 @@ object DownloadRangeManager : DownloadManager() {
                 val path = checkBeforeDownloadFile(info)
                 if (!TextUtils.isEmpty(path)) {
                     ZLog.e(TAG, "has download:$info")
-                    info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
+                    info.status = DownloadStatus.STATUS_HAS_DOWNLOAD
                     innerDownloadListener.onComplete(info.filePath, info)
                     return@start
                 }
@@ -316,5 +320,9 @@ object DownloadRangeManager : DownloadManager() {
 
     override fun getAllTask(): List<DownloadItem> {
         return DownloadTaskList.getDownloadTasKList(DownloadItem.TYPE_RANGE)
+    }
+
+    override fun getDownloadingTask(): List<DownloadItem> {
+        return DownloadingList.getDownloadingItemList(DownloadItem.TYPE_RANGE)
     }
 }

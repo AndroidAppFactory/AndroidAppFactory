@@ -98,9 +98,9 @@ public class DownloadFileUtils {
      */
     public static void pauseDownload(@NotNull final long downloadID, boolean canAutoResume) {
         if (canAutoResume) {
-            DownloadFileManager.INSTANCE.pauseTask(downloadID, DownloadPauseType.PAUSED_BY_ALL, false);
+            DownloadFileManager.INSTANCE.pauseTask(downloadID, DownloadPauseType.PAUSED_BY_ALL);
         } else {
-            DownloadFileManager.INSTANCE.pauseTask(downloadID, DownloadPauseType.PAUSED_BY_USER, false);
+            DownloadFileManager.INSTANCE.pauseTask(downloadID, DownloadPauseType.PAUSED_BY_USER);
         }
     }
 
@@ -185,6 +185,16 @@ public class DownloadFileUtils {
      */
     public static void resumePause(boolean pauseOnMobile) {
         DownloadFileManager.INSTANCE.resumePauseTask(pauseOnMobile);
+    }
+
+    /**
+     * 恢复被暂停的下载任务
+     *
+     * @param pauseOnMobile     4G是否暂停下载
+     * @param includeUserPaused 是否包含用户手动暂停的任务，true 表示恢复所有暂停任务，false 表示只恢复系统自动暂停的任务
+     */
+    public static void resumePause(boolean pauseOnMobile, boolean includeUserPaused) {
+        DownloadFileManager.INSTANCE.resumePauseTask(pauseOnMobile, includeUserPaused);
     }
 
     /**

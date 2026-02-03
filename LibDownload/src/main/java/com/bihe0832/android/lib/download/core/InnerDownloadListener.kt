@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.download.core
 
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 
@@ -32,9 +33,9 @@ abstract class InnerDownloadListener : DownloadListener {
         item.downloadListener?.onProgress(item)
     }
 
-    override fun onPause(item: DownloadItem) {
+    override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
         item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
-        item.downloadListener?.onPause(item)
+        item.downloadListener?.onPause(item, pauseType)
     }
 
     override fun onDelete(item: DownloadItem) {

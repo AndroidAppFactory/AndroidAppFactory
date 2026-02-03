@@ -28,6 +28,7 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
+import com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.download.core.DownloadingList
@@ -110,9 +111,9 @@ object DownloadFileManager : DownloadManager() {
             }
         }
 
-        override fun onPause(item: DownloadItem) {
+        override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
-            item.downloadListener?.onPause(item)
+            item.downloadListener?.onPause(item, pauseType)
             if (item.notificationVisibility()) {
                 DownloadFileNotify.notifyPause(item)
             }
@@ -145,6 +146,8 @@ object DownloadFileManager : DownloadManager() {
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
             item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+            // 下载成功，重置网络异常重试计数
+            item.resetNetworkErrorRetryRound()
             val file = File(filePath)
             if (item.contentLength < 1) {
                 item.contentLength = file.length()
@@ -283,7 +286,7 @@ object DownloadFileManager : DownloadManager() {
                 val filePath = checkBeforeDownloadFile(info)
                 if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e(TAG, "has download:$info")
-                    info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
+                    info.status = DownloadStatus.STATUS_HAS_DOWNLOAD
                     Thread.sleep(DOWNLOAD_START_DELAY)
                     innerDownloadListener.onComplete(info.filePath, info)
                 } else {
@@ -292,8 +295,7 @@ object DownloadFileManager : DownloadManager() {
                             ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
                             pauseTask(
                                 info,
-                                DownloadPauseType.PAUSED_BY_NETWORK,
-                                clearHistory = false
+                                DownloadPauseType.PAUSED_BY_NETWORK
                             )
                         } else {
                             val currentTime = System.currentTimeMillis()
@@ -310,7 +312,7 @@ object DownloadFileManager : DownloadManager() {
                         }
                     } else {
                         ZLog.e(TAG, "download paused by downloadAfterAdd")
-                        pauseTask(info, DownloadPauseType.PAUSED_BY_ADD, clearHistory = false)
+                        pauseTask(info, DownloadPauseType.PAUSED_PENDING_START)
                     }
                 }
             }.start()
@@ -356,9 +358,12 @@ object DownloadFileManager : DownloadManager() {
         } catch (e: Exception) {
             e.printStackTrace()
             ZLog.e(TAG, "download:$e")
+            val internalErrorCode = DownloadExceptionAnalyzer.analyzeException(e)
+            // 对外回调时收敛为旧版本错误码
+            val externalErrorCode = DownloadExceptionAnalyzer.toExternalErrorCode(internalErrorCode)
             innerDownloadListener.onFail(
-                DownloadErrorCode.ERR_CONTENT_LENGTH_EXCEPTION,
-                "update server content exception",
+                externalErrorCode,
+                "update server content exception: ${e.javaClass.simpleName}: ${e.message}",
                 info
             )
             return false
@@ -399,7 +404,7 @@ object DownloadFileManager : DownloadManager() {
                 val filePath = checkBeforeDownloadFile(info)
                 if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e(TAG, "has download:$info")
-                    info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
+                    info.status = DownloadStatus.STATUS_HAS_DOWNLOAD
                     innerDownloadListener.onComplete(info.filePath, info)
                     return@start
                 }
@@ -439,6 +444,10 @@ object DownloadFileManager : DownloadManager() {
 
     override fun getAllTask(): List<DownloadItem> {
         return DownloadTaskList.getDownloadTasKList(DownloadItem.TYPE_FILE)
+    }
+
+    override fun getDownloadingTask(): List<DownloadItem> {
+        return DownloadingList.getDownloadingItemList(DownloadItem.TYPE_FILE)
     }
 
     override fun getDownloadEngine(): DownloadByHttpBase {

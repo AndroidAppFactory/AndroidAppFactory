@@ -1,12 +1,13 @@
 package com.bihe0832.android.lib.download.range
 
 import com.bihe0832.android.lib.download.DownloadClientConfig
-import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
+import com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
 import com.bihe0832.android.lib.log.ZLog
 
 
@@ -28,6 +29,10 @@ open class DownloadByHttpForRange(
         if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
             innerDownloadListener.onFail(errorCode, msg, item)
         }
+    }
+    
+    override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
+        innerDownloadListener.onPause(item, pauseType)
     }
 
     override fun notifyDownloadAfterFinish(downloadInfo: DownloadItem) {
@@ -55,8 +60,9 @@ open class DownloadByHttpForRange(
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
+                val errorCode = DownloadExceptionAnalyzer.analyzeException(e)
                 notifyDownloadFailed(
-                    info, DownloadErrorCode.ERR_DOWNLOAD_EXCEPTION, "download with exception$e"
+                    info, errorCode, "download with exception: ${e.javaClass.simpleName}: ${e.message}"
                 )
             }
         }

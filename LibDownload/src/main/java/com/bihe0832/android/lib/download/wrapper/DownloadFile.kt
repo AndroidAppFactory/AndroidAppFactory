@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -410,8 +411,8 @@ object DownloadFile {
                     downloadListener?.onProgress(item)
                 }
 
-                override fun onPause(item: DownloadItem) {
-                    downloadListener?.onPause(item)
+                override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
+                    downloadListener?.onPause(item, pauseType)
                     ThreadManager.getInstance().runOnUIThread {
                         progressDialog.dismiss()
                     }

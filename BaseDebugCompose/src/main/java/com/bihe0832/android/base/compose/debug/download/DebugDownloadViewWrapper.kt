@@ -382,7 +382,7 @@ fun testDownload(context: Context) {
                         })
 
                     DownloadFile.forceDownload(context,
-                        URL_FILE,
+                        p0?:"",
                         AAFFileWrapper.getTempFolder() + "a.a",
                         true,
                         MD5_FILE,

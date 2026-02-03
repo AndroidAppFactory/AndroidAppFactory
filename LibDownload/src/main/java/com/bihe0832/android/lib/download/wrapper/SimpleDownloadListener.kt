@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.download.wrapper
 
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.log.ZLog
 
 /**
@@ -39,8 +40,8 @@ abstract class SimpleDownloadListener : DownloadListener {
         ZLog.d(DownloadItem.TAG, "onStart $item")
     }
 
-    override fun onPause(item: DownloadItem) {
-        ZLog.d(DownloadItem.TAG, "onPause $item")
+    override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
+        ZLog.d(DownloadItem.TAG, "onPause pauseType=$pauseType $item")
     }
 
     override fun onDelete(item: DownloadItem) {

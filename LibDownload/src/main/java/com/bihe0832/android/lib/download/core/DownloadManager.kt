@@ -57,8 +57,8 @@ abstract class DownloadManager {
         /** 最大并发下载数上限（建议不超过5，避免资源竞争） */
         private const val MAX_MAX_NUM = 5
 
-        /** 网络切换后延迟检查时间（毫秒），避免频繁触发 */
-        private const val MSG_DELAY_START_CHECK = 3 * 1000L
+        /** 网络变化后延迟处理时间（秒），避免网络不稳定时频繁触发 */
+        private const val NETWORK_CHANGE_DELAY = 3  * 1000L
 
         /** Handler 消息类型：开始检查下载任务 */
         private const val MSG_TYPE_START_CHECK = 1
@@ -67,6 +67,8 @@ abstract class DownloadManager {
     // 是否一键暂停所有任务，暂停以后，不再新增下载，当前下载全部暂停
     private var hasPauseAll = false
     abstract fun getAllTask(): List<DownloadItem>
+
+    abstract fun getDownloadingTask(): List<DownloadItem>
 
     abstract fun getDownloadEngine(): DownloadByHttpBase
 
@@ -180,7 +182,7 @@ abstract class DownloadManager {
         netReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 ZLog.d(TAG, "当前发生网络切换")
-                msgHandler.sendEmptyMessageDelayed(MSG_TYPE_START_CHECK, MSG_DELAY_START_CHECK)
+                msgHandler.sendEmptyMessageDelayed(MSG_TYPE_START_CHECK, NETWORK_CHANGE_DELAY)
             }
         }
         val intentFilter = IntentFilter()
@@ -231,14 +233,19 @@ abstract class DownloadManager {
                     ZLog.e(TAG, "当前网络切换为移动网络，任务暂停:$it")
                     pauseTask(
                         it.downloadID,
-                        DownloadPauseType.PAUSED_BY_NETWORK,
-                        clearHistory = false
+                        DownloadPauseType.PAUSED_BY_NETWORK
                     )
                 }
             }
         } else {
             ZLog.d(TAG, "当前网络切换为非移动网络，任务尝试重启")
+            // WiFi→移动→WiFi 切换，立即恢复
             addPauseByNetworkToDownload()
+            // 网络异常恢复时，延迟再重试，避免网络不稳定时频繁重试
+            ThreadManager.getInstance().start({
+                ZLog.d(TAG, "延迟恢复网络异常任务开始")
+                addPauseByNetworkErrorToDownload()
+            }, NETWORK_CHANGE_DELAY)
         }
     }
 
@@ -420,9 +427,12 @@ abstract class DownloadManager {
                 )
                 if (times > MAX_RETRY_TIMES) {
                     //累积请求三次都失败在结束
+                    val internalErrorCode = DownloadExceptionAnalyzer.analyzeException(e)
+                    // 对外回调时收敛为旧版本错误码
+                    val externalErrorCode = DownloadExceptionAnalyzer.toExternalErrorCode(internalErrorCode)
                     getInnerDownloadListener().onFail(
-                        DownloadErrorCode.ERR_HTTP_EXCEPTION,
-                        "download with exception after three times:${e.javaClass.name}",
+                        externalErrorCode,
+                        "download with exception after three times: ${e.javaClass.simpleName}: ${e.message}",
                         info
                     )
                     ZLog.e(
@@ -487,16 +497,17 @@ abstract class DownloadManager {
             .toList()
     }
 
-    fun getDownloadingTask(): List<DownloadItem> {
-        return DownloadingList.getDownloadingItemList().toList<DownloadItem>()
-    }
-
     fun getWaitingTask(): List<DownloadItem> {
         return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList()
     }
 
     fun getPauseByNetworkTask(): List<DownloadItem> {
         return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK }
+            .toList()
+    }
+    
+    fun getPauseByNetworkErrorTask(): List<DownloadItem> {
+        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR }
             .toList()
     }
 
@@ -508,26 +519,50 @@ abstract class DownloadManager {
         getDownloadEngine().closeDownload(item.downloadID, true, !item.isNeedRecord)
     }
 
-    fun checkAndAddTaskFromList(taskList: List<DownloadItem>) {
-        taskList.let { list ->
-            if (list.isNotEmpty()) {
-                list.maxByOrNull { it.downloadPriority }?.let {
-                    ThreadManager.getInstance().start {
-                        if (!hasPauseAll()) {
-                            startTask(it, it.isDownloadWhenAdd)
-                        }
-                    }
+    /**
+     * 从等待队列中取出优先级最高的任务开始下载
+     * 
+     * 当有下载槽位空出时（任务完成/暂停/失败）调用此方法，
+     * 从等待队列中选择优先级最高的任务启动下载。
+     * 每次只启动一个任务，通过链式调用保持最大并发数。
+     */
+    fun addWaitToDownload() {
+        getWaitingTask().maxByOrNull { it.downloadPriority }?.let { task ->
+            ThreadManager.getInstance().start {
+                if (!hasPauseAll()) {
+                    startTask(task, task.isDownloadWhenAdd)
                 }
             }
         }
     }
 
-    fun addWaitToDownload() {
-        checkAndAddTaskFromList(getWaitingTask())
+    /**
+     * 恢复因网络切换（WiFi→移动网络）而暂停的任务
+     * 
+     * 当网络从移动网络切换回WiFi时调用，按优先级从高到低批量恢复所有因网络暂停的任务。
+     * [startTask] 内部会自动控制并发数，高优先级任务先占用下载槽位，
+     * 超出限制的低优先级任务会进入等待队列。
+     */
+    private fun addPauseByNetworkToDownload() {
+        ZLog.d(TAG, "addPauseByNetworkToDownload: 恢复因网络切换暂停的任务")
+        getPauseByNetworkTask().sortedByDescending { it.downloadPriority }.forEach { info ->
+            ZLog.d(TAG, "恢复网络暂停任务(优先级${info.downloadPriority}): ${info.downloadURL}")
+            resumeTask(info.downloadID, info.downloadListener, false, info.isDownloadWhenUseMobile)
+        }
     }
-
-    fun addPauseByNetworkToDownload() {
-        checkAndAddTaskFromList(getPauseByNetworkTask())
+    
+    /**
+     * 恢复因网络异常（断网/超时等）而暂停的任务
+     * 
+     * 当网络恢复时调用，按优先级从高到低批量恢复所有因网络异常暂停的任务。
+     * 高优先级任务先占用下载槽位，低优先级任务进入等待队列。
+     */
+    private fun addPauseByNetworkErrorToDownload() {
+        ZLog.d(TAG, "addPauseByNetworkErrorToDownload: 恢复因网络异常暂停的任务")
+        getPauseByNetworkErrorTask().sortedByDescending { it.downloadPriority }.forEach { info ->
+            ZLog.d(TAG, "恢复网络异常任务(优先级${info.downloadPriority}): ${info.downloadURL}")
+            resumeTask(info.downloadID, info.downloadListener, false, info.isDownloadWhenUseMobile)
+        }
     }
 
 
@@ -541,6 +576,8 @@ abstract class DownloadManager {
             ZLog.d(TAG, "resumeTask:$info")
             if (startByUser) {
                 info.isDownloadWhenAdd = true
+                // 用户手动恢复时，重置网络异常重试计数
+                info.resetNetworkErrorRetryRound()
             }
             info.isDownloadWhenUseMobile = downloadWhenUseMobile
             downloadListener?.let {
@@ -560,27 +597,29 @@ abstract class DownloadManager {
         }
     }
 
-    fun pauseTask(downloadId: Long, type: Int, clearHistory: Boolean) {
+    fun pauseTask(downloadId: Long, type: Int) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            pauseTask(info, type, clearHistory)
+            pauseTask(info, type)
         }
     }
 
-    fun pauseTask(info: DownloadItem, type: Int, clearHistory: Boolean) {
-        ZLog.d(TAG, "pause:$type $clearHistory ${info.downloadURL}")
+    fun pauseTask(info: DownloadItem, type: Int) {
+        ZLog.d(TAG, "pause:$type ${info.downloadURL}")
         ZLog.d(TAG, "pause:$info")
+        // 网络暂停的任务，恢复时应该自动下载
+        if (type == DownloadPauseType.PAUSED_BY_NETWORK || 
+            type == DownloadPauseType.PAUSED_BY_NETWORK_ERROR) {
+            info.isDownloadWhenAdd = true
+        }
         // 先设置状态为暂停，避免 checkDownloadProcess 线程竞态触发 onProgress
         info.setPause(type)
-        getDownloadEngine().closeDownload(info.downloadID, false, clearHistory)
-        when (type) {
-            DownloadPauseType.PAUSED_BY_NETWORK -> {
-
-            }
-
-            else -> {
-                getInnerDownloadListener().onPause(info)
-            }
-        }
+        // 暂停时不清除下载历史，保留断点续传进度
+        getDownloadEngine().closeDownload(info.downloadID,
+            finishDownload = false,
+            clearDownloadHistory = false
+        )
+        // 所有暂停类型都回调 onPause，让上层知道暂停原因
+        getInnerDownloadListener().onPause(info, type)
     }
 
     open fun deleteTask(downloadId: Long, startByUser: Boolean, deleteFile: Boolean) {
@@ -608,6 +647,8 @@ abstract class DownloadManager {
         ZLog.d(TAG, "pauseAllTask:$type")
         pauseWaitingTask(type, pauseMaxDownload)
         pauseDownloadingTask(type, pauseMaxDownload)
+        // 更新已暂停任务的 pauseType，确保状态一致
+        updatePausedTaskType(type, pauseMaxDownload)
     }
 
     fun pauseDownloadingTask(type: Int, pauseMaxDownload: Boolean) {
@@ -615,13 +656,12 @@ abstract class DownloadManager {
         getDownloadingTask().forEach {
             if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
                 if (pauseMaxDownload) {
-                    pauseTask(it.downloadID, type, clearHistory = false)
+                    pauseTask(it.downloadID, type)
                 } else {
-                    ZLog.e(TAG, "skip pause maxPriority download:$it")
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                 }
             } else {
-                pauseTask(it.downloadID, type, clearHistory = false)
+                pauseTask(it.downloadID, type)
             }
         }
     }
@@ -631,17 +671,46 @@ abstract class DownloadManager {
         getWaitingTask().forEach {
             if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
                 if (pauseMaxDownload) {
-                    pauseTask(it.downloadID, type, clearHistory = false)
+                    pauseTask(it.downloadID, type)
                 } else {
-                    ZLog.e(TAG, "skip pause maxPriority download:$it")
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                 }
             } else {
-                pauseTask(it.downloadID, type, clearHistory = false)
+                pauseTask(it.downloadID, type)
             }
         }
     }
 
+    /**
+     * 更新已暂停任务的 pauseType
+     * 用于 pauseAllTask 时，确保已经暂停的任务也被标记为正确的暂停类型
+     * 避免网络恢复时错误地恢复这些任务
+     * 
+     * 注意：用户主动暂停的任务（PAUSED_BY_USER）不会被覆盖，保护用户意图
+     */
+    private fun updatePausedTaskType(type: Int, pauseMaxDownload: Boolean) {
+        ZLog.d(TAG, "updatePausedTaskType:$type")
+        getAllTask().filter { 
+            it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED 
+            // 不覆盖用户主动暂停的任务，保护用户意图
+            && it.pauseType != DownloadPauseType.PAUSED_BY_USER
+        }.forEach {
+            if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
+                if (pauseMaxDownload) {
+                    it.setPause(type)
+                } else {
+                    ZLog.e(TAG, "skip update maxPriority paused task:$it")
+                }
+            } else {
+                it.setPause(type)
+            }
+        }
+    }
+
+    /**
+     * 恢复所有任务（暂停的 + 失败的）
+     * @param pauseOnMobile 是否允许在移动网络下载
+     */
     fun resumeAllTask(pauseOnMobile: Boolean) {
         ZLog.d(TAG, "resumeAllTask")
         hasPauseAll = false
@@ -649,19 +718,38 @@ abstract class DownloadManager {
         resumeFailedTask(pauseOnMobile)
     }
 
+    /**
+     * 恢复失败的任务，按优先级从高到低恢复
+     * @param pauseOnMobile 是否允许在移动网络下载
+     */
     fun resumeFailedTask(pauseOnMobile: Boolean) {
         ZLog.d(TAG, "resumeFailedTask")
         hasPauseAll = false
-        getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
-        }
+        getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }
+            .sortedByDescending { it.downloadPriority }
+            .forEach {
+                resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
+            }
     }
 
     fun resumePauseTask(pauseOnMobile: Boolean) {
-        ZLog.d(TAG, "resumePauseTask")
+        resumePauseTask(pauseOnMobile, includeUserPaused = true)
+    }
+    
+    /**
+     * 恢复暂停的任务，按优先级从高到低恢复
+     * @param pauseOnMobile 是否允许在移动网络下载
+     * @param includeUserPaused 是否包含用户手动暂停的任务，默认 true
+     */
+    fun resumePauseTask(pauseOnMobile: Boolean, includeUserPaused: Boolean) {
+        ZLog.d(TAG, "resumePauseTask includeUserPaused=$includeUserPaused")
         hasPauseAll = false
-        getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
-        }
+        getAllTask().filter { 
+            it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && 
+            (includeUserPaused || it.pauseType != DownloadPauseType.PAUSED_BY_USER)
+        }.sortedByDescending { it.downloadPriority }
+            .forEach {
+                resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
+            }
     }
 }

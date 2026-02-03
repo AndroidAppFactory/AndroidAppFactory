@@ -51,8 +51,7 @@ object DownloadFileNotify {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 DownloadFileManager.pauseTask(
                                     item.downloadID,
-                                    DownloadPauseType.PAUSED_BY_USER,
-                                    clearHistory = false
+                                    DownloadPauseType.PAUSED_BY_USER
                                 )
                             }
                         }

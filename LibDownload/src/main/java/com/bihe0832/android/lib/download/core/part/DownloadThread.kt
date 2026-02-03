@@ -80,26 +80,32 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
 
         val file = File(mDownloadPartInfo.finalFileName)
-        val finishedBeforeLength = when {
+        
+        // 冷启动回退：只在进入 run() 时执行一次，防止上次下载中断时最后一个缓冲区写入不完整
+        val coldStartFinished = when {
             mDownloadPartInfo.partFinished > DOWNLOAD_BUFFER_SIZE -> {
                 ZLog.w(
                     TAG,
-                    "分片下载开始 回退进度简要信息 第${mDownloadPartInfo.downloadPartID}分片:  可以回退"
+                    "分片下载开始 冷启动回退 第${mDownloadPartInfo.downloadPartID}分片: ${mDownloadPartInfo.partFinished} -> ${mDownloadPartInfo.partFinished - DOWNLOAD_BUFFER_SIZE}"
                 )
                 mDownloadPartInfo.partFinished - DOWNLOAD_BUFFER_SIZE
             }
-
             else -> {
                 0
             }
         }
+        
+        // 冷启动时回退进度并保存
+        mDownloadPartInfo.partFinished = coldStartFinished
+        DownloadInfoDBManager.saveDownloadPartInfo(mDownloadPartInfo)
+        
         val availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
-        val needSpace = mDownloadPartInfo.partLength - finishedBeforeLength
+        val needSpace = mDownloadPartInfo.partLength - mDownloadPartInfo.partFinished
         if (needSpace > 0 && needSpace > availableSpace) {
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             ZLog.e(
                 TAG,
-                "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片失败 下载异常 $retryTimes！！！！存储空间不足, availableSpace: $availableSpace, need: $finishedBeforeLength ",
+                "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片失败 下载异常 $retryTimes！！！！存储空间不足, availableSpace: $availableSpace, need: $needSpace ",
             )
             return
         }
@@ -119,24 +125,24 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
         try {
             do {
+                // 热重试：直接从当前 partFinished 继续，不再回退
+                // partFinished 在写入循环中实时更新，是准确的
+                val currentFinished = mDownloadPartInfo.partFinished
+                mDownloadPartInfo.partFinishedBefore = currentFinished
+                
                 ZLog.e(
                     TAG,
-                    "分片下载开始 回退进度前简要信息 第${mDownloadPartInfo.downloadPartID}分片下载前: 分片长度：${mDownloadPartInfo.partLength}, 分片Range开头：${mDownloadPartInfo.partRangeStart}, 分片本地开头：${mDownloadPartInfo.partLocalStart}, 已完成：${mDownloadPartInfo.partFinished} ",
-                )
-                mDownloadPartInfo.partFinished = finishedBeforeLength
-                mDownloadPartInfo.partFinishedBefore = mDownloadPartInfo.partFinished
-                DownloadInfoDBManager.saveDownloadPartInfo(mDownloadPartInfo)
-                ZLog.e(
-                    TAG,
-                    "分片下载开始 回退进度后简要信息 第${mDownloadPartInfo.downloadPartID}分片下载前: 分片长度：${mDownloadPartInfo.partLength}, 分片Range开头：${mDownloadPartInfo.partRangeStart}, 分片本地开头：${mDownloadPartInfo.partLocalStart}, 已完成：${mDownloadPartInfo.partFinished} ",
+                    "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片: 分片长度：${mDownloadPartInfo.partLength}, 当前进度：$currentFinished, 重试次数：$retryTimes",
                 )
 
                 try {
+                    val localStart = mDownloadPartInfo.partLocalStart + currentFinished
+                    val rangeStart = mDownloadPartInfo.partRangeStart + currentFinished
                     ZLog.e(
                         TAG,
-                        "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片 开始: 本次Range开头：${mDownloadPartInfo.partRangeStart + finishedBeforeLength}, 本次Local开头：${mDownloadPartInfo.partLocalStart + finishedBeforeLength},  本次Range结尾: ${mDownloadPartInfo.partRangeEnd}",
+                        "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片 开始: 本次Range开头：$rangeStart, 本次Local开头：$localStart, 本次Range结尾: ${mDownloadPartInfo.partRangeEnd}",
                     )
-                    randomAccessFile.seek(mDownloadPartInfo.partLocalStart + finishedBeforeLength)
+                    randomAccessFile.seek(localStart)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     ZLog.e(
@@ -148,7 +154,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
 
                 try {
-                    val rangeStart = mDownloadPartInfo.partRangeStart + finishedBeforeLength
+                    val rangeStart = mDownloadPartInfo.partRangeStart + currentFinished
                     if (!startDownload(
                             randomAccessFile,
                             rangeStart,
@@ -163,6 +169,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         TAG,
                         "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载异常 $retryTimes！！！！:${e.javaClass.name}"
                     )
+                    // 保存当前进度（partFinished 已经是最新值）
                     DownloadInfoDBManager.updateDownloadFinished(
                         mDownloadPartInfo.downloadPartID,
                         mDownloadPartInfo.partFinished,
@@ -170,6 +177,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     sleep(3)
                     if (retryTimes < DOWNLOAD_RETRY_TIMES) {
                         retryTimes++
+                        // 继续循环，从 partFinished 当前值继续，不回退
                     } else {
                         ZLog.e(
                             TAG,
