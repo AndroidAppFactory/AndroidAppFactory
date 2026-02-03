@@ -303,6 +303,12 @@ abstract class DownloadManager {
         downloadAfterAdd: Boolean
     ): Boolean {
         ZLog.w(TAG, "updateDownItemByServerInfo:$info")
+        // DEBUG: 记录进入时的关键参数
+        ZLog.w(TAG, "updateDownItemByServerInfo START ================")
+        ZLog.w(TAG, "updateDownItemByServerInfo downloadURL: ${info.downloadURL}")
+        ZLog.w(TAG, "updateDownItemByServerInfo downloadWhenUseMobile: ${info.isDownloadWhenUseMobile}")
+        ZLog.w(TAG, "updateDownItemByServerInfo rangeStart: $rangeStart, rangeLength: $rangeLength, localStart: $localStart")
+        ZLog.w(TAG, "updateDownItemByServerInfo downloadAfterAdd: $downloadAfterAdd")
         // 重新启动，获取文件总长度
         var times = 0
         // 直接使用原始 URL，让 OkHttp 自动处理重定向
@@ -362,12 +368,15 @@ abstract class DownloadManager {
                 // 从 header 中读取 Content-Length，使用统一的扩展方法
                 val contentLength = response.getContentLength()
                 ZLog.e(TAG, "获取文件长度 getContentType:${response.body?.contentType()}")
-                ZLog.e(TAG, "获取文件长度 getContentLength:${contentLength}")
+                ZLog.e(TAG, "获取文件长度 HTTP响应 responseCode: ${response.code}")
+                ZLog.e(TAG, "获取文件长度 HTTP响应 contentLength: $contentLength")
+                ZLog.e(TAG, "获取文件长度 HTTP响应 Content-Length Header: ${response.header("Content-Length")}")
+                ZLog.e(TAG, "获取文件长度 HTTP响应 Content-Range Header: ${response.header("Content-Range")}")
                 ZLog.e(TAG, "获取文件长度 protocol:${response.protocol}")
-                ZLog.e(TAG, "计划下载的信息 rangeStart:${rangeStart}, rangeLength:${rangeLength}")
-                ZLog.e(TAG, "获取文件长度 responseCode:${response.code}")
+                ZLog.e(TAG, "获取文件长度 计划下载的信息 rangeStart:${rangeStart}, rangeLength:${rangeLength}")
 
                 if (response.code == HttpURLConnection.HTTP_OK || response.code == HttpURLConnection.HTTP_PARTIAL) {
+                    ZLog.e(TAG, "获取文件长度 HTTP成功，准备调用 updateItemByServer, serverContentLength: $contentLength")
                     val result = updateItemByServer(
                         info,
                         rangeStart,

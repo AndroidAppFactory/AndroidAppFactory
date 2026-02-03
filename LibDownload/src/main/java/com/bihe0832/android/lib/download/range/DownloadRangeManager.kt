@@ -128,9 +128,17 @@ object DownloadRangeManager : DownloadManager() {
         downloadAfterAdd: Boolean
     ): Boolean {
         ZLog.d(TAG, "startTask:$info")
+        // DEBUG: 记录 updateItemByServer 的关键参数
+        ZLog.w(TAG, "updateItemByServer ================")
+        ZLog.w(TAG, "updateItemByServer serverContentLength: $serverContentLength")
+        ZLog.w(TAG, "updateItemByServer rangeStart: $rangeStart, rangeLength: $rangeLength")
+        ZLog.w(TAG, "updateItemByServer 判断条件: serverContentLength > 0 = ${serverContentLength > 0}")
         try {
             if (serverContentLength > 0) {
-                if (rangeLength > 0 && serverContentLength < rangeStart + rangeLength) {
+                ZLog.w(TAG, "updateItemByServer serverContentLength > 0, 检查 rangeLength")
+                // 修复：分片下载时，serverContentLength 是本次请求返回的数据长度，应与 rangeLength 比较
+                if (rangeLength > 0 && serverContentLength < rangeLength) {
+                    ZLog.w(TAG, "失败: serverContentLength($serverContentLength) < rangeLength($rangeLength)")
                     //请求长度小于服务器获取的长度
                     innerDownloadListener.onFail(
                         DownloadErrorCode.ERR_RANGE_BAD_SERVER_LENGTH,
@@ -139,7 +147,9 @@ object DownloadRangeManager : DownloadManager() {
                     )
                     return false
                 }
+                ZLog.w(TAG, "updateItemByServer serverContentLength 检查通过")
             } else {
+                ZLog.w(TAG, "updateItemByServer 失败: serverContentLength <= 0, 不支持分片下载")
                 // 区间下载，但是源数据不支持分片，返回失败
                 innerDownloadListener.onFail(
                     DownloadErrorCode.ERR_RANGE_NOT_SUPPORT,
@@ -239,6 +249,12 @@ object DownloadRangeManager : DownloadManager() {
     fun addTask(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
         ThreadManager.getInstance().start {
             ZLog.d(TAG, "addTask:$info")
+            // DEBUG: 记录 addTask 的关键参数
+            ZLog.w(TAG, "addTask START ================")
+            ZLog.w(TAG, "downloadURL: ${info.downloadURL}")
+            ZLog.w(TAG, "downloadWhenUseMobile: ${info.isDownloadWhenUseMobile}")
+            ZLog.w(TAG, "downloadWhenAdd: ${info.isDownloadWhenAdd}")
+            ZLog.w(TAG, "rangeStart: $rangeStart, rangeLength: $rangeLength, localStart: $localStart")
             info.downloadType = DownloadItem.TYPE_RANGE
             if (DownloadingList.isDownloading(info)) {
                 val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
