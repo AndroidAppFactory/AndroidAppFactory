@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.download.file.DownloadFileManager
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -42,6 +43,12 @@ fun DebugDownloadTestView() {
             "下载及安装Debug调试",
             "DebugDownloadView"
         ) { DebugDownloadView() }
+        // ========== 🚀 自动化测试 ==========
+        DebugTips("🚀 自动化测试")
+
+        DebugItem("一键执行全部测试") { context ->
+            runAllTests(context)
+        }
 
         // ========== 📥 任务创建 ==========
         DebugTips("📥 任务创建")
@@ -212,13 +219,6 @@ fun DebugDownloadTestView() {
             DownloadFileUtils.resumeAll(true)
             ZLog.d(TAG, "hasPauseAll 已重置为 false")
         }
-
-        // ========== 🚀 自动化测试 ==========
-        DebugTips("🚀 自动化测试")
-        
-        DebugItem("一键执行全部测试") { context ->
-            runAllTests(context)
-        }
     }
 }
 
@@ -241,28 +241,28 @@ private fun logResult(passed: Boolean, message: String) {
 
 private val testDownloadListener = object : SimpleDownloadListener() {
     override fun onWait(item: DownloadItem) {
-        ZLog.d(TAG, "  [回调] onWait: downloadID=${item.downloadID}")
+        ZLog.d(TAG, "  [回调] onWait: ${getShortUrl(item.downloadURL)}")
     }
 
     override fun onStart(item: DownloadItem) {
-        ZLog.d(TAG, "  [回调] onStart: downloadID=${item.downloadID}")
+        ZLog.d(TAG, "  [回调] onStart: ${getShortUrl(item.downloadURL)}")
     }
 
     override fun onProgress(item: DownloadItem) {
         // 每 20% 输出一次进度
-        ZLog.d(TAG, "  [回调] onProgress: downloadID=${item.downloadID}, progress=${item.getProcessDesc()}")
+        ZLog.d(TAG, "  [回调] onProgress: ${getShortUrl(item.downloadURL)}, progress=${item.getProcessDesc()}")
     }
 
     override fun onPause(item: DownloadItem, pauseType: Int) {
-        ZLog.d(TAG, "  [回调] onPause: downloadID=${item.downloadID}, pauseType=${getPauseTypeName(pauseType)}")
+        ZLog.d(TAG, "  [回调] onPause: ${getShortUrl(item.downloadURL)}, pauseType=${getPauseTypeName(pauseType)}")
     }
 
     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-        ZLog.d(TAG, "  [回调] onFail: downloadID=${item.downloadID}, errorCode=$errorCode, msg=$msg")
+        ZLog.d(TAG, "  [回调] onFail: ${getShortUrl(item.downloadURL)}, errorCode=$errorCode, msg=$msg")
     }
 
     override fun onComplete(filePath: String, item: DownloadItem): String {
-        ZLog.d(TAG, "  [回调] onComplete: downloadID=${item.downloadID}, filePath=$filePath")
+        ZLog.d(TAG, "  [回调] onComplete: ${getShortUrl(item.downloadURL)}, filePath=$filePath")
         return filePath
     }
 }
@@ -293,7 +293,7 @@ private fun addBatchTasks(context: Context, count: Int) {
         DownloadFile.download(context, urls[i], true, testDownloadListener)
     }
     
-    ThreadManager.getInstance().start({ printAllTasksStatus("添加后") }, 1000)
+    ThreadManager.getInstance().start({ printAllTasksStatus("添加后") }, 5000)
 }
 
 private fun addSmallFileTask(context: Context) {
@@ -316,7 +316,7 @@ private fun pauseFirstDownloadingTask(pauseType: Int) {
     }
     
     val task = downloadingTasks.first()
-    ZLog.d(TAG, "暂停任务: downloadID=${task.downloadID}")
+    ZLog.d(TAG, "暂停任务: ${getShortUrl(task.downloadURL)}")
     DownloadFileManager.pauseTask(task.downloadID, pauseType)
     
     ThreadManager.getInstance().start({ printAllTasksStatus("执行后") }, 500)
@@ -336,7 +336,7 @@ private fun resumeFirstPausedTask() {
     }
     
     val task = pausedTasks.first()
-    ZLog.d(TAG, "恢复任务: downloadID=${task.downloadID}, 原 pauseType=${getPauseTypeName(task.pauseType)}")
+    ZLog.d(TAG, "恢复任务: ${getShortUrl(task.downloadURL)}, 原 pauseType=${getPauseTypeName(task.pauseType)}")
     DownloadFileUtils.resumeDownload(task.downloadID, true)
     
     ThreadManager.getInstance().start({ printAllTasksStatus("执行后") }, 500)
@@ -353,7 +353,7 @@ private fun deleteFirstTask() {
     }
     
     val task = allTasks.first()
-    ZLog.d(TAG, "删除任务: downloadID=${task.downloadID}")
+    ZLog.d(TAG, "删除任务: ${getShortUrl(task.downloadURL)}")
     DownloadFileUtils.deleteTask(task.downloadID, true)
     
     ThreadManager.getInstance().start({ printAllTasksStatus("执行后") }, 500)
@@ -368,7 +368,7 @@ private fun deleteAllTasks() {
     ZLog.d(TAG, "待删除任务数: ${allTasks.size}")
     
     allTasks.forEach { task ->
-        ZLog.d(TAG, "  删除: downloadID=${task.downloadID}")
+        ZLog.d(TAG, "  删除: ${getShortUrl(task.downloadURL)}")
         DownloadFileUtils.deleteTask(task.downloadID, true)
     }
     
@@ -387,7 +387,7 @@ private fun printAllTasksStatus(label: String) {
     }
     
     allTasks.forEachIndexed { index, task ->
-        ZLog.d(TAG, "  任务${index + 1}: downloadID=${task.downloadID}")
+        ZLog.d(TAG, "  任务${index + 1}: ${getShortUrl(task.downloadURL)}")
         ZLog.d(TAG, "         status=${getStatusName(task.status)}")
         ZLog.d(TAG, "         pauseType=${getPauseTypeName(task.pauseType)}")
         ZLog.d(TAG, "         progress=${task.process}%")
@@ -432,19 +432,19 @@ private fun printPausedTasksByType() {
     val byNetworkError = pausedTasks.filter { it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR }
     
     ZLog.d(TAG, "  PAUSED_BY_MOBILE_NETWORK: ${byMobile.size}")
-    byMobile.forEach { ZLog.d(TAG, "    - downloadID=${it.downloadID}") }
+    byMobile.forEach { ZLog.d(TAG, "    - ${getShortUrl(it.downloadURL)}") }
     
     ZLog.d(TAG, "  PAUSED_BY_USER: ${byUser.size}")
-    byUser.forEach { ZLog.d(TAG, "    - downloadID=${it.downloadID}") }
+    byUser.forEach { ZLog.d(TAG, "    - ${getShortUrl(it.downloadURL)}") }
     
     ZLog.d(TAG, "  PAUSED_BY_ALL: ${byAll.size}")
-    byAll.forEach { ZLog.d(TAG, "    - downloadID=${it.downloadID}") }
+    byAll.forEach { ZLog.d(TAG, "    - ${getShortUrl(it.downloadURL)}") }
     
     ZLog.d(TAG, "  PAUSED_PENDING_START: ${byPending.size}")
-    byPending.forEach { ZLog.d(TAG, "    - downloadID=${it.downloadID}") }
+    byPending.forEach { ZLog.d(TAG, "    - ${getShortUrl(it.downloadURL)}") }
     
     ZLog.d(TAG, "  PAUSED_BY_NETWORK_ERROR: ${byNetworkError.size}")
-    byNetworkError.forEach { ZLog.d(TAG, "    - downloadID=${it.downloadID}") }
+    byNetworkError.forEach { ZLog.d(TAG, "    - ${getShortUrl(it.downloadURL)}") }
     
     ZLog.d(TAG, "================================================")
 }
@@ -476,7 +476,93 @@ private fun getPauseTypeName(pauseType: Int): String {
     }
 }
 
+private fun getShortUrl(url: String?): String {
+    return FileUtils.getFileName(url)
+}
+
 // ==================== 自动化测试 ====================
+
+/**
+ * 等待至少有指定数量的任务进入下载状态（非 WAITING）
+ * @param minCount 最少需要的任务数
+ * @param maxWaitMs 最大等待时间（毫秒）
+ * @return 是否等待成功
+ */
+private fun waitForTasksReady(minCount: Int, maxWaitMs: Long = 10000): Boolean {
+    val startTime = System.currentTimeMillis()
+    while (System.currentTimeMillis() - startTime < maxWaitMs) {
+        val allTasks = DownloadFileManager.getAllTask()
+        // 统计非 WAITING 状态的任务（已开始下载、暂停、完成等都算）
+        val readyTasks = allTasks.filter { 
+            it.status != DownloadStatus.STATUS_DOWNLOAD_WAITING 
+        }
+        if (allTasks.size >= minCount && readyTasks.size >= minCount) {
+            ZLog.d(TAG, "  任务准备就绪: 总数=${allTasks.size}, 已开始=${readyTasks.size}")
+            return true
+        }
+        Thread.sleep(500)
+    }
+    val allTasks = DownloadFileManager.getAllTask()
+    ZLog.d(TAG, "  等待超时: 总数=${allTasks.size}, 状态=${allTasks.map { getStatusName(it.status) }}")
+    return false
+}
+
+/**
+ * 等待至少有一个任务进入下载中状态
+ * @param maxWaitMs 最大等待时间（毫秒）
+ * @return 是否等待成功
+ */
+private fun waitForDownloading(maxWaitMs: Long = 10000): Boolean {
+    val startTime = System.currentTimeMillis()
+    while (System.currentTimeMillis() - startTime < maxWaitMs) {
+        val downloading = DownloadFileManager.getDownloadingTask()
+        if (downloading.isNotEmpty()) {
+            ZLog.d(TAG, "  任务已开始下载: ${getShortUrl(downloading.first().downloadURL)}")
+            return true
+        }
+        Thread.sleep(500)
+    }
+    ZLog.d(TAG, "  等待下载中任务超时")
+    return false
+}
+
+/**
+ * 等待至少有一个任务下载完成
+ * @param maxWaitMs 最大等待时间（毫秒）
+ * @return 是否等待成功
+ */
+private fun waitForFinished(maxWaitMs: Long = 15000): Boolean {
+    val startTime = System.currentTimeMillis()
+    while (System.currentTimeMillis() - startTime < maxWaitMs) {
+        val finished = DownloadFileManager.getFinishedTask()
+        if (finished.isNotEmpty()) {
+            ZLog.d(TAG, "  任务已完成: ${getShortUrl(finished.first().downloadURL)}")
+            return true
+        }
+        Thread.sleep(500)
+    }
+    ZLog.d(TAG, "  等待下载完成超时")
+    return false
+}
+
+/**
+ * 等待任务状态变化（用于暂停/恢复后的验证）
+ * @param taskId 任务ID
+ * @param expectedStatus 期望的状态
+ * @param maxWaitMs 最大等待时间
+ * @return 是否等待成功
+ */
+private fun waitForTaskStatus(taskId: Long, expectedStatus: Int, maxWaitMs: Long = 5000): Boolean {
+    val startTime = System.currentTimeMillis()
+    while (System.currentTimeMillis() - startTime < maxWaitMs) {
+        val task = DownloadFileManager.getAllTask().find { it.downloadID == taskId }
+        if (task?.status == expectedStatus) {
+            return true
+        }
+        Thread.sleep(300)
+    }
+    return false
+}
 
 private fun runAllTests(context: Context) {
     ZLog.d(TAG, "")
@@ -502,9 +588,8 @@ private fun runAllTests(context: Context) {
             // Step 2: 基础下载测试
             logStep(2, "基础下载测试")
             DownloadFile.download(context, URL_CONFIG, true, testDownloadListener)
-            Thread.sleep(3000) // 等待小文件下载完成
+            val step2Pass = waitForFinished(15000)  // 等待小文件下载完成
             val finishedCount = DownloadFileManager.getFinishedTask().size
-            val step2Pass = finishedCount >= 1
             testResults.add("基础下载测试" to step2Pass)
             logResult(step2Pass, "基础下载测试 - 完成任务数: $finishedCount")
             deleteAllTasksSync()
@@ -513,13 +598,15 @@ private fun runAllTests(context: Context) {
             // Step 3: 单任务暂停/恢复测试
             logStep(3, "单任务暂停/恢复测试")
             DownloadFile.download(context, URL_YYB_WZ, true, testDownloadListener)
-            Thread.sleep(2000) // 等待进入下载状态
             
-            val downloadingBefore = DownloadFileManager.getDownloadingTask()
-            if (downloadingBefore.isNotEmpty()) {
+            if (!waitForDownloading()) {
+                testResults.add("单任务暂停/恢复测试" to false)
+                logResult(false, "  等待下载中任务超时")
+            } else {
+                val downloadingBefore = DownloadFileManager.getDownloadingTask()
                 val taskId = downloadingBefore.first().downloadID
                 DownloadFileManager.pauseTask(taskId, DownloadPauseType.PAUSED_BY_USER)
-                Thread.sleep(500)
+                waitForTaskStatus(taskId, DownloadStatus.STATUS_DOWNLOAD_PAUSED)
                 
                 val taskAfterPause = DownloadFileManager.getAllTask().find { it.downloadID == taskId }
                 val pauseCorrect = taskAfterPause?.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED &&
@@ -527,7 +614,7 @@ private fun runAllTests(context: Context) {
                 logResult(pauseCorrect, "  暂停状态: ${getPauseTypeName(taskAfterPause?.pauseType ?: 0)}")
                 
                 DownloadFileUtils.resumeDownload(taskId, true)
-                Thread.sleep(1000)
+                waitForDownloading(10000)
                 
                 val taskAfterResume = DownloadFileManager.getAllTask().find { it.downloadID == taskId }
                 val resumeCorrect = taskAfterResume?.status == DownloadStatus.STATUS_DOWNLOADING ||
@@ -535,9 +622,6 @@ private fun runAllTests(context: Context) {
                 logResult(resumeCorrect, "  恢复后状态: ${getStatusName(taskAfterResume?.status ?: 0)}")
                 
                 testResults.add("单任务暂停/恢复测试" to (pauseCorrect && resumeCorrect))
-            } else {
-                testResults.add("单任务暂停/恢复测试" to false)
-                logResult(false, "  没有下载中的任务")
             }
             deleteAllTasksSync()
             Thread.sleep(500)
@@ -546,26 +630,29 @@ private fun runAllTests(context: Context) {
             logStep(4, "批量控制测试")
             DownloadFile.download(context, URL_YYB_WZ, true, testDownloadListener)
             DownloadFile.download(context, URL_YYB_TTS, true, testDownloadListener)
-            Thread.sleep(2000)
             
-            val beforePauseAll = DownloadFileManager.getAllTask().size
-            DownloadFileUtils.pauseAll(true, true)
-            Thread.sleep(500)
-            
-            val pausedAfterPauseAll = DownloadFileManager.getAllTask().count { 
-                it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && 
-                it.pauseType == DownloadPauseType.PAUSED_BY_ALL 
-            }
-            logResult(pausedAfterPauseAll > 0, "  pauseAll 后 PAUSED_BY_ALL 数: $pausedAfterPauseAll")
-            
-            DownloadFileUtils.resumeAll(true)
-            Thread.sleep(1000)
-            
-            val activeAfterResume = DownloadFileManager.getDownloadingTask().size + 
+            if (!waitForTasksReady(2)) {
+                testResults.add("批量控制测试" to false)
+                logResult(false, "  等待任务就绪超时")
+            } else {
+                DownloadFileUtils.pauseAll(true, true)
+                Thread.sleep(500)
+                
+                val pausedAfterPauseAll = DownloadFileManager.getAllTask().count { 
+                    it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && 
+                    it.pauseType == DownloadPauseType.PAUSED_BY_ALL 
+                }
+                logResult(pausedAfterPauseAll > 0, "  pauseAll 后 PAUSED_BY_ALL 数: $pausedAfterPauseAll")
+                
+                DownloadFileUtils.resumeAll(true)
+                waitForDownloading(10000)
+                
+                val activeAfterResume = DownloadFileManager.getDownloadingTask().size + 
                     DownloadFileManager.getWaitingTask().size
-            logResult(activeAfterResume > 0, "  resumeAll 后活跃任务数: $activeAfterResume")
-            
-            testResults.add("批量控制测试" to (pausedAfterPauseAll > 0 && activeAfterResume > 0))
+                logResult(activeAfterResume > 0, "  resumeAll 后活跃任务数: $activeAfterResume")
+                
+                testResults.add("批量控制测试" to (pausedAfterPauseAll > 0 && activeAfterResume > 0))
+            }
             deleteAllTasksSync()
             Thread.sleep(500)
             
@@ -573,39 +660,46 @@ private fun runAllTests(context: Context) {
             logStep(5, "USER 暂停优先级测试")
             DownloadFile.download(context, URL_YYB_WZ, true, testDownloadListener)
             DownloadFile.download(context, URL_YYB_TTS, true, testDownloadListener)
-            Thread.sleep(2000)
             
-            val tasks = DownloadFileManager.getAllTask()
-            if (tasks.size >= 2) {
-                // 任务1 用 USER 暂停
-                DownloadFileManager.pauseTask(tasks[0].downloadID, DownloadPauseType.PAUSED_BY_USER)
-                // 任务2 用 ALL 暂停
-                DownloadFileManager.pauseTask(tasks[1].downloadID, DownloadPauseType.PAUSED_BY_ALL)
-                Thread.sleep(500)
-                
-                // 执行 pauseAll(ALL)，USER 不应该被覆盖
-                DownloadFileUtils.pauseAll(true, true)
-                Thread.sleep(500)
-                
-                val task1AfterPauseAll = DownloadFileManager.getAllTask().find { it.downloadID == tasks[0].downloadID }
-                val userNotOverwritten = task1AfterPauseAll?.pauseType == DownloadPauseType.PAUSED_BY_USER
-                logResult(userNotOverwritten, "  USER 暂停未被覆盖: ${getPauseTypeName(task1AfterPauseAll?.pauseType ?: 0)}")
-                
-                // resumePauseTask(false) 排除 USER
-                DownloadFileManager.resumePauseTask(true, false)
-                Thread.sleep(1000)
-                
-                val task1AfterResume = DownloadFileManager.getAllTask().find { it.downloadID == tasks[0].downloadID }
-                val task2AfterResume = DownloadFileManager.getAllTask().find { it.downloadID == tasks[1].downloadID }
-                
-                val userStillPaused = task1AfterResume?.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED
-                val allResumed = task2AfterResume?.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED
-                logResult(userStillPaused, "  USER 任务仍暂停: ${getStatusName(task1AfterResume?.status ?: 0)}")
-                logResult(allResumed, "  ALL 任务已恢复: ${getStatusName(task2AfterResume?.status ?: 0)}")
-                
-                testResults.add("USER 暂停优先级测试" to (userNotOverwritten && userStillPaused))
-            } else {
+            // 等待任务准备就绪（非 WAITING 状态）
+            if (!waitForTasksReady(2)) {
+                ZLog.d(TAG, "  ⚠️ 等待任务就绪超时，跳过此测试")
                 testResults.add("USER 暂停优先级测试" to false)
+            } else {
+                val tasks = DownloadFileManager.getAllTask()
+                ZLog.d(TAG, "  当前任务数: ${tasks.size}")
+                if (tasks.size >= 2) {
+                    // 任务1 用 USER 暂停
+                    DownloadFileManager.pauseTask(tasks[0].downloadID, DownloadPauseType.PAUSED_BY_USER)
+                    // 任务2 用 ALL 暂停
+                    DownloadFileManager.pauseTask(tasks[1].downloadID, DownloadPauseType.PAUSED_BY_ALL)
+                    Thread.sleep(500)
+                    
+                    // 执行 pauseAll(ALL)，USER 不应该被覆盖
+                    DownloadFileUtils.pauseAll(true, true)
+                    Thread.sleep(500)
+                    
+                    val task1AfterPauseAll = DownloadFileManager.getAllTask().find { it.downloadID == tasks[0].downloadID }
+                    val userNotOverwritten = task1AfterPauseAll?.pauseType == DownloadPauseType.PAUSED_BY_USER
+                    logResult(userNotOverwritten, "  USER 暂停未被覆盖: ${getPauseTypeName(task1AfterPauseAll?.pauseType ?: 0)}")
+                    
+                    // resumePauseTask(false) 排除 USER
+                    DownloadFileManager.resumePauseTask(pauseOnMobile = true, includeUserPaused = false)
+                    Thread.sleep(3000)
+                    
+                    val task1AfterResume = DownloadFileManager.getAllTask().find { it.downloadID == tasks[0].downloadID }
+                    val task2AfterResume = DownloadFileManager.getAllTask().find { it.downloadID == tasks[1].downloadID }
+                    
+                    val userStillPaused = task1AfterResume?.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED
+                    val allResumed = task2AfterResume?.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED
+                    logResult(userStillPaused, "  USER 任务仍暂停: ${getStatusName(task1AfterResume?.status ?: 0)}")
+                    logResult(allResumed, "  ALL 任务已恢复: ${getStatusName(task2AfterResume?.status ?: 0)}")
+                    
+                    testResults.add("USER 暂停优先级测试" to (userNotOverwritten && userStillPaused))
+                } else {
+                    ZLog.d(TAG, "  ⚠️ 任务数不足（需要 >= 2），跳过此测试")
+                    testResults.add("USER 暂停优先级测试" to false)
+                }
             }
             deleteAllTasksSync()
             Thread.sleep(500)
@@ -613,31 +707,39 @@ private fun runAllTests(context: Context) {
             // Step 6: 网络暂停类型测试（模拟方式，真实WiFi操作请使用手动测试）
             logStep(6, "网络暂停类型测试")
             DownloadFile.download(context, URL_YYB_WZ, true, testDownloadListener)
-            Thread.sleep(2000)
             
-            val netTask = DownloadFileManager.getAllTask().firstOrNull()
-            if (netTask != null) {
-                // 模拟断网暂停
-                DownloadFileManager.pauseTask(netTask.downloadID, DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
-                Thread.sleep(500)
-                val afterNetError = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
-                val netErrorCorrect = afterNetError?.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR
-                ZLog.d(TAG, "  断网暂停后: status=${getStatusName(afterNetError?.status ?: 0)}, pauseType=${getPauseTypeName(afterNetError?.pauseType ?: 0)}")
-                logResult(netErrorCorrect, "  PAUSED_BY_NETWORK_ERROR 设置正确")
-                
-                // 模拟网络恢复（调用 checkDownloadWhenNetChanged）
-                DownloadFileManager.checkDownloadWhenNetChanged()
-                Thread.sleep(1000)
-                val afterRecover = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
-                val recoverCorrect = afterRecover?.status == DownloadStatus.STATUS_DOWNLOADING || 
-                                     afterRecover?.status == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
-                                     afterRecover?.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                ZLog.d(TAG, "  网络恢复后: status=${getStatusName(afterRecover?.status ?: 0)}, pauseType=${getPauseTypeName(afterRecover?.pauseType ?: 0)}")
-                logResult(recoverCorrect, "  checkDownloadWhenNetChanged 恢复正确")
-                
-                testResults.add("网络暂停类型测试" to (netErrorCorrect && recoverCorrect))
-            } else {
+            // 等待任务进入下载状态
+            if (!waitForDownloading()) {
+                ZLog.d(TAG, "  ⚠️ 等待下载中任务超时，跳过此测试")
                 testResults.add("网络暂停类型测试" to false)
+            } else {
+                val netTask = DownloadFileManager.getAllTask().firstOrNull()
+                ZLog.d(TAG, "  当前任务数: ${DownloadFileManager.getAllTask().size}")
+                if (netTask != null) {
+                    ZLog.d(TAG, "  测试任务: ${getShortUrl(netTask.downloadURL)}")
+                    // 模拟断网暂停
+                    DownloadFileManager.pauseTask(netTask.downloadID, DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
+                    Thread.sleep(500)
+                    val afterNetError = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
+                    val netErrorCorrect = afterNetError?.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR
+                    ZLog.d(TAG, "  断网暂停后: status=${getStatusName(afterNetError?.status ?: 0)}, pauseType=${getPauseTypeName(afterNetError?.pauseType ?: 0)}")
+                    logResult(netErrorCorrect, "  PAUSED_BY_NETWORK_ERROR 设置正确")
+                    
+                    // 模拟网络恢复（调用 checkDownloadWhenNetChanged）
+                    DownloadFileManager.checkDownloadWhenNetChanged()
+                    Thread.sleep(5000)
+                    val afterRecover = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
+                    val recoverCorrect = afterRecover?.status == DownloadStatus.STATUS_DOWNLOADING || 
+                                         afterRecover?.status == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
+                                         afterRecover?.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                    ZLog.d(TAG, "  网络恢复后: status=${getStatusName(afterRecover?.status ?: 0)}, pauseType=${getPauseTypeName(afterRecover?.pauseType ?: 0)}")
+                    logResult(recoverCorrect, "  checkDownloadWhenNetChanged 恢复正确")
+                    
+                    testResults.add("网络暂停类型测试" to (netErrorCorrect && recoverCorrect))
+                } else {
+                    ZLog.d(TAG, "  ⚠️ 没有找到任务，跳过此测试")
+                    testResults.add("网络暂停类型测试" to false)
+                }
             }
             deleteAllTasksSync()
             Thread.sleep(500)
@@ -645,7 +747,7 @@ private fun runAllTests(context: Context) {
             // Step 7: 状态查询测试
             logStep(7, "状态查询测试")
             DownloadFile.download(context, URL_YYB_WZ, true, testDownloadListener)
-            Thread.sleep(1000)
+            Thread.sleep(3000)
             
             val queryAllTask = DownloadFileManager.getAllTask()
             val queryDownloading = DownloadFileManager.getDownloadingTask()
@@ -663,18 +765,30 @@ private fun runAllTests(context: Context) {
             
             testResults.add("状态查询测试" to (queryAllTask.isNotEmpty()))
             logResult(queryAllTask.isNotEmpty(), "状态查询测试")
-            
-            // Step 8: 清理
-            logStep(8, "清理")
             deleteAllTasksSync()
             Thread.sleep(500)
+            
+            // Step 8: 最终清理验证
+            logStep(8, "最终清理验证")
             val step8Pass = DownloadFileManager.getAllTask().isEmpty()
-            testResults.add("清理" to step8Pass)
-            logResult(step8Pass, "清理完成")
+            testResults.add("最终清理验证" to step8Pass)
+            logResult(step8Pass, "所有任务已清理")
             
         } catch (e: Exception) {
             ZLog.e(TAG, "测试异常: ${e.message}")
             e.printStackTrace()
+        } finally {
+            // 确保测试结束后清理所有任务
+            ZLog.d(TAG, "")
+            ZLog.d(TAG, "🧹 测试结束，清理所有任务...")
+            deleteAllTasksSync()
+            Thread.sleep(300)
+            val remainingTasks = DownloadFileManager.getAllTask()
+            if (remainingTasks.isEmpty()) {
+                ZLog.d(TAG, "✅ 清理完成，所有任务已删除")
+            } else {
+                ZLog.d(TAG, "⚠️ 仍有 ${remainingTasks.size} 个任务未清理")
+            }
         }
         
         // 输出测试报告
