@@ -52,7 +52,7 @@ abstract class DownloadManager {
         private const val MAX_RETRY_TIMES = 2
 
         /** 默认最大并发下载数 */
-        private const val DEFAULT_MAX_NUM = 1
+        private const val DEFAULT_MAX_NUM = 3
 
         /** 最大并发下载数上限（建议不超过5，避免资源竞争） */
         private const val MAX_MAX_NUM = 5
