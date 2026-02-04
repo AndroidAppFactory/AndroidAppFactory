@@ -16,6 +16,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 @Composable
 fun DebugDownloadView() {
     DebugContent {
+
         DebugItem("下载并计算文件的具体信息") { testDownload(it) }
         DebugItem("测试带进度下载") {
             (it as? Activity)?.let { activity ->

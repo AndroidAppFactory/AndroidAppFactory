@@ -7,6 +7,7 @@ import com.bihe0832.android.base.compose.debug.clipboard.DebugClipboardComposeVi
 import com.bihe0832.android.base.compose.debug.color.DebugColorFragment
 import com.bihe0832.android.base.compose.debug.convert.DebugConvertComposeView
 import com.bihe0832.android.base.compose.debug.dialog.DebugDialogComposeView
+import com.bihe0832.android.base.compose.debug.download.DebugDownloadTestView
 import com.bihe0832.android.base.compose.debug.download.DebugDownloadView
 import com.bihe0832.android.base.compose.debug.encrypt.DebugEncryptView
 import com.bihe0832.android.base.compose.debug.file.DebugFileComposeView
@@ -46,7 +47,7 @@ fun AAFDebugModuleView() {
 
     DebugContent {
         DebugComposeItem("临时测试(Temp)", "DebugTempView") { DebugTempView() }
-        DebugComposeItem("下载及安装 Download 调试", "DebugDownloadView") { DebugDownloadView() }
+        DebugComposeItem("下载及安装 Download 调试", "DebugDownloadTestView") { DebugDownloadTestView() }
         DebugComposeItem("文件管理相关", "DebugFileComposeView") { DebugFileComposeView() }
         DebugComposeItem(
             "Dialog (不同类型、顺序、底部，分享等)调试", "DebugDialogComposeView"
