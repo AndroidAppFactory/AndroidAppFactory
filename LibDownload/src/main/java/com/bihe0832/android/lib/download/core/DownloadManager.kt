@@ -611,7 +611,7 @@ abstract class DownloadManager {
             info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)
             info.finished = info.finishedLengthBefore
             ZLog.d(TAG, "resumeTask restore progress: finishedLengthBefore=${info.finishedLengthBefore}, finished=${info.finished}")
-            getInnerDownloadListener().onWait(info)
+            // 不在这里调用 onWait，让 startDownload 统一根据队列情况决定通知 onWait 或 onStart
             // 使用 info.isDownloadWhenAdd 而不是 startByUser
             // 因为网络异常暂停时已设置 isDownloadWhenAdd=true，恢复时应该自动下载
             startTask(info, info.isDownloadWhenAdd)
