@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.compose.debug.download
 
 import android.content.Context
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
@@ -15,7 +16,9 @@ import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 private const val TAG = "DownloadTest"
 
@@ -151,20 +154,30 @@ fun DebugDownloadTestView() {
             ThreadManager.getInstance().start({ printAllTasksStatus("执行后") }, 500)
         }
 
-        // ========== 🌐 网络模拟 ==========
-        DebugTips("🌐 网络模拟")
+        // ========== 🌐 网络控制 ==========
+        DebugTips("🌐 网络控制")
         
-        DebugItem("触发网络变化检查") {
-            logAction("checkDownloadWhenNetChanged")
-            DownloadFileManager.checkDownloadWhenNetChanged()
+        DebugItem("关闭 WiFi (跳转设置)") { context ->
+            logAction("closeWifi - openSettings")
+            printAllTasksStatus("关闭前")
+            ZLog.d(TAG, "跳转到 WiFi 设置，请手动关闭 WiFi")
+            IntentUtils.startSettings(context, Settings.ACTION_WIFI_SETTINGS)
         }
         
-        DebugItem("模拟断网暂停(第一个任务)") {
-            simulateNetworkPause(DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
+        DebugItem("打开 WiFi") {
+            logAction("openWifi")
+            printAllTasksStatus("打开前")
+            WifiManagerWrapper.openWifi()
+            ZLog.d(TAG, "WiFi 打开中，等待网络恢复...")
+            ThreadManager.getInstance().start({ 
+                printAllTasksStatus("打开后")
+            }, 3000)
         }
         
-        DebugItem("模拟移动网络暂停(第一个任务)") {
-            simulateNetworkPause(DownloadPauseType.PAUSED_BY_MOBILE_NETWORK)
+        DebugItem("检查任务状态") {
+            logAction("checkStatus")
+            printAllTasksStatus("当前状态")
+            printPausedTasksByType()
         }
 
         // ========== 🔍 状态查询 ==========
@@ -346,25 +359,7 @@ private fun deleteFirstTask() {
     ThreadManager.getInstance().start({ printAllTasksStatus("执行后") }, 500)
 }
 
-private fun simulateNetworkPause(pauseType: Int) {
-    logAction("模拟网络暂停(${getPauseTypeName(pauseType)})")
-    printAllTasksStatus("执行前")
-    
-    val tasks = DownloadFileManager.getDownloadingTask().ifEmpty { 
-        DownloadFileManager.getWaitingTask() 
-    }
-    
-    if (tasks.isEmpty()) {
-        ZLog.d(TAG, "⚠️ 没有可暂停的任务")
-        return
-    }
-    
-    val task = tasks.first()
-    ZLog.d(TAG, "模拟网络暂停任务: downloadID=${task.downloadID}")
-    DownloadFileManager.pauseTask(task.downloadID, pauseType)
-    
-    ThreadManager.getInstance().start({ printAllTasksStatus("执行后") }, 500)
-}
+
 
 private fun deleteAllTasks() {
     logAction("删除所有任务")
@@ -615,30 +610,32 @@ private fun runAllTests(context: Context) {
             deleteAllTasksSync()
             Thread.sleep(500)
             
-            // Step 6: 网络暂停类型测试
+            // Step 6: 网络暂停类型测试（模拟方式，真实WiFi操作请使用手动测试）
             logStep(6, "网络暂停类型测试")
             DownloadFile.download(context, URL_YYB_WZ, true, testDownloadListener)
             Thread.sleep(2000)
             
             val netTask = DownloadFileManager.getAllTask().firstOrNull()
             if (netTask != null) {
-                // 模拟移动网络暂停
-                DownloadFileManager.pauseTask(netTask.downloadID, DownloadPauseType.PAUSED_BY_MOBILE_NETWORK)
-                Thread.sleep(500)
-                val afterMobile = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
-                val mobileCorrect = afterMobile?.pauseType == DownloadPauseType.PAUSED_BY_MOBILE_NETWORK
-                logResult(mobileCorrect, "  PAUSED_BY_MOBILE_NETWORK: ${getPauseTypeName(afterMobile?.pauseType ?: 0)}")
-                
-                // 恢复后模拟断网暂停
-                DownloadFileUtils.resumeDownload(netTask.downloadID, true)
-                Thread.sleep(1000)
+                // 模拟断网暂停
                 DownloadFileManager.pauseTask(netTask.downloadID, DownloadPauseType.PAUSED_BY_NETWORK_ERROR)
                 Thread.sleep(500)
                 val afterNetError = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
                 val netErrorCorrect = afterNetError?.pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR
-                logResult(netErrorCorrect, "  PAUSED_BY_NETWORK_ERROR: ${getPauseTypeName(afterNetError?.pauseType ?: 0)}")
+                ZLog.d(TAG, "  断网暂停后: status=${getStatusName(afterNetError?.status ?: 0)}, pauseType=${getPauseTypeName(afterNetError?.pauseType ?: 0)}")
+                logResult(netErrorCorrect, "  PAUSED_BY_NETWORK_ERROR 设置正确")
                 
-                testResults.add("网络暂停类型测试" to (mobileCorrect && netErrorCorrect))
+                // 模拟网络恢复（调用 checkDownloadWhenNetChanged）
+                DownloadFileManager.checkDownloadWhenNetChanged()
+                Thread.sleep(1000)
+                val afterRecover = DownloadFileManager.getAllTask().find { it.downloadID == netTask.downloadID }
+                val recoverCorrect = afterRecover?.status == DownloadStatus.STATUS_DOWNLOADING || 
+                                     afterRecover?.status == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
+                                     afterRecover?.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                ZLog.d(TAG, "  网络恢复后: status=${getStatusName(afterRecover?.status ?: 0)}, pauseType=${getPauseTypeName(afterRecover?.pauseType ?: 0)}")
+                logResult(recoverCorrect, "  checkDownloadWhenNetChanged 恢复正确")
+                
+                testResults.add("网络暂停类型测试" to (netErrorCorrect && recoverCorrect))
             } else {
                 testResults.add("网络暂停类型测试" to false)
             }
