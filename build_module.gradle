@@ -86,6 +86,41 @@ def checkModuleIsDev(String moduleName) {
     return isDev
 }
 
+// ============= 工具方法 =============
+
+// 确保依赖列表已初始化
+def ensureDependencyList(String projectName, HashMap<String, ArrayList> dependencies) {
+    if (null == dependencies.get(projectName)) {
+        dependencies.put(projectName, new ArrayList())
+    }
+}
+
+// 添加依赖（如果不存在），返回是否成功添加
+def addDependencyIfNotExists(String projectName, String key, HashMap<String, ArrayList> dependencies) {
+    ensureDependencyList(projectName, dependencies)
+    if (dependencies.get(projectName).contains(key)) {
+        return false
+    }
+    dependencies.get(projectName).add(key)
+    return true
+}
+
+// 从指定路径添加本地 libs 依赖（aar/jar）
+def addLibsFromPath(String projectName, String libsPath, String depType, HashMap<String, ArrayList> dependencies) {
+    def libsDir = new File(libsPath)
+    if (!libsDir.exists() || !libsDir.isDirectory()) return
+    
+    if (zixieIsDebug) println("addLibsFromPath: " + libsPath + " with " + depType)
+    
+    fileTree(dir: libsPath, include: ['*.aar', '*.jar']).each { File file ->
+        def uniqueKey = libsPath + '/' + file.name + '_' + depType
+        if (addDependencyIfNotExists(projectName, uniqueKey, dependencies)) {
+            if (zixieIsDebug) println("addLibsFromPath: " + projectName + " " + depType + " " + file.name)
+            project(':' + projectName).dependencies.add(depType, files(libsPath + '/' + file.name))
+        }
+    }
+}
+
 // 检查 moduleA 和 moduleB 是否有依赖关系
 def checkModuleDependencies(String moduleA, String moduleB) {
     if (zixieIsDebug) println("checkModuleDependencies:" + moduleA + " " + moduleB)
@@ -103,6 +138,14 @@ def checkModuleDependencies(String moduleA, String moduleB) {
 def addDependencies(String projectName) {
     HashMap<String, ArrayList> dependencies = new HashMap<>()
     addLocalDependencies(projectName, "$rootDir/libs")
+    // 如果是 Application 模块，扫描开发模块的 libs 目录，将本地 aar 依赖添加到 Application
+    // 只添加开发中模块的 libs，已发布模块的 libs 已打包到 maven aar 中
+    if (isApplicationModule(projectName)) {
+        addSubModuleLocalDependencies(projectName, dependencies)
+    } else {
+        // 非 Application 模块需要能访问其依赖模块的 libs 目录（使用 compileOnly）
+        addDependentModuleLibs(projectName, dependencies)
+    }
     autoDependencies(projectName, projectName, dependencies)
     if (zixieIsDebug) println("======== addDependencies " + projectName + " ========")
 }
@@ -113,7 +156,6 @@ def addLocalDependencies(String projectName, String path) {
     HashMap<String, ArrayList> dependencies = new HashMap<>()
     fileTree(dir: path, include: '*.aar').each { File file ->
         if (zixieIsDebug) println("fileTree dependencies： " + file + "")
-//        addDependenciesOnce(projectName, file.name, "", dependencies)
         addDependenciesOnce(projectName, path + '/' + file.name, "", dependencies)
     }
 
@@ -121,6 +163,58 @@ def addLocalDependencies(String projectName, String path) {
         if (zixieIsDebug) println("fileTree dependencies： " + file + "")
         addDependenciesOnce(projectName, path + '/' + file.name, "", dependencies)
     }
+}
+
+// 为非 Application 模块添加其依赖模块的 libs 目录（使用 compileOnly，避免打包问题）
+def addDependentModuleLibs(String projectName, HashMap<String, ArrayList> dependencies) {
+    if (zixieIsDebug) println("======== addDependentModuleLibs for " + projectName + " ========")
+    
+    // 直接使用预处理的依赖列表（复用 zixieDepenciesList）
+    def dependentModules = zixieDepenciesList[projectName]
+    if (dependentModules == null) {
+        if (zixieIsDebug) println("No dependencies found for " + projectName)
+        return
+    }
+    
+    if (zixieIsDebug) println("Module " + projectName + " depends on: " + dependentModules)
+    
+    // 为每个依赖模块的 libs 添加 compileOnly 依赖
+    dependentModules.each { moduleName ->
+        if (!moduleName.contains(":")) {
+            def moduleLibsPath = rootDir.toString() + '/' + moduleName + '/libs'
+            addLibsFromPath(projectName, moduleLibsPath, "compileOnly", dependencies)
+        }
+    }
+    if (zixieIsDebug) println("======== addDependentModuleLibs end ========")
+}
+
+// 根据 Application 模块的依赖关系，将开发中模块的 libs 添加到 Application
+// 只添加：1. 在依赖列表中 2. 且在 zixieIncludeList 中（开发中）的模块的 libs
+// 已发布模块的 libs 已打包到 maven aar 中，不需要添加
+def addSubModuleLocalDependencies(String projectName, HashMap<String, ArrayList> dependencies) {
+    if (zixieIsDebug) println("======== addSubModuleLocalDependencies for " + projectName + " ========")
+    
+    // 获取当前 Application 模块的依赖列表
+    def dependentModules = zixieDepenciesList[projectName]
+    if (dependentModules == null) {
+        if (zixieIsDebug) println("No dependencies found for " + projectName)
+        return
+    }
+    
+    if (zixieIsDebug) println("Module " + projectName + " depends on: " + dependentModules)
+    
+    // 遍历依赖模块，只添加开发中模块的 libs
+    dependentModules.each { moduleName ->
+        if (!moduleName.contains(":") && !isApplicationModule(moduleName)) {
+            // 只有当模块在 zixieIncludeList 中（开发中），才添加其 libs
+            // 已发布模块的 libs 已打包到 maven aar 中
+            if (zixieIncludeList.contains(moduleName)) {
+                def moduleLibsPath = rootDir.toString() + '/' + moduleName + '/libs'
+                addLibsFromPath(projectName, moduleLibsPath, "api", dependencies)
+            }
+        }
+    }
+    if (zixieIsDebug) println("======== addSubModuleLocalDependencies end ========")
 }
 
 //根据依赖添加依赖
@@ -165,25 +259,22 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
     if (null == moduleName || moduleName.trim().length() == 0) {
         return
     }
-    if (null == dependencies.get(projectName)) {
-        dependencies.put(projectName, new ArrayList())
-    }
-    if (dependencies.get(projectName).contains(moduleName)) {
+    if (!addDependencyIfNotExists(projectName, moduleName, dependencies)) {
         if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " has dependencies " + moduleName)
         return
     }
-    dependencies.get(projectName).add(moduleName)
 
     String finalType = sourceType
     if (null == finalType || finalType.length() < 1) {
         if (isDebugModule(projectName)) {
             finalType = "debugApi"
+        } else if (isApplicationModule(projectName)) {
+            finalType = "implementation"
+        } else if (moduleName.endsWith(".jar") || moduleName.endsWith(".aar")) {
+            // 非 Application 模块的本地 jar/aar 使用 compileOnly，避免打包问题
+            finalType = "compileOnly"
         } else {
-            if (!isApplicationModule(projectName)) {
-                finalType = "api"
-            } else {
-                finalType = "implementation"
-            }
+            finalType = "api"
         }
     }
 
@@ -191,10 +282,6 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
     if (moduleName.endsWith(".jar")) {
         project(':' + projectName).dependencies.add(finalType, files(moduleName))
     } else if (moduleName.endsWith(".aar")) {
-//        def name = moduleName.lastIndexOf('.').with {
-//            it != -1 ? moduleName[0..<it] : moduleName
-//        }
-//        project(':' + projectName).dependencies.add(finalType, [name: name, ext: 'aar'])
         project(':' + projectName).dependencies.add(finalType, files(moduleName))
     } else if (moduleName.contains(":")) {
         project(':' + projectName).dependencies.add(finalType, moduleName)
@@ -202,13 +289,9 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
         if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + finalType + " " + moduleName + " project")
         project(':' + projectName).dependencies.add(finalType, project(':' + moduleName + ''))
     } else {
-        if (moduleName.contains(":")) {
-            project(':' + projectName).dependencies.add(finalType, moduleName)
-        } else {
-            if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + finalType + " " + moduleName + " release aar")
-            if (null != zixieModuleInfo[moduleName]) {
-                project(':' + projectName).dependencies.add(finalType, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
-            }
+        if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + finalType + " " + moduleName + " release aar")
+        if (null != zixieModuleInfo[moduleName]) {
+            project(':' + projectName).dependencies.add(finalType, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
         }
     }
 }
