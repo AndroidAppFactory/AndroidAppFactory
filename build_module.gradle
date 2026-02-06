@@ -22,7 +22,11 @@ ext {
     zixieIsPublish = ext.isPublish
     zixieIncludeALL = includeALLDependOnDevelopModule
     zixieIncludeList = new ArrayList()
-    zixieDepenciesList = new HashMap<String, ArrayList>()
+    // 重构后的数据结构：Map<String, Map<String, Map>>
+    // 外层 key: 模块名
+    // 内层 key: 依赖名
+    // 内层 value: [type: "direct"|"transitive", path: "A → B → C", ...]
+    zixieDepenciesList = new HashMap<String, HashMap<String, HashMap<String, Object>>>()
     zixieUpdateRealDependencies = this.&updateRealDependencies
     zixieAutoDependencies = this.&addDependencies
     zixieLocalDependencies = this.&addLocalDependencies
@@ -30,52 +34,66 @@ ext {
     zixiePublishCommand = this.&getPublishCommand
     zixieMergeStringCommand = this.&getMergeStringCommand
     zixieHelpCommand = this.&getHelpCommand
+    zixieShowDependencyTree = this.&showDependencyTree
 }
 
-zixieModuleInfo.each { projectName, subModuleList -> zixieUpdateRealDependencies(projectName, projectName)
+zixieModuleInfo.each { projectName, subModuleList ->
+    zixieUpdateRealDependencies(projectName, projectName, projectName)
 }
 
-//根据依赖添加依赖
-def updateRealDependencies(String projectName, String moduleName) {
+// 注意：本地依赖（全局 libs + 子模块 libs）的记录和添加统一在 Build 阶段完成
+// Settings 阶段只负责模块间依赖关系的记录，用于确定 include 哪些模块
+
+// 根据依赖添加依赖（重构版：支持完整路径记录）
+def updateRealDependencies(String projectName, String moduleName, String currentPath) {
     if (zixieIsDebug) println("======== updateRealDependencies " + projectName + " from " + moduleName + " ========")
     if (zixieModuleInfo[moduleName] != null) {
-        if (zixieDepenciesList[projectName] == null) {
-            zixieDepenciesList[projectName] = new ArrayList<>()
-        }
         if (null != zixieModuleInfo[moduleName]) {
             if (zixieIsDebug) println("add depenciese from " + moduleName + " to " + projectName + "; depenciese list:" + zixieModuleInfo[moduleName])
             if (!zixieIsPublish) {
+                // 处理 apidependenciesList
                 zixieModuleInfo[moduleName].get("apidependenciesList").each { item ->
                     if (zixieIsDebug) println("will add " + item + " from " + moduleName + " to " + projectName + "; depenciese list:" + zixieModuleInfo[item])
-                    if (zixieDepenciesList[projectName].contains(item)) {
-                        if (zixieIsDebug) println("skip add " + item + " from " + moduleName + " to " + projectName)
-                    } else {
-                        if (zixieIsDebug) println("add " + item + " from " + moduleName + " to " + projectName)
-                        if (zixieDepenciesList[projectName] == null) {
-                            zixieDepenciesList[projectName] = new ArrayList<>()
-                        }
-                        zixieDepenciesList[projectName].add(item)
+                    // 计算依赖类型和路径
+                    def isDirect = (projectName == moduleName)
+                    def newPath = isDirect ? currentPath : (currentPath + " → " + item)
+
+                    if (addDependencyToDepList(projectName, item, moduleName, isDirect, currentPath, "api")) {
                         if (!item.contains(":")) {
-                            updateRealDependencies(projectName, item)
+                            updateRealDependencies(projectName, item, currentPath + " → " + item)
                         }
                     }
                 }
-                if (zixieIsDebug) println(projectName + " add depenciese from " + moduleName + " to " + projectName + ":" + zixieModuleInfo[moduleName])
-                zixieDepenciesList[projectName].addAll(zixieModuleInfo[moduleName].get("apidependenciesList"))
+
+                // 处理 specialdependenciesList（如 kapt, coreLibraryDesugaring 等）
+                def specialDeps = zixieModuleInfo[moduleName].get("specialdependenciesList")
+                if (specialDeps != null) {
+                    specialDeps.each { depType, depList ->
+                        if (depList != null) {
+                            depList.each { item ->
+                                def isDirect = (projectName == moduleName)
+                                def depName = "[${depType}] ${item}"
+                                addDependencyToDepList(projectName, depName, moduleName, isDirect, currentPath, depType)
+                            }
+                        }
+                    }
+                }
             }
         }
+
         if (zixieIsDebug) println("======== updateRealDependencies ========")
     }
 }
 
-// 检查一个模块当前是否为可开发状态
+// 检查一个模块当前是否为可开发状态（适配新数据结构）
 def checkModuleIsDev(String moduleName) {
     if (zixieIsDebug) println("checkDev:" + moduleName)
     boolean isDev = false
     if (!moduleName.contains(":")) {
-        if (zixieIsDebug) println("checkModuleIsDev dependenciesModule  " + moduleName + zixieDepenciesList[moduleName])
+        def depInfo = zixieDepenciesList[moduleName]
+        if (zixieIsDebug) println("checkModuleIsDev dependenciesModule  " + moduleName + " " + (depInfo != null ? depInfo.keySet() : "null"))
         zixieDevelopModule.replaceAll("\\s*", "").split(",").each { devModuleName ->
-            if (null != zixieDepenciesList[moduleName] && zixieDepenciesList[moduleName].contains(devModuleName)) {
+            if (null != depInfo && depInfo.containsKey(devModuleName)) {
                 if (zixieIsDebug) println("checkModuleIsDev ：" + moduleName + " is dev add by " + devModuleName)
                 isDev = true
             } else if (moduleName == devModuleName) {
@@ -87,6 +105,64 @@ def checkModuleIsDev(String moduleName) {
 }
 
 // ============= 工具方法 =============
+
+// 添加依赖项到 zixieDepenciesList（重构版：带类型、路径和依赖类型信息）
+// @param projectName 目标模块名
+// @param item 依赖项名称
+// @param source 依赖来源模块
+// @param isDirect 是否为直接依赖
+// @param path 依赖路径
+// @param depType 依赖配置类型（api/implementation/compileOnly 等），可选
+def addDependencyToDepList(String projectName, String item, String source, boolean isDirect, String path, String depType = "api") {
+    // 获取正确的 depList（优先使用 gradle.ext 中的，因为它是跨阶段共享的）
+    def depList = gradle.ext.has('zixieDepenciesList') ? gradle.ext.zixieDepenciesList : zixieDepenciesList
+
+    // 确保外层 Map 已初始化
+    if (depList[projectName] == null) {
+        depList[projectName] = new HashMap<String, HashMap<String, Object>>()
+    }
+
+    // 检查是否已存在
+    if (depList[projectName].containsKey(item)) {
+        def existingInfo = depList[projectName][item]
+        // 如果已存在是传递依赖，但新的是直接依赖，则更新为直接依赖（直接依赖优先）
+        if (existingInfo.type == "transitive" && isDirect) {
+            if (zixieIsDebug) println("[UPGRADE] " + projectName + " 升级依赖类型: " + item + " (transitive → direct)")
+            existingInfo.type = "direct"
+            existingInfo.path = path
+            existingInfo.from = source
+            return true
+        }
+        if (zixieIsDebug) println("[SKIP] " + projectName + " 已有依赖: " + item + " (首次来源: " + existingInfo.path + ")")
+        return false
+    }
+
+    // 构建依赖信息
+    def depInfo = [
+        type: isDirect ? "direct" : "transitive",
+        path: path,
+        from: source,
+        depType: depType  // 依赖配置类型：api/implementation/compileOnly 等
+    ]
+
+    depList[projectName][item] = depInfo
+
+    // 打印添加日志
+    def typeTag = isDirect ? "[DIRECT]" : "[TRANSITIVE]"
+    if (zixieIsDebug) println(typeTag + " " + projectName + " += " + item + " (" + depType + ") (path: " + path + ", from: " + source + ")")
+
+    return true
+}
+
+// 获取模块的依赖列表（返回依赖名称集合，兼容旧代码）
+def getModuleDependencyNames(String moduleName) {
+    def depList = gradle.ext.has('zixieDepenciesList') ? gradle.ext.zixieDepenciesList : zixieDepenciesList
+    def depInfo = depList[moduleName]
+    if (depInfo == null) {
+        return []
+    }
+    return depInfo.keySet().toList()
+}
 
 // 确保依赖列表已初始化
 def ensureDependencyList(String projectName, HashMap<String, ArrayList> dependencies) {
@@ -107,28 +183,39 @@ def addDependencyIfNotExists(String projectName, String key, HashMap<String, Arr
 
 // 从指定路径添加本地 libs 依赖（aar/jar）
 def addLibsFromPath(String projectName, String libsPath, String depType, HashMap<String, ArrayList> dependencies) {
+    addLibsFromPath(projectName, libsPath, depType, dependencies, projectName, true)
+}
+
+// 扩展方法：支持指定来源模块和是否为直接依赖
+// Build 阶段执行：同时记录依赖树并添加实际依赖
+def addLibsFromPath(String projectName, String libsPath, String depType, HashMap<String, ArrayList> dependencies, String fromModule, boolean isDirect) {
     def libsDir = new File(libsPath)
     if (!libsDir.exists() || !libsDir.isDirectory()) return
-    
+
     if (zixieIsDebug) println("addLibsFromPath: " + libsPath + " with " + depType)
-    
+
     fileTree(dir: libsPath, include: ['*.aar', '*.jar']).each { File file ->
         def uniqueKey = libsPath + '/' + file.name + '_' + depType
         if (addDependencyIfNotExists(projectName, uniqueKey, dependencies)) {
-            if (zixieIsDebug) println("addLibsFromPath: " + projectName + " " + depType + " " + file.name)
+            if (zixieIsDebug) println("[LIB] " + projectName + " += " + file.name + " (" + depType + ") from " + libsPath)
             project(':' + projectName).dependencies.add(depType, files(libsPath + '/' + file.name))
+            // Build 阶段同时记录到依赖树（带依赖类型）
+            addDependencyToDepList(projectName, file.name, fromModule, isDirect, fromModule, depType)
         }
     }
 }
 
-// 检查 moduleA 和 moduleB 是否有依赖关系
+// 检查 moduleA 和 moduleB 是否有依赖关系（适配新数据结构）
 def checkModuleDependencies(String moduleA, String moduleB) {
     if (zixieIsDebug) println("checkModuleDependencies:" + moduleA + " " + moduleB)
-    if (zixieDepenciesList.containsKey(moduleA) && zixieDepenciesList.get(moduleA).contains(moduleB)) {
+    def depInfoA = zixieDepenciesList[moduleA]
+    def depInfoB = zixieDepenciesList[moduleB]
+
+    if (depInfoA != null && depInfoA.containsKey(moduleB)) {
         return 1
     }
 
-    if (zixieDepenciesList.containsKey(moduleB) && zixieDepenciesList.get(moduleB).contains(moduleA)) {
+    if (depInfoB != null && depInfoB.containsKey(moduleA)) {
         return -1
     }
     return 0
@@ -137,50 +224,106 @@ def checkModuleDependencies(String moduleA, String moduleB) {
 //添加依赖
 def addDependencies(String projectName) {
     HashMap<String, ArrayList> dependencies = new HashMap<>()
-    addLocalDependencies(projectName, "$rootDir/libs")
-    // 如果是 Application 模块，扫描开发模块的 libs 目录，将本地 aar 依赖添加到 Application
-    // 只添加开发中模块的 libs，已发布模块的 libs 已打包到 maven aar 中
+    addLocalDependencies(projectName, rootDir.toString() + '/libs')
+    // 先执行 autoDependencies 构建依赖树
+    autoDependencies(projectName, projectName, dependencies)
+    // 如果是 Application 模块，扫描所有子模块的 libs 目录，将本地 aar 依赖添加到 Application
+    // 必须在 autoDependencies 之后执行，因为需要依赖树来知道哪些子模块需要扫描
     if (isApplicationModule(projectName)) {
         addSubModuleLocalDependencies(projectName, dependencies)
     } else {
-        // 非 Application 模块需要能访问其依赖模块的 libs 目录（使用 compileOnly）
+        // 非 Application 模块也需要能访问其依赖模块的 libs 目录（使用 compileOnly）
         addDependentModuleLibs(projectName, dependencies)
     }
-    autoDependencies(projectName, projectName, dependencies)
     if (zixieIsDebug) println("======== addDependencies " + projectName + " ========")
 }
 
+// 添加全局 libs 依赖
+// Build 阶段执行：同时记录依赖树并添加实际依赖
 def addLocalDependencies(String projectName, String path) {
     if (zixieIsDebug) println("======== addLocalDependencies " + projectName + " ========")
-    if (zixieIsDebug) println("addLocalDependencies fileTree ： " + path)
+    if (zixieIsDebug) println("addLocalDependencies path: " + path)
     HashMap<String, ArrayList> dependencies = new HashMap<>()
+    // 判断是否为 Application 模块（只为 Application 模块记录全局 libs 到依赖树）
+    def isApp = isApplicationModule(projectName)
+
+    // Application 模块使用 api，非 Application 模块使用 compileOnly
+    def localDepType = isApp ? "api" : "compileOnly"
+
     fileTree(dir: path, include: '*.aar').each { File file ->
-        if (zixieIsDebug) println("fileTree dependencies： " + file + "")
+        if (zixieIsDebug) println("will add local aar: " + file.name + " from " + path + " to " + projectName)
+        // 传递完整路径，而不是只传文件名
         addDependenciesOnce(projectName, path + '/' + file.name, "", dependencies)
+        // Build 阶段同时记录到依赖树（带依赖类型）
+        if (isApp) {
+            addDependencyToDepList(projectName, file.name, "global-libs", true, projectName, localDepType)
+        }
     }
 
     fileTree(dir: path, include: '*.jar').each { File file ->
-        if (zixieIsDebug) println("fileTree dependencies： " + file + "")
+        if (zixieIsDebug) println("will add local jar: " + file.name + " from " + path + " to " + projectName)
+        // 传递完整路径，而不是只传文件名
         addDependenciesOnce(projectName, path + '/' + file.name, "", dependencies)
+        if (isApp) {
+            addDependencyToDepList(projectName, file.name, "global-libs", true, projectName, localDepType)
+        }
     }
 }
 
-// 为非 Application 模块添加其依赖模块的 libs 目录（使用 compileOnly，避免打包问题）
+// 递归收集模块的所有传递依赖（包括依赖的依赖）
+// 返回所有依赖模块名称的集合（去重）
+def collectAllTransitiveDependencies(String moduleName, Set<String> visited) {
+    if (visited.contains(moduleName)) {
+        return [] as Set
+    }
+    visited.add(moduleName)
+
+    def result = [] as Set
+    def directDeps = getModuleDependencyNames(moduleName)
+    if (directDeps == null || directDeps.isEmpty()) {
+        return result
+    }
+
+    directDeps.each { depName ->
+        if (!depName.contains(":")) {  // 只处理本地模块
+            result.add(depName)
+            // 递归收集依赖的依赖
+            result.addAll(collectAllTransitiveDependencies(depName, visited))
+        }
+    }
+    return result
+}
+
+// 为非 Application 模块添加其依赖模块的 libs 目录（全部使用 compileOnly）
+// AGP 限制：构建 AAR 时不允许直接本地 .aar 依赖使用 api/implementation
+// 所有本地 aar 都由 Application 模块通过 addSubModuleLocalDependencies 统一以 api 方式添加
+// 递归收集所有传递依赖的 libs，确保编译不报错
 def addDependentModuleLibs(String projectName, HashMap<String, ArrayList> dependencies) {
     if (zixieIsDebug) println("======== addDependentModuleLibs for " + projectName + " ========")
-    
-    // 直接使用预处理的依赖列表（复用 zixieDepenciesList）
-    def dependentModules = zixieDepenciesList[projectName]
-    if (dependentModules == null) {
+
+    // 从 gradle.ext 获取 settings 阶段设置的 includeList
+    def includeList = gradle.ext.has('zixieIncludeList') ? gradle.ext.zixieIncludeList : zixieIncludeList
+
+    // 首先为模块自身 libs 目录添加 compileOnly 依赖
+    // 注意：AGP 不允许 Library 模块对本地 aar 使用 api 类型
+    def ownLibsPath = rootDir.toString() + '/' + projectName + '/libs'
+    addLibsFromPath(projectName, ownLibsPath, "compileOnly", dependencies)
+
+    // 递归收集所有传递依赖模块（包括直接依赖和间接依赖）
+    def visited = [] as Set
+    def allDependentModules = collectAllTransitiveDependencies(projectName, visited)
+
+    if (zixieIsDebug) println("[DEBUG] Module " + projectName + " transitive deps: " + allDependentModules + ", includeList: " + includeList)
+
+    if (allDependentModules == null || allDependentModules.isEmpty()) {
         if (zixieIsDebug) println("No dependencies found for " + projectName)
         return
     }
-    
-    if (zixieIsDebug) println("Module " + projectName + " depends on: " + dependentModules)
-    
-    // 为每个依赖模块的 libs 添加 compileOnly 依赖
-    dependentModules.each { moduleName ->
-        if (!moduleName.contains(":")) {
+
+    // 为每个依赖模块的 libs 添加 compileOnly 依赖（只处理在 includeList 中的模块）
+    // 使用 compileOnly 避免重复打包（最终由 Application 模块统一打包）
+    allDependentModules.each { moduleName ->
+        if (includeList.contains(moduleName)) {
             def moduleLibsPath = rootDir.toString() + '/' + moduleName + '/libs'
             addLibsFromPath(projectName, moduleLibsPath, "compileOnly", dependencies)
         }
@@ -188,29 +331,39 @@ def addDependentModuleLibs(String projectName, HashMap<String, ArrayList> depend
     if (zixieIsDebug) println("======== addDependentModuleLibs end ========")
 }
 
+// 扫描当前项目依赖的子模块的 libs 目录，将本地 aar/jar 依赖添加到 Application 模块
 // 根据 Application 模块的依赖关系，将开发中模块的 libs 添加到 Application
 // 只添加：1. 在依赖列表中 2. 且在 zixieIncludeList 中（开发中）的模块的 libs
 // 已发布模块的 libs 已打包到 maven aar 中，不需要添加
+// 递归收集所有传递依赖，确保打包完整
 def addSubModuleLocalDependencies(String projectName, HashMap<String, ArrayList> dependencies) {
     if (zixieIsDebug) println("======== addSubModuleLocalDependencies for " + projectName + " ========")
-    
-    // 获取当前 Application 模块的依赖列表
-    def dependentModules = zixieDepenciesList[projectName]
-    if (dependentModules == null) {
+
+    // 从 gradle.ext 获取 settings 阶段设置的 includeList
+    def includeList = gradle.ext.has('zixieIncludeList') ? gradle.ext.zixieIncludeList : zixieIncludeList
+
+    // 递归收集所有传递依赖模块（包括直接依赖和间接依赖）
+    def visited = [] as Set
+    def allDependentModules = collectAllTransitiveDependencies(projectName, visited)
+
+    if (allDependentModules == null || allDependentModules.isEmpty()) {
         if (zixieIsDebug) println("No dependencies found for " + projectName)
         return
     }
-    
-    if (zixieIsDebug) println("Module " + projectName + " depends on: " + dependentModules)
-    
-    // 遍历依赖模块，只添加开发中模块的 libs
-    dependentModules.each { moduleName ->
-        if (!moduleName.contains(":") && !isApplicationModule(moduleName)) {
-            // 只有当模块在 zixieIncludeList 中（开发中），才添加其 libs
+
+    if (zixieIsDebug) println("Module " + projectName + " all transitive dependencies: " + allDependentModules)
+
+    // 遍历所有依赖模块，只添加开发中模块的 libs
+    allDependentModules.each { moduleName ->
+        if (zixieIsDebug) println("Checking module: " + moduleName + ", isApp = " + isApplicationModule(moduleName) + ", inInclude = " + includeList.contains(moduleName))
+        if (!isApplicationModule(moduleName)) {
+            // 只有当模块在 includeList 中（开发中），才添加其 libs
             // 已发布模块的 libs 已打包到 maven aar 中
-            if (zixieIncludeList.contains(moduleName)) {
+            if (includeList.contains(moduleName)) {
                 def moduleLibsPath = rootDir.toString() + '/' + moduleName + '/libs'
-                addLibsFromPath(projectName, moduleLibsPath, "api", dependencies)
+                if (zixieIsDebug) println("Will add libs from: " + moduleLibsPath)
+                // 这是传递依赖（来自子模块的本地 aar），isDirect = false
+                addLibsFromPath(projectName, moduleLibsPath, "api", dependencies, moduleName, false)
             }
         }
     }
@@ -219,7 +372,9 @@ def addSubModuleLocalDependencies(String projectName, HashMap<String, ArrayList>
 
 //根据依赖添加依赖
 def autoDependencies(String projectName, String moduleName, HashMap<String, ArrayList> dependencies) {
-    if (zixieIsDebug) println("======== autoDependencies " + "check " + projectName + " depenciese:" + moduleName + " start ========")
+    if (zixieIsDebug) println("======== autoDependencies " + projectName + " ========")
+    if (zixieIsDebug) println("check " + projectName + " depenciese:" + moduleName)
+
     if (zixieModuleInfo[moduleName] != null) {
         zixieModuleInfo[moduleName].get("apidependenciesList").each { item ->
             if (zixieIsDebug) println(projectName + " addDependenciesOnce:" + item)
@@ -229,6 +384,8 @@ def autoDependencies(String projectName, String moduleName, HashMap<String, Arra
             }
         }
 
+        // specialdependenciesList 的依赖树记录已在 Settings 阶段由 updateRealDependencies 完成
+        // 这里只负责实际添加依赖，不重复记录
         zixieModuleInfo[moduleName].get("specialdependenciesList").each { item, data ->
             if (zixieIsDebug) println(projectName + " specialdependenciesList from " + item + " list :" + data)
             if (null != data) {
@@ -237,22 +394,17 @@ def autoDependencies(String projectName, String moduleName, HashMap<String, Arra
                     if (listItem.contains(":")) {
                         project(':' + projectName).dependencies.add(item, listItem)
                     } else {
-                        if (checkModuleIsDev(listItem)) {
-                            if (zixieIsDebug) println(item + " project(:'" + listItem + "')")
-                            project(':' + projectName).dependencies.add(item, project(':' + listItem + ''))
-                        } else {
-                            if (null != zixieModuleInfo[listItem]) {
-                                project(':' + projectName).dependencies.add(item, zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
-                                if (zixieIsDebug) println(item + " " + zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
-                            }
+                        if (null != zixieModuleInfo[listItem]) {
+                            def depCoord = zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version")
+                            project(':' + projectName).dependencies.add(item, depCoord)
+                            if (zixieIsDebug) println(item + " " + depCoord)
                         }
                     }
                 }
             }
-
         }
     }
-    if (zixieIsDebug) println("======== autoDependencies " + "check " + projectName + " depenciese:" + moduleName + " end ========")
+    if (zixieIsDebug) println("======== autoDependencies " + projectName + " ========")
 }
 
 def addDependenciesOnce(String projectName, String moduleName, String sourceType, HashMap<String, ArrayList> dependencies) {
@@ -269,7 +421,7 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
         if (isDebugModule(projectName)) {
             finalType = "debugApi"
         } else if (isApplicationModule(projectName)) {
-            finalType = "implementation"
+            finalType = "api"
         } else if (moduleName.endsWith(".jar") || moduleName.endsWith(".aar")) {
             // 非 Application 模块的本地 jar/aar 使用 compileOnly，避免打包问题
             finalType = "compileOnly"
@@ -282,10 +434,20 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
     if (moduleName.endsWith(".jar")) {
         project(':' + projectName).dependencies.add(finalType, files(moduleName))
     } else if (moduleName.endsWith(".aar")) {
-        project(':' + projectName).dependencies.add(finalType, files(moduleName))
+        // 如果是完整路径（包含 /），使用 files() 方式添加
+        if (moduleName.contains("/")) {
+            project(':' + projectName).dependencies.add(finalType, files(moduleName))
+        } else {
+            // 否则使用 flatDir 方式（需要预先配置 flatDir 仓库）
+            def name = moduleName.lastIndexOf('.').with {
+                it != -1 ? moduleName[0..<it] : moduleName
+            }
+            project(':' + projectName).dependencies.add(finalType, [name: name, ext: 'aar'])
+        }
     } else if (moduleName.contains(":")) {
         project(':' + projectName).dependencies.add(finalType, moduleName)
-    } else if (checkModuleIsDev(moduleName)) {
+    } else if (gradle.ext.zixieIncludeList.contains(moduleName)) {
+        // 模块在当前项目的 includeList 中，使用 project 依赖
         if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + finalType + " " + moduleName + " project")
         project(':' + projectName).dependencies.add(finalType, project(':' + moduleName + ''))
     } else {
@@ -373,4 +535,96 @@ def isApplicationModule(String projectName) {
 
 def isDebugModule(String projectName) {
     return false
+}
+
+// ============= 依赖树展示 =============
+
+// 展示依赖树
+// @param showTransitive 是否展示传递依赖，默认为 false
+def showDependencyTree(boolean showTransitive = false) {
+    System.err.println("\n========== Module Dependencies Tree ==========\n")
+    if (!showTransitive) {
+        System.err.println("(传递依赖已隐藏，如需展示请使用 -PshowTransitive=true)\n")
+    }
+
+    // 从 gradle.ext 获取 settings 阶段设置的 includeList
+    def includeList = gradle.ext.has('zixieIncludeList') ? gradle.ext.zixieIncludeList : zixieIncludeList
+    def depList = gradle.ext.has('zixieDepenciesList') ? gradle.ext.zixieDepenciesList : zixieDepenciesList
+
+    // 过滤出 includeList 中的模块，并按依赖顺序倒序排列
+    def moduleList = depList.keySet().findAll { includeList.contains(it) }.toList()
+
+    // 按依赖顺序排序（被依赖的模块排在前面，依赖者排在后面）
+    for (int i = 0; i < moduleList.size(); i++) {
+        for (int j = 0; j < moduleList.size() - 1; j++) {
+            if (checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0) {
+                def temp = moduleList.get(i)
+                moduleList.set(i, moduleList.get(j))
+                moduleList.set(j, temp)
+            }
+        }
+    }
+
+    // 按排序后的顺序展示
+    moduleList.each { moduleName ->
+        def deps = depList[moduleName]
+        if (deps == null || deps.isEmpty()) return
+        if (!includeList.contains(moduleName)) return
+
+        System.err.println(moduleName)
+
+        // 分离直接依赖和传递依赖
+        def directDeps = deps.findAll { k, v -> v.type == "direct" }
+        def transitiveDeps = deps.findAll { k, v -> v.type == "transitive" }
+
+        // 本地 jar/aar 的传递依赖始终展示，不受 showTransitive 控制
+        def localTransitiveDeps = transitiveDeps.findAll { k, v -> k.endsWith(".jar") || k.endsWith(".aar") }
+        def otherTransitiveDeps = transitiveDeps.findAll { k, v -> !k.endsWith(".jar") && !k.endsWith(".aar") }
+
+        // 根据 showTransitive 决定是否展示非本地的传递依赖
+        def showOtherTransitiveDeps = showTransitive ? otherTransitiveDeps : [:]
+        def allTransitiveToShow = localTransitiveDeps + showOtherTransitiveDeps
+
+        // 打印直接依赖
+        directDeps.eachWithIndex { entry, index ->
+            def isLast = (index == directDeps.size() - 1) && allTransitiveToShow.isEmpty()
+            def prefix = isLast ? "└── " : "├── "
+            def depName = entry.key
+            def depInfo = entry.value
+            def depTypeStr = depInfo.depType ? " (${depInfo.depType})" : ""
+            System.err.println("${prefix}[DIRECT]${depTypeStr} ${depName}")
+            System.err.println("    └── path: ${depInfo.path}")
+        }
+
+        // 打印传递依赖（本地 jar/aar 始终展示，其他受 showTransitive 控制）
+        allTransitiveToShow.eachWithIndex { entry, index ->
+            def isLast = (index == allTransitiveToShow.size() - 1)
+            def prefix = isLast ? "└── " : "├── "
+            def depName = entry.key
+            def depInfo = entry.value
+            def isLocal = depName.endsWith(".jar") || depName.endsWith(".aar")
+            def localTag = isLocal ? " (local)" : ""
+            def depTypeStr = depInfo.depType ? " (${depInfo.depType})" : ""
+            System.err.println("${prefix}[TRANSITIVE]${localTag}${depTypeStr} ${depName}")
+            System.err.println("    └── path: ${depInfo.path}, from: ${depInfo.from}")
+        }
+
+        System.err.println("")
+    }
+
+    // 打印统计信息（只统计 includeList 中的模块）
+    def includedModules = depList.findAll { k, v -> includeList.contains(k) }
+    def totalModules = includedModules.size()
+    def totalDeps = includedModules.values().sum { it?.size() ?: 0 } ?: 0
+    def directCount = includedModules.values().sum { deps ->
+        deps?.count { k, v -> v.type == "direct" } ?: 0
+    } ?: 0
+    def transitiveCount = totalDeps - directCount
+
+    System.err.println("========== Summary ==========")
+    System.err.println("Total modules (included): ${totalModules}")
+    System.err.println("Total dependencies: ${totalDeps}")
+    System.err.println("Direct dependencies: ${directCount}")
+    System.err.println("Transitive dependencies: ${transitiveCount}")
+    System.err.println("=============================\n")
 }

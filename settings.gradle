@@ -31,8 +31,12 @@ if (zixieIncludeALL) {
     }
 } else {
     zixieMainProject.split(",").each { projectName ->
-        zixieDepenciesList[projectName].each { dependenciesModule ->
-            autoAddInclude(dependenciesModule)
+        // 适配新数据结构：zixieDepenciesList[projectName] 现在是 Map，需要遍历 keySet()
+        def deps = zixieDepenciesList[projectName]
+        if (deps != null) {
+            deps.keySet().each { dependenciesModule ->
+                autoAddInclude(dependenciesModule)
+            }
         }
     }
 }
@@ -40,6 +44,14 @@ if (zixieIncludeALL) {
 System.err.println("\n\n========================================\n\n")
 System.err.println("当前工程导入组件如下：\n\n\t" + zixieIncludeList)
 System.err.println("\n\n========================================\n\n")
+
+// 将变量保存到 gradle.ext，以便在 build 阶段访问
+gradle.ext.zixieIncludeList = zixieIncludeList
+gradle.ext.zixieDepenciesList = zixieDepenciesList
+
+// 注意：本地依赖（全局 libs + 子模块 libs）的记录和添加统一在 Build 阶段完成
+// 因为只有在 Build 阶段才能调用 project().dependencies.add()
+
 
 def addInclude(projectName) {
     if (null == projectName || projectName.trim().length() == 0) {

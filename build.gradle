@@ -37,6 +37,14 @@ allprojects {
                     zixiePublishCommand()
                 }
             }
+            subproject.getTasks().create("showDependencyTree") {
+                group = "zixieDev"
+                description = "展示模块依赖树 (使用 -PshowTransitive=true 展示传递依赖)"
+                doLast {
+                    def showTransitive = project.hasProperty('showTransitive') && project.property('showTransitive').toString().toLowerCase() == 'true'
+                    zixieShowDependencyTree(showTransitive)
+                }
+            }
             rootProject.getTasks().register("showInfo") {
                 group = "zixieDev"
                 doLast {
