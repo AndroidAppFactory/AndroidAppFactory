@@ -5,10 +5,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +35,12 @@ public class PermissionsActivityV2 extends PermissionsActivity {
 
     protected void showTips() {
         findViewById(R.id.permission_layout).setVisibility(View.VISIBLE);
-        GlideExtKt.loadImage((ImageView) findViewById(R.id.permission_icon),
-                PermissionManager.INSTANCE.getPermissionIcon(scene, ""));
         List<String> tempPermissionList = new ArrayList<>();
         for (String permission : needCheckPermissionGroup) {
             tempPermissionList.add(permission);
         }
+        GlideExtKt.loadImage((ImageView) findViewById(R.id.permission_icon), PermissionManager.INSTANCE.getPermissionIcon(scene, tempPermissionList.isEmpty() ? "" : tempPermissionList.get(0)));
+
 
         String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, true,
                 getNeedSpecial());
