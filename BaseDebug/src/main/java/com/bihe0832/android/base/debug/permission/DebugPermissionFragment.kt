@@ -3,7 +3,6 @@ package com.bihe0832.android.base.debug.permission
 import android.Manifest
 import android.app.Activity
 import android.view.View
-import com.bihe0832.android.base.compose.debug.R as DebugComposeR
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
@@ -13,17 +12,38 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.base.compose.debug.R as DebugComposeR
 
 class DebugPermissionFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(getDebugItem("自定义内容权限弹框(多语言)", View.OnClickListener { testCustomPermission(activity) }))
-            add(getDebugItem("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
-            add(getDebugItem("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
-            add(getDebugItem("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
+            add(
+                getDebugItem(
+                    "自定义内容权限弹框(多语言)",
+                    View.OnClickListener { testCustomPermission(activity) })
+            )
+            add(
+                getDebugItem(
+                    "通用权限弹框",
+                    View.OnClickListener { testCommonPermission(activity) })
+            )
+            add(
+                getDebugItem(
+                    "通用权限弹框V2",
+                    View.OnClickListener { testCommonPermissionV2(activity) })
+            )
+            add(
+                getDebugItem(
+                    "权限拒绝通用弹框",
+                    View.OnClickListener { testCommonPermissionDialog() })
+            )
             add(getDebugItem("申请通用权限（相机）", View.OnClickListener { checkCommonPermision() }))
-            add(getDebugItem("申请特殊权限（位置）", View.OnClickListener { checkSpecialPermision() }))
+            add(
+                getDebugItem(
+                    "申请特殊权限（位置）",
+                    View.OnClickListener { checkSpecialPermision() })
+            )
             add(
                 getDebugItem(
                     "调试中临时申请指定权限",
@@ -67,7 +87,7 @@ class DebugPermissionFragment : DebugEnvFragment() {
             HashMap<String, String>().apply {
                 put(
                     Manifest.permission.CAMERA,
-                    activity?.getString(DebugComposeR.string.name_permission_debug)?:"",
+                    activity?.getString(DebugComposeR.string.name_permission_debug) ?: "",
                 )
             },
         )
