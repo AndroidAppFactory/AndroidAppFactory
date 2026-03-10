@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "8.2.9",
+                "version"            : "8.2.10",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "CommonCompose", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
