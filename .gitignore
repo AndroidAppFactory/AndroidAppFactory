@@ -18,6 +18,12 @@ buildNumber.properties
 .mvn/timing.properties
 
 ######################
+# jekyll
+######################
+.jekyll-cache
+_site
+
+######################
 # 解决各类编辑器自动产生的文件
 ######################
 *.iml
@@ -26,6 +32,7 @@ buildNumber.properties
 /target/
 .idea_modules/
 local.properties
+.externalNativeBuild/
 
 ######################
 # gradle
@@ -39,7 +46,6 @@ build
 captures
 gradle.properties
 .externalNativeBuild
-.cxx
 
 ######################
 # mac
@@ -47,5 +53,38 @@ gradle.properties
 .DS_Store
 sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20
 sherpa-onnx-whisper-base
-bin
+
+######################
+# gitbook
+######################
+_book
+node_modules
+
+######################
+# CMake
+######################
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+.cxx
+
+
+
+######################
+# NPM and arkts
+######################
+.npm
+.clang-format
+.clang-tidy
+.clangd
+.idea
+.hvigor
+oh_modules
+oh-package-lock.json5
+.cxx
+.preview
+build
+.codebuddy
 aafRepo
+bin
