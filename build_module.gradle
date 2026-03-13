@@ -553,7 +553,8 @@ def getPublishCommand() {
 
     zixieDepenciesList.each { projectName, subModuleList ->
         if (zixieIsDebug) println("showCommand projectName :" + projectName + " " + checkModuleIsDev(projectName))
-        if (!isApplicationModule(projectName) && checkModuleIsDev(projectName)) {
+        def moduleArtifactId = zixieModuleInfo[projectName]?.get("artifactId") ?: ""
+        if (!isApplicationModule(projectName) && checkModuleIsDev(projectName) && !moduleArtifactId.isEmpty()) {
             moduleList.add(projectName)
         }
     }
@@ -622,5 +623,5 @@ def isApplicationModule(String projectName) {
 }
 
 def isDebugModule(String projectName) {
-    return false
+    return projectName == "BaseDebug" || projectName == "BaseDebugCompose"
 }
