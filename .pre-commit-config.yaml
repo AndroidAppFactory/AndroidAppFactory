@@ -1,0 +1,25 @@
+# .pre-commit-config.yaml（由 config-sync 同步生成）
+# Git hook 统一管理配置 — 脚本路径已适配 .codebuddy/scripts/
+#
+# 安装：
+#   pip install pre-commit
+#   pre-commit install --hook-type pre-commit --hook-type post-commit
+#
+# 手动运行：
+#   pre-commit run --all-files                  # 运行所有 pre-commit hook
+#   pre-commit run <hook-id>                    # 运行指定 hook
+#
+# 更多用法见：https://pre-commit.com/
+
+repos:
+  - repo: local
+    hooks:
+      # ── post-commit ─────────────────────────────────────────
+      # 对刚提交的 .java/.kt 文件执行格式修复，修复后静默提交
+      - id: code-style-fix
+        name: Java/Kotlin 代码格式自动修复
+        entry: python3 .codebuddy/scripts/hook-post-commit-code-style-fix.py
+        language: system
+        pass_filenames: false
+        stages: [post-commit]
+        always_run: true
