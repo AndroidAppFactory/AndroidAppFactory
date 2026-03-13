@@ -38,7 +38,7 @@ import com.bihe0832.android.test.widget.DebugWidget
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
-open class TestMainActivity: DebugComposeMainActivity(){
+open class TestMainActivity : DebugComposeMainActivity() {
 
     val TAB_FOR_DEV_MODULE: String = "模块调试"
     val TAB_FOR_COMPOSE: String = "Compose"
