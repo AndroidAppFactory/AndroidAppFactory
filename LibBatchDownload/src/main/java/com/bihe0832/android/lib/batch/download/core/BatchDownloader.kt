@@ -386,9 +386,9 @@ class BatchDownloader(
         val activeCount = submittedUrls.count { url ->
             val item = urlToItemMap[url] ?: return@count false
             val itemStatus = item.status
-            itemStatus == DownloadStatus.STATUS_DOWNLOADING
-                    || itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING
-                    || itemStatus == DownloadStatus.STATUS_DOWNLOAD_STARTED
+            itemStatus == DownloadStatus.STATUS_DOWNLOADING ||
+                    itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
+                    itemStatus == DownloadStatus.STATUS_DOWNLOAD_STARTED
         }
 
         var slotsAvailable = config.maxConcurrent - activeCount
@@ -517,9 +517,9 @@ class BatchDownloader(
             val hasActive = submittedUrls.any { url ->
                 val item = urlToItemMap[url] ?: return@any false
                 val itemStatus = item.status
-                itemStatus == DownloadStatus.STATUS_DOWNLOADING
-                        || itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING
-                        || itemStatus == DownloadStatus.STATUS_DOWNLOAD_STARTED
+                itemStatus == DownloadStatus.STATUS_DOWNLOADING ||
+                        itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
+                        itemStatus == DownloadStatus.STATUS_DOWNLOAD_STARTED
             }
             val hasPending = !pendingQueue.isEmpty()
             if (hasActive || hasPending) return
