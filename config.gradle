@@ -41,9 +41,5 @@ ext {
             keyPassword     : ZixieSigKeyPassword,
             storeFile       : ZixieSigPath,
             storePassword   : ZixieSigStorePassword,
-//            keyAlias        : 'androiddebugkey',
-//            keyPassword     : 'android',
-//            storeFile       : "./../debug.keystore",
-//            storePassword   : 'android',
     ]
 }

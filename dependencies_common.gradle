@@ -6,8 +6,6 @@ ext.commonmoduleInfo = [
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper","CommonPermission", "LibDebug"
-
-
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]

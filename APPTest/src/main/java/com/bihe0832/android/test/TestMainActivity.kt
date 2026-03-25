@@ -27,7 +27,9 @@ import com.bihe0832.android.base.compose.debug.AAFDebugModuleView
 import com.bihe0832.android.base.compose.debug.DebugTempView
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.common.DebugComposeMainActivity
+import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeView
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.router.annotation.APPMain
@@ -156,7 +158,9 @@ open class TestMainActivity : DebugComposeMainActivity() {
             }
 
             TAB_FOR_DEV_MODULE -> {
-                DebugTempView()
+                DebugContent {
+                    DebugComposeItem("临时测试(Temp)", "DebugTempView") { DebugTempView() }
+                }
             }
 
             TAB_FOR_COMPOSE -> {
