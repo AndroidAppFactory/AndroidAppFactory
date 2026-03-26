@@ -53,7 +53,8 @@ open class DebugCurrentStorageActivity : DebugBaseComposeActivity() {
 
     @Composable
     fun StorageDataList(
-        viewModel: DebugStorageViewModel, uiState: DebugStorageUiState
+        viewModel: DebugStorageViewModel,
+        uiState: DebugStorageUiState
     ) {
         StorageControlPanel(viewModel, uiState)
         StorageDataItems(uiState)
@@ -102,7 +103,8 @@ open class DebugCurrentStorageActivity : DebugBaseComposeActivity() {
 
     @Composable
     private fun StorageControlPanel(
-        viewModel: DebugStorageViewModel, uiState: DebugStorageUiState
+        viewModel: DebugStorageViewModel,
+        uiState: DebugStorageUiState
     ) {
         Column {
             LittleDebugTips("<b>点击切换文件夹是否按大小排列，当前：${uiState.needSort}</b>", {

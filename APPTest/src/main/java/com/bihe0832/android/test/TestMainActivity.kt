@@ -61,8 +61,8 @@ open class TestMainActivityWithDrawer : DebugComposeMainActivityWithDrawer() {
         AAFMessageManager.getMessageLiveData().observe(this) { noticeList ->
             noticeList?.distinctBy { it.messageID }
                 ?.filter {
-                    !AAFMessageManager.mAutoShowMessageList.contains(it.messageID)
-                            && AAFMessageManager.canShowFace(it, false)
+                    !AAFMessageManager.mAutoShowMessageList.contains(it.messageID) &&
+                            AAFMessageManager.canShowFace(it, false)
                 }?.forEach {
                     AAFMessageManager.mAutoShowMessageList.add(it.messageID)
                     AAFMessageManager.showMessage(this, it, true)

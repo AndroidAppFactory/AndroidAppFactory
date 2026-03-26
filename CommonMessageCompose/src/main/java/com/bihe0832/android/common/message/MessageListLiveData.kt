@@ -47,7 +47,7 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
         } else {
             synchronized(lockdata) {
                 ZLog.d(TAG, "parseMessage and update msglist")
-                //本地已经有的列表
+                // 本地已经有的列表
                 var msgListInDB = HashMap<String, MessageInfoItem>().apply {
                     MessageDBManager.getAll().let { messgeInfo ->
                         messgeInfo.forEach {
@@ -81,10 +81,10 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
                     }
                 }
                 ZLog.d(TAG, "ignoreList size:" + ignoreList.size)
-                //剔除网络请求重复的公告
+                // 剔除网络请求重复的公告
                 var newHttpResultList = httpResultList.toMutableList().filter { !ignoreList.contains(it.messageID) }
                 ZLog.d(TAG, "newHttpResultList length:" + newHttpResultList?.size)
-                //通知栏通知
+                // 通知栏通知
                 sendNotify(newHttpResultList)
                 ZLog.d(TAG, "value length:" + value?.size)
                 ZLog.d(TAG, "msgListInDB length:" + msgListInDB?.size)
@@ -119,14 +119,14 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
                     }
                 }
             }
-        }catch (e:java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
 
         ZLog.d(TAG, "sendNotify end")
     }
 
-    //更新 是否已读，flag;更新是否删除，目前仅做删除标记 ，isDel
+    // 更新 是否已读，flag;更新是否删除，目前仅做删除标记 ，isDel
     fun updateMessageLocalStatus(msgid: String, hasRead: Boolean, showFace: Int, isDel: Boolean) {
         ThreadManager.getInstance().start {
             synchronized(lockdata) {
