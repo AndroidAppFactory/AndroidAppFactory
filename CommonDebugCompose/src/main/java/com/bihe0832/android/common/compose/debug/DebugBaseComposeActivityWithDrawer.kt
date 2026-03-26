@@ -1,7 +1,7 @@
 package com.bihe0832.android.common.compose.debug
 
 import androidx.compose.runtime.Composable
-import com.bihe0832.android.common.compose.common.activity.CommonComposeActivity
+import com.bihe0832.android.common.compose.common.activity.CommonComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
@@ -24,7 +24,11 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
  *
  */
 
-open class DebugBaseComposeActivity : CommonComposeActivity() {
+open class DebugBaseComposeActivity : CommonComposeActivityWithDrawer() {
+
+    override fun getDrawerContentContentRender(): RenderState? {
+        return null
+    }
 
     override fun getContentRender(): RenderState {
         return object : RenderState {
@@ -204,19 +208,19 @@ open class DebugBaseComposeActivity : CommonComposeActivity() {
         )
     }
 
-     fun sendInfo(title: String, content: String) {
+    fun sendInfo(title: String, content: String) {
         DebugUtilsV2.sendInfo(this, title, content)
     }
 
-     fun showInfo(title: String, content: List<String>) {
+    fun showInfo(title: String, content: List<String>) {
         DebugUtilsV2.showInfo(this, title, content)
     }
 
-     fun showInfoWithHTML(title: String, content: List<String>) {
+    fun showInfoWithHTML(title: String, content: List<String>) {
         DebugUtilsV2.showInfoWithHTML(this, title, content)
     }
 
-     fun showInfoWithHTML(title: String, content: String) {
+    fun showInfoWithHTML(title: String, content: String) {
         DebugUtilsV2.showInfoWithHTML(this, title, mutableListOf(content))
     }
 

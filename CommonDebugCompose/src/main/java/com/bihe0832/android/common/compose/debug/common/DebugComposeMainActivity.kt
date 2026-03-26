@@ -36,7 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.compose.state.RenderState
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
  *
  */
 
-abstract class DebugComposeMainActivity : DebugBaseComposeActivity() {
+abstract class DebugComposeMainActivity : DebugBaseComposeActivityWithDrawer() {
 
     abstract fun getTabs(): List<String>
 
