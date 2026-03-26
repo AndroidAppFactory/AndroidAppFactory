@@ -57,7 +57,8 @@ import com.bihe0832.android.lib.aaf.res.R as ResR
  */
 @Composable
 fun ActivityThemeView(
-    themeType: ColorScheme, contentRender: RenderState
+    themeType: ColorScheme,
+    contentRender: RenderState
 ) {
     MaterialTheme(colorScheme = themeType) {
         val systemUiController = rememberSystemUiController()

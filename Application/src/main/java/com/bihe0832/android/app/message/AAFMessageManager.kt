@@ -56,8 +56,8 @@ object AAFMessageManager : MessageManager() {
         getMessageLiveData().observe(activity) { noticeList ->
             noticeList?.distinctBy { it.messageID }
                 ?.filter {
-                    !mAutoShowMessageList.contains(it.messageID)
-                            && canShowFace(it, false)
+                    !mAutoShowMessageList.contains(it.messageID) &&
+                            canShowFace(it, false)
                 }?.forEach {
                     mAutoShowMessageList.add(it.messageID)
                     showMessage(activity, it, true)
