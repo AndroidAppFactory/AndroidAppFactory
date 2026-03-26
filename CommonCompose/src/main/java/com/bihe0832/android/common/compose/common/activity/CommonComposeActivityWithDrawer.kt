@@ -71,7 +71,7 @@ abstract class CommonComposeActivityWithDrawer : CommonComposeActivity() {
                 handleEffect(LocalContext.current)
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 CommonActivityToolbarViewWithDrawer(
-                    icon = getNavigationIcon()?: ImageVector.vectorResource(ResR.drawable.icon_menu),
+                    icon = getNavigationIcon() ?: ImageVector.vectorResource(ResR.drawable.icon_menu),
                     drawerState = drawerState,
                     drawerContent = { drawerContent.Content() },
                     title = getTitleName(),
