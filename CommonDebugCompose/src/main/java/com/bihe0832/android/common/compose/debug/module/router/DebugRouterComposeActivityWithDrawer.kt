@@ -2,7 +2,7 @@ package com.bihe0832.android.common.compose.debug.module.router
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.debug.item.RouterItem
@@ -10,7 +10,7 @@ import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.router.RouterInterrupt
 
-open class DebugRouterComposeActivity : DebugBaseComposeActivity() {
+open class DebugRouterComposeActivity : DebugBaseComposeActivityWithDrawer() {
 
 
     open fun getRouterList(): List<String> {

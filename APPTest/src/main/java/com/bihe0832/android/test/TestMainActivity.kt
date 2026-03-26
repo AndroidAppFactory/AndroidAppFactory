@@ -25,16 +25,20 @@ import androidx.compose.ui.unit.sp
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.app.ui.AAFDefaultTitleActions
+import com.bihe0832.android.app.ui.navigation.getAAFNavigationDrawerContentRender
+import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.base.compose.debug.AAFDebugModuleView
 import com.bihe0832.android.base.compose.debug.DebugTempView
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
-import com.bihe0832.android.common.compose.debug.common.DebugComposeMainActivityWithDrawer
+import com.bihe0832.android.common.compose.debug.common.DebugComposeMainActivity
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeView
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.utils.BadgeView
 import com.bihe0832.android.common.qrcode.QrcodeUtils
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.aaf.res.R
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.router.annotation.APPMain
@@ -46,7 +50,7 @@ import com.bihe0832.android.test.widget.DebugWidget
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
-open class TestMainActivityWithDrawer : DebugComposeMainActivityWithDrawer() {
+open class TestMainActivity : DebugComposeMainActivity() {
 
     val TAB_FOR_DEV_COMMON: String = "通用调试"
     val TAB_FOR_DEV_MODULE: String = "模块调试"
@@ -58,75 +62,17 @@ open class TestMainActivityWithDrawer : DebugComposeMainActivityWithDrawer() {
         DebugLogTips.initModule(this, true, Gravity.LEFT or Gravity.TOP)
         CommonDBManager.init(this)
         // 消息拍脸
-        AAFMessageManager.getMessageLiveData().observe(this) { noticeList ->
-            noticeList?.distinctBy { it.messageID }
-                ?.filter {
-                    !AAFMessageManager.mAutoShowMessageList.contains(it.messageID) &&
-                            AAFMessageManager.canShowFace(it, false)
-                }?.forEach {
-                    AAFMessageManager.mAutoShowMessageList.add(it.messageID)
-                    AAFMessageManager.showMessage(this, it, true)
-                }
-        }
+        AAFMessageManager.observeAndShowFace(this)
+        // 版本更新检查
+        UpdateManager.checkUpdateAndShowDialog(this, false, ZixieContext.isOfficial())
+
     }
 
     override fun getTitleActionContentRender(): RenderState {
         return object : RenderState {
             @Composable
             override fun Content() {
-                val context = LocalContext.current
-                val lifecycleOwner = LocalLifecycleOwner.current
-
-                // 观察消息未读数 LiveData（通过 DisposableEffect + observe 避免依赖 runtime-livedata）
-                var unreadCount by remember { mutableIntStateOf(AAFMessageManager.getUnreadNum()) }
-                DisposableEffect(lifecycleOwner) {
-                    val observer = androidx.lifecycle.Observer<Any?> { _ ->
-                        unreadCount = AAFMessageManager.getUnreadNum()
-                    }
-                    AAFMessageManager.getMessageLiveData().observe(lifecycleOwner, observer)
-                    onDispose {
-                        AAFMessageManager.getMessageLiveData().removeObserver(observer)
-                    }
-                }
-
-                Row {
-                    // 扫描二维码
-                    IconButton(onClick = {
-                        QrcodeUtils.openQrScan(this@TestMainActivityWithDrawer)
-                    }) {
-                        Icon(
-                            modifier = Modifier.width(24.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.icon_scan),
-                            contentDescription = "扫描二维码"
-                        )
-                    }
-                    // 消息中心（带未读红点）
-                    IconButton(onClick = {
-                        RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
-                    }) {
-                        Box {
-                            Icon(
-                                modifier = Modifier.width(24.dp),
-                                imageVector = ImageVector.vectorResource(R.drawable.icon_message),
-                                contentDescription = "消息中心"
-                            )
-                            if (unreadCount > 0) {
-                                Box(
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .offset(x = 4.dp, y = (-4).dp)
-                                ) {
-                                    BadgeView(
-                                        num = unreadCount,
-                                        badgeSmallSize = 14.dp,
-                                        badgeLargeSize = 16.dp,
-                                        fontSize = 8.sp
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+                AAFDefaultTitleActions()
             }
         }
     }
@@ -137,8 +83,8 @@ open class TestMainActivityWithDrawer : DebugComposeMainActivityWithDrawer() {
     }
 
     override fun getDrawerContentContentRender(): RenderState? {
-//        return getAAFNavigationDrawerContentRender()
-        return null
+        return getAAFNavigationDrawerContentRender()
+//        return null
     }
 
     override fun onResume() {

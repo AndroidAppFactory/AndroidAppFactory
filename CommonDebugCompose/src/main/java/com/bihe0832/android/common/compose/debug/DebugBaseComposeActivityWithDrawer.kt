@@ -24,7 +24,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
  *
  */
 
-open class DebugBaseComposeActivity : CommonComposeActivityWithDrawer() {
+open class DebugBaseComposeActivityWithDrawer : CommonComposeActivityWithDrawer() {
 
     override fun getDrawerContentContentRender(): RenderState? {
         return null

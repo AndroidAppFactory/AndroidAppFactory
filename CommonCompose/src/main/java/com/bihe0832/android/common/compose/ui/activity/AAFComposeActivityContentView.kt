@@ -3,6 +3,7 @@ package com.bihe0832.android.common.compose.ui.activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -98,6 +99,7 @@ fun ActivityRootView(
 fun ActivityRootViewWithDrawer(
     drawerState: DrawerState,
     drawerContent: @Composable () -> Unit,
+    contentPercent: Float,
     topBar: @Composable () -> Unit,
     bottomBar: @Composable () -> Unit,
     content: @Composable () -> Unit
@@ -105,7 +107,9 @@ fun ActivityRootViewWithDrawer(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet(
+                modifier = Modifier.fillMaxWidth(contentPercent)
+            ) {
                 drawerContent()
             }
         },
@@ -249,12 +253,15 @@ fun ActivityToolBarViewWithDrawer(
     isCenter: Boolean,
     drawerState: DrawerState,
     drawerContent: @Composable () -> Unit,
+    contentPercent: Float = 0.7f,
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
     if (isCenter) {
-        ActivityRootViewWithDrawer(drawerState = drawerState,
+        ActivityRootViewWithDrawer(
+            drawerState = drawerState,
             drawerContent = drawerContent,
+            contentPercent = contentPercent,
             topBar = {
                 AAFCenterTopAppBar(navigationIcon, navigationOnClick, title, textSize, actions)
             },
@@ -265,8 +272,10 @@ fun ActivityToolBarViewWithDrawer(
                 content()
             })
     } else {
-        ActivityRootViewWithDrawer(drawerState = drawerState,
+        ActivityRootViewWithDrawer(
+            drawerState = drawerState,
             drawerContent = drawerContent,
+            contentPercent = contentPercent,
             topBar = {
                 AAFTopAppBar(navigationIcon, navigationOnClick, title, textSize, actions)
             },
@@ -291,7 +300,11 @@ fun ActivityBottomBarView(bottomBar: @Composable () -> Unit, content: @Composabl
 
 @Composable
 fun BaseComposeActivity.CommonActivityToolbarView(
-    icon: ImageVector?, title: String, isCenter: Boolean, content: @Composable () -> Unit
+    icon: ImageVector?,
+    title: String,
+    isCenter: Boolean,
+    actions: @Composable () -> Unit = {},
+    content: @Composable () -> Unit
 ) {
     ActivityToolBarView(navigationIcon = icon,
         navigationOnClick = {
@@ -300,7 +313,7 @@ fun BaseComposeActivity.CommonActivityToolbarView(
         title = title,
         textSize = 18.sp,
         isCenter = isCenter,
-        actions = {},
+        actions = { actions() },
         content = { content() })
 }
 
@@ -311,6 +324,7 @@ fun BaseComposeActivity.CommonActivityToolbarViewWithDrawer(
     drawerContent: @Composable () -> Unit,
     title: String,
     isCenter: Boolean,
+    actions: @Composable () -> Unit,
     content: @Composable () -> Unit
 ) {
 
@@ -330,7 +344,7 @@ fun BaseComposeActivity.CommonActivityToolbarViewWithDrawer(
         isCenter = isCenter,
         drawerState = drawerState,
         drawerContent = { drawerContent() },
-        actions = {},
+        actions = { actions() },
         content = { content() })
 }
 
@@ -404,15 +418,4 @@ fun Preview() {
                 )
             }
         })
-
-//    ActivityBottomBarView(bottomBar = {
-//        Text(
-//            text = "fsdf", modifier = Modifier
-//                .background(Color.Red)
-//                .fillMaxWidth()
-//        )
-//    }, content = {
-//
-//    })
-
 }

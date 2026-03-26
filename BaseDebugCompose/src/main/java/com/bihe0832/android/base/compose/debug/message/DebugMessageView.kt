@@ -3,11 +3,9 @@ package com.bihe0832.android.base.compose.debug.message
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.bihe0832.android.app.message.AAFMessageListFragment
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
-import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.message.data.MessageInfoItem
@@ -20,13 +18,6 @@ fun DebugMessageComposeView() {
     val activity = LocalContext.current as? Activity
     DebugContent {
         DebugItem("初始化并拉取公告") { testTrace() }
-        DebugItem("打开消息详情页(Fragment)") {
-            DebugUtilsV2.startComposeActivity(
-                it,
-                "打开消息详情页(Fragment)",
-                AAFMessageListFragment::class.java.name
-            )
-        }
         DebugItem("打开消息详情页(Activity)") {
             RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
         }

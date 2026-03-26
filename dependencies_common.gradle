@@ -35,9 +35,9 @@ ext.commonmoduleInfo = [
                 "version"            : "8.2.10",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
-                        "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
-                        "CommonList", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare",
-                        "CommonMessage", "CommonPermission", "CommonQRCode",
+                        "CommonFeedback", "CommonSplash", "CommonPraise",
+                        "CommonList", "CommonBottomTab",  "CommonShare",
+                        "CommonPermission", "CommonQRCode",
                         "CommonWebview", "CommonNetwork", "CommonLanguage", "CommonFilePreview"
                 ]
         ],
@@ -45,7 +45,7 @@ ext.commonmoduleInfo = [
                 "version"            : "8.2.10",
                 "artifactId"         : "common-wrapper-compose",
                 "apidependenciesList": [
-                        "CommonCompose", "CommonListCompose"
+                        "CommonCompose", "CommonListCompose","CommonAboutCompose","CommonMessageCompose"
                 ]
         ],
         "ModelRes"              : [
@@ -100,13 +100,6 @@ ext.commonmoduleInfo = [
                         "kapt": ["RouterCompiler"]
                 ]
         ],
-        "CommonMessage"         : [
-                "version"            : "8.2.10",
-                "artifactId"         : "common-message",
-                "apidependenciesList": [
-                        "CommonList", "CommonListCompose"
-                ]
-        ],
         "CommonShare"           : [
                 "version"                : "8.2.10",
                 "artifactId"             : "common-share",
@@ -116,11 +109,6 @@ ext.commonmoduleInfo = [
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
                 ]
-        ],
-        "CommonNavigationDrawer": [
-                "version"            : "8.2.10",
-                "artifactId"         : "common-navigation-drawer",
-                "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
         ],
         "CommonBottomTab"       : [
                 "version"            : "8.2.10",
@@ -147,13 +135,6 @@ ext.commonmoduleInfo = [
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
-                ]
-        ],
-        "CommonAbout"           : [
-                "version"            : "8.2.10",
-                "artifactId"         : "common-about",
-                "apidependenciesList": [
-                        "CommonDeprecated", "CommonList"
                 ]
         ],
         "CommonListCompose"     : [
@@ -272,6 +253,20 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-audio-wave",
                 "apidependenciesList": [
                         "CommonCompose"
+                ]
+        ],
+        "CommonAboutCompose"           : [
+                "version"            : "8.2.10",
+                "artifactId"         : "common-about-compose",
+                "apidependenciesList": [
+                        "CommonCompose"
+                ]
+        ],
+        "CommonMessageCompose"         : [
+                "version"            : "8.2.10",
+                "artifactId"         : "common-message-compose",
+                "apidependenciesList": [
+                         "CommonListCompose"
                 ]
         ],
 

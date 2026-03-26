@@ -20,15 +20,17 @@
 
         <activity
             android:name="com.bihe0832.android.app.about.AboutActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
         <activity
             android:name="com.bihe0832.android.app.message.AAFMessageActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
         <activity
             android:name="com.bihe0832.android.common.tbswebview.WebPageActivity"

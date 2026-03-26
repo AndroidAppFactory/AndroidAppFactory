@@ -1,14 +1,15 @@
 package com.bihe0832.android.app.message
 
 import android.app.Activity
+import androidx.fragment.app.FragmentActivity
 import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.common.message.base.MessageManager
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
 /**
  * AAF 消息管理器
@@ -37,7 +38,31 @@ object AAFMessageManager : MessageManager() {
      * 通过配置的消息 URL 获取消息列表
      */
     override fun fetchNewMsg() {
-        fetchMessageByURLList(AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.message_url) ?: "", ""))
+        fetchMessageByURLList(
+            AAFNetWorkApi.getCommonURL(
+                ThemeResourcesManager.getString(R.string.message_url) ?: "", ""
+            )
+        )
+    }
+
+    /**
+     * 观察消息变化并自动拍脸展示
+     *
+     * 将消息拍脸逻辑统一收口，Activity 只需在 onCreate 中调用此方法即可
+     *
+     * @param activity FragmentActivity 实例，用于 observe 生命周期和展示消息
+     */
+    fun observeAndShowFace(activity: FragmentActivity) {
+        getMessageLiveData().observe(activity) { noticeList ->
+            noticeList?.distinctBy { it.messageID }
+                ?.filter {
+                    !mAutoShowMessageList.contains(it.messageID)
+                            && canShowFace(it, false)
+                }?.forEach {
+                    mAutoShowMessageList.add(it.messageID)
+                    showMessage(activity, it, true)
+                }
+        }
     }
 
     /**
@@ -55,7 +80,8 @@ object AAFMessageManager : MessageManager() {
                 showMessage(activity, messageInfoItem, showFace, object :
                     OnDialogListener {
                     override fun onPositiveClick() {
-                        mDependenceBlockDialogManager.getDependentTaskManager().finishTask(messageInfoItem.messageID)
+                        mDependenceBlockDialogManager.getDependentTaskManager()
+                            .finishTask(messageInfoItem.messageID)
                     }
 
                     override fun onNegativeClick() {

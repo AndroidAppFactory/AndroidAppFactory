@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.common.message.MessageListLiveData
-import com.bihe0832.android.common.message.R
+import com.bihe0832.android.common.message.compose.R
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.data.db.MessageDBManager
 import com.bihe0832.android.framework.router.RouterAction
@@ -31,7 +31,7 @@ import java.net.HttpURLConnection
  * Description: Description
  *
  */
-public open class MessageManager {
+open class MessageManager {
 
     open fun fetchNewMsg() {
         fetchMessageByURLList(ThemeResourcesManager.getString(R.string.com_bihe0832_message_common_msg_url)!!)

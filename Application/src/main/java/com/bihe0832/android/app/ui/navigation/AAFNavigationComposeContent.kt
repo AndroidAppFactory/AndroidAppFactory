@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -31,13 +30,13 @@ import androidx.compose.ui.unit.sp
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.common.about.compose.item.SettingsItemCompose
 import com.bihe0832.android.common.about.compose.wrapper.SettingsItemFactory
 import com.bihe0832.android.common.about.compose.wrapper.SettingsItemGo
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.permission.settings.PermissionFragment
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
-import com.bihe0832.android.common.about.compose.item.SettingsItemCompose
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.framework.R as FrameworkR
@@ -158,7 +157,11 @@ fun AAFNavigationContent() {
             mShowGo = true,
             mHeaderListener = {
                 val title = context.getString(ModelResR.string.common_permission_item_title_privacy)
-                CommonRootActivity.startCommonRootActivity(context, PermissionFragment::class.java, title)
+                CommonRootActivity.startCommonRootActivity(
+                    context,
+                    PermissionFragment::class.java,
+                    title
+                )
             }
         )
 

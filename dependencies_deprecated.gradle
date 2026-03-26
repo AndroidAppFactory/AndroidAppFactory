@@ -9,6 +9,25 @@ ext.deprecatedModuleInfo = [
                         "LibRefresh", "LibRecycleviewExt", "LibBottomTab"
                 ]
         ],
+        "CommonAbout"           : [
+                "version"            : "8.2.10",
+                "artifactId"         : "common-about",
+                "apidependenciesList": [
+                        "CommonList"
+                ]
+        ],
+        "CommonMessage"         : [
+                "version"            : "8.2.10",
+                "artifactId"         : "common-message",
+                "apidependenciesList": [
+                        "CommonList", "CommonMessageCompose"
+                ]
+        ],
+        "CommonNavigationDrawer": [
+                "version"            : "8.2.10",
+                "artifactId"         : "common-navigation-drawer",
+                "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
+        ],
         "LibFragmentation_core"     : [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-fragmentation-core",

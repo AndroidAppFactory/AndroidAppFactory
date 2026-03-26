@@ -11,7 +11,7 @@ import android.os.Process
 import android.text.format.Formatter
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugItem
@@ -38,7 +38,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 
-open class DebugDeviceActivity : DebugBaseComposeActivity() {
+open class DebugDeviceActivity : DebugBaseComposeActivityWithDrawer() {
 
     val statusChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {

@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.debug.item.LittleDebugTips
 import com.bihe0832.android.common.compose.debug.module.audio.item.AudioItemCompose
@@ -44,7 +44,7 @@ import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager
 import java.io.File
 
-open class DebugAudioListActivity : DebugBaseComposeActivity() {
+open class DebugAudioListActivity : DebugBaseComposeActivityWithDrawer() {
 
     protected var folder = AAFFileWrapper.getMediaTempFolder()
     protected val viewModel: DebugAudioListViewModel = DebugAudioListViewModel()

@@ -9,7 +9,6 @@ import com.bihe0832.android.base.compose.debug.convert.DebugConvertComposeView
 import com.bihe0832.android.base.compose.debug.dialog.DebugDialogComposeView
 import com.bihe0832.android.base.compose.debug.download.DebugBatchDownloadView
 import com.bihe0832.android.base.compose.debug.download.DebugDownloadTestView
-import com.bihe0832.android.base.compose.debug.download.DebugDownloadView
 import com.bihe0832.android.base.compose.debug.encrypt.DebugEncryptView
 import com.bihe0832.android.base.compose.debug.file.DebugFileComposeView
 import com.bihe0832.android.base.compose.debug.google.DebugGoogleFragment
@@ -20,7 +19,6 @@ import com.bihe0832.android.base.compose.debug.log.DebugLogComposeView
 import com.bihe0832.android.base.compose.debug.media.DebugMediaComposeView
 import com.bihe0832.android.base.compose.debug.message.DebugMessageComposeView
 import com.bihe0832.android.base.compose.debug.notify.DebugNotifyComposeView
-import com.bihe0832.android.base.compose.debug.tts.DebugTTSComposeView
 import com.bihe0832.android.base.compose.debug.qrcode.DebugQRCodeFragment
 import com.bihe0832.android.base.compose.debug.request.DebugHttpActivity
 import com.bihe0832.android.base.compose.debug.shake.DebugShakeView
@@ -28,7 +26,9 @@ import com.bihe0832.android.base.compose.debug.share.DebugShareComposeView
 import com.bihe0832.android.base.compose.debug.task.DebugEnqueueView
 import com.bihe0832.android.base.compose.debug.task.DebugThreadAndCoroutinesView
 import com.bihe0832.android.base.compose.debug.toast.DebugToastComposeView
+import com.bihe0832.android.base.compose.debug.tts.DebugTTSComposeView
 import com.bihe0832.android.base.compose.debug.ui.DebugApplicaionUIView
+import com.bihe0832.android.base.compose.debug.ui.SampleMainActivity
 import com.bihe0832.android.common.compose.debug.item.DebugComposeActivityItem
 import com.bihe0832.android.common.compose.debug.item.DebugComposeFragmentItem
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
@@ -48,8 +48,14 @@ fun AAFDebugModuleView() {
 
     DebugContent {
         DebugComposeItem("临时测试(Temp)", "DebugTempView") { DebugTempView() }
-        DebugComposeItem("下载及安装 Download 调试", "DebugDownloadTestView") { DebugDownloadTestView() }
-        DebugComposeItem("批量下载 BatchDownload 调试", "DebugBatchDownloadView") { DebugBatchDownloadView() }
+        DebugComposeItem(
+            "下载及安装 Download 调试",
+            "DebugDownloadTestView"
+        ) { DebugDownloadTestView() }
+        DebugComposeItem(
+            "批量下载 BatchDownload 调试",
+            "DebugBatchDownloadView"
+        ) { DebugBatchDownloadView() }
         DebugComposeItem("文件管理相关", "DebugFileComposeView") { DebugFileComposeView() }
         DebugComposeItem(
             "Dialog (不同类型、顺序、底部，分享等)调试", "DebugDialogComposeView"
@@ -100,6 +106,7 @@ fun AAFDebugModuleView() {
         DebugComposeItem("通知栏调试", "DebugNotifyComposeView") { DebugNotifyComposeView() }
         DebugComposeItem("多进程调试", "DebugIPCView") { DebugIPCView() }
         DebugComposeActivityItem("HTTP Request", DebugHttpActivity::class.java)
+        DebugComposeActivityItem("示例主页（AAFCommonMainActivity）", SampleMainActivity::class.java)
     }
 }
 

@@ -4,7 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import androidx.compose.runtime.Composable
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.debug.DebugComposeItemManager
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.state.RenderState
@@ -15,7 +15,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
  * @author zixie code@bihe0832.com Created on 2025/2/17.
  * Description: 仅支持全Compose 页面，且页面对应的Compose UI 通过Key 获取
  */
-open class DebugComposeRootActivity : DebugBaseComposeActivity() {
+open class DebugComposeRootActivity : DebugBaseComposeActivityWithDrawer() {
 
     private val TAG = "DebugComposeRootActivit"
     private var rootFragmentClassName = ""

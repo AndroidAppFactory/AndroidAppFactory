@@ -26,7 +26,7 @@ import com.bihe0832.android.base.compose.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.compose.debug.request.basic.BasicPostRequest
 import com.bihe0832.android.base.compose.debug.request.okhttp.debugOKHttp1
 import com.bihe0832.android.base.compose.debug.request.okhttp.debugOKHttp2
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.file.FileUtils
@@ -45,7 +45,7 @@ import java.io.File
 import java.net.URLDecoder
 
 
-class DebugHttpActivity : DebugBaseComposeActivity() {
+class DebugHttpActivity : DebugBaseComposeActivityWithDrawer() {
 
     private val _resultText = mutableStateOf("Result:")
     val resultText: State<String> = _resultText

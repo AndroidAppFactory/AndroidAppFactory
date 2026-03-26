@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import com.bihe0832.android.base.compose.debug.ipc.iservice.IZixieIPCTestServiceForMain
 import com.bihe0832.android.base.compose.debug.ipc.iservice.IZixieIPCTestServiceForTest
 import com.bihe0832.android.base.compose.debug.ipc.iservice.impl.ZixieIPCTestServiceForMain
-import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivityWithDrawer
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.lib.ipc.ServiceManager
 import com.bihe0832.android.lib.log.ZLog
 
 
-open class TestIPCActivity : DebugBaseComposeActivity() {
+open class TestIPCActivity : DebugBaseComposeActivityWithDrawer() {
 
     override fun getContentRender(): RenderState {
         return object : RenderState {
