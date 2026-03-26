@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="com_bihe0832_message_common_msg_url" translatable="false">https://cdn.bihe0832.com/app/msg/aaf_msg.json</string>
+</resources>
