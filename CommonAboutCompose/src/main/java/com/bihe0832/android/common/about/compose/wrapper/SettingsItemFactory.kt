@@ -40,11 +40,16 @@ object SettingsItemFactory {
 
     /**
      * 版本列表（默认标题）
+     *
+     * @param listener 点击回调
      */
     @Composable
-    fun VersionList() {
+    fun VersionList(
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         VersionList(
-            ZixieContext.applicationContext!!.getString(ModelResR.string.settings_version_title)
+            ZixieContext.applicationContext!!.getString(ModelResR.string.settings_version_title),
+            listener = listener,
         )
     }
 
@@ -52,9 +57,13 @@ object SettingsItemFactory {
      * 版本列表（自定义标题）
      *
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun VersionList(title: String) {
+    fun VersionList(
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = ResR.drawable.icon_menu,
@@ -68,6 +77,7 @@ object SettingsItemFactory {
                         openZixieWeb(url)
                     }
                 }
+                listener?.invoke(it)
             }
         )
     }
@@ -167,19 +177,30 @@ object SettingsItemFactory {
 
     /**
      * 意见反馈 - URL 方式（默认标题）
+     *
+     * @param listener 点击回调
      */
     @Composable
-    fun FeedbackURL() {
-        FeedbackURL(ThemeResourcesManager.getString(ModelResR.string.feedback) ?: "")
+    fun FeedbackURL(
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
+        FeedbackURL(
+            ThemeResourcesManager.getString(ModelResR.string.feedback) ?: "",
+            listener = listener,
+        )
     }
 
     /**
      * 意见反馈 - URL 方式（自定义标题）
      *
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun FeedbackURL(title: String) {
+    fun FeedbackURL(
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = FrameworkR.drawable.icon_feedback,
@@ -187,6 +208,7 @@ object SettingsItemFactory {
             mShowGo = true,
             mHeaderListener = {
                 openFeedback()
+                listener?.invoke(it)
             }
         )
     }
@@ -195,12 +217,17 @@ object SettingsItemFactory {
      * 意见反馈 - 邮件方式（默认标题）
      *
      * @param activity 当前 Activity，用于发送邮件
+     * @param listener 点击回调
      */
     @Composable
-    fun FeedbackMail(activity: Activity?) {
+    fun FeedbackMail(
+        activity: Activity?,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         FeedbackMail(
             activity,
-            ThemeResourcesManager.getString(ModelResR.string.feedback) ?: ""
+            ThemeResourcesManager.getString(ModelResR.string.feedback) ?: "",
+            listener = listener,
         )
     }
 
@@ -209,9 +236,14 @@ object SettingsItemFactory {
      *
      * @param activity 当前 Activity
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun FeedbackMail(activity: Activity?, title: String) {
+    fun FeedbackMail(
+        activity: Activity?,
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         val mail = ThemeResourcesManager.getString(FrameworkR.string.feedback_mail) ?: ""
         SettingsItemGo(
             mItemText = title,
@@ -233,6 +265,7 @@ object SettingsItemFactory {
                         openFeedback()
                     }
                 }
+                listener?.invoke(it)
             }
         )
     }
@@ -241,10 +274,14 @@ object SettingsItemFactory {
      * 客服 QQ（默认标题）
      *
      * @param activity 当前 Activity
+     * @param listener 点击回调
      */
     @Composable
-    fun QQService(activity: Activity?) {
-        QQService(activity, "客服QQ")
+    fun QQService(
+        activity: Activity?,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
+        QQService(activity, "客服QQ", listener = listener)
     }
 
     /**
@@ -252,9 +289,14 @@ object SettingsItemFactory {
      *
      * @param activity 当前 Activity
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun QQService(activity: Activity?, title: String) {
+    fun QQService(
+        activity: Activity?,
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         val feedbackQQnumber = ThemeResourcesManager.getString(FrameworkR.string.feedback_qq) ?: ""
         SettingsItemGo(
             mItemText = title,
@@ -269,25 +311,34 @@ object SettingsItemFactory {
                         ThemeResourcesManager.getString(ModelResR.string.contact_QQ_join_failed)!!
                     )
                 }
+                listener?.invoke(it)
             }
         )
     }
 
     /**
      * 调试入口（默认标题）
+     *
+     * @param listener 点击回调
      */
     @Composable
-    fun Debug() {
-        Debug("调试")
+    fun Debug(
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
+        Debug("调试", listener = listener)
     }
 
     /**
      * 调试入口（自定义标题）
      *
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun Debug(title: String) {
+    fun Debug(
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = ResR.drawable.icon_android,
@@ -295,6 +346,7 @@ object SettingsItemFactory {
             mShowGo = true,
             mHeaderListener = {
                 RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_DEBUG)
+                listener?.invoke(it)
             }
         )
     }
@@ -303,13 +355,18 @@ object SettingsItemFactory {
      * 微信公众号（默认标题和提示）
      *
      * @param activity 当前 Activity
+     * @param listener 点击回调
      */
     @Composable
-    fun Wechat(activity: Activity?) {
+    fun Wechat(
+        activity: Activity?,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         Wechat(
             activity,
             activity?.getString(ModelResR.string.wechat_official_account) ?: "",
-            activity?.getString(ModelResR.string.wechat_sub_content_tips) ?: ""
+            activity?.getString(ModelResR.string.wechat_sub_content_tips) ?: "",
+            listener = listener,
         )
     }
 
@@ -319,9 +376,15 @@ object SettingsItemFactory {
      * @param activity 当前 Activity
      * @param title 标题文本
      * @param tipsText 提示文本
+     * @param listener 点击回调
      */
     @Composable
-    fun Wechat(activity: Activity?, title: String, tipsText: String) {
+    fun Wechat(
+        activity: Activity?,
+        title: String,
+        tipsText: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = ResR.drawable.icon_wechat,
@@ -342,25 +405,34 @@ object SettingsItemFactory {
                         },
                     )
                 }
+                listener?.invoke(it)
             }
         )
     }
 
     /**
      * 关于开发者（默认标题）
+     *
+     * @param listener 点击回调
      */
     @Composable
-    fun Zixie() {
-        Zixie("关于开发者")
+    fun Zixie(
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
+        Zixie("关于开发者", listener = listener)
     }
 
     /**
      * 关于开发者（自定义标题）
      *
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun Zixie(title: String) {
+    fun Zixie(
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = ResR.drawable.icon_author,
@@ -368,6 +440,7 @@ object SettingsItemFactory {
             mShowGo = true,
             mHeaderListener = {
                 openZixieWeb("file:///android_asset/web/author.html")
+                listener?.invoke(it)
             }
         )
     }
@@ -376,12 +449,17 @@ object SettingsItemFactory {
      * 分享应用（默认标题）
      *
      * @param canSendAPK 是否支持发送 APK 文件
+     * @param listener 点击回调
      */
     @Composable
-    fun ShareAPP(canSendAPK: Boolean) {
+    fun ShareAPP(
+        canSendAPK: Boolean,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         ShareAPP(
             canSendAPK,
-            ZixieContext.applicationContext!!.getString(ModelResR.string.com_bihe0832_share_title)
+            ZixieContext.applicationContext!!.getString(ModelResR.string.com_bihe0832_share_title),
+            listener = listener,
         )
     }
 
@@ -390,9 +468,14 @@ object SettingsItemFactory {
      *
      * @param canSendAPK 是否支持发送 APK 文件
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun ShareAPP(canSendAPK: Boolean, title: String) {
+    fun ShareAPP(
+        canSendAPK: Boolean,
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = ResR.drawable.icon_share,
@@ -400,6 +483,7 @@ object SettingsItemFactory {
             mShowGo = true,
             mHeaderListener = {
                 shareAPP(canSendAPK)
+                listener?.invoke(it)
             }
         )
     }
@@ -443,10 +527,18 @@ object SettingsItemFactory {
      * 清除缓存（默认标题）
      *
      * @param activity 当前 Activity
+     * @param listener 点击回调
      */
     @Composable
-    fun ClearCache(activity: Activity) {
-        ClearCache(activity, activity.getString(ModelResR.string.settings_clear_title))
+    fun ClearCache(
+        activity: Activity,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
+        ClearCache(
+            activity,
+            activity.getString(ModelResR.string.settings_clear_title),
+            listener = listener,
+        )
     }
 
     /**
@@ -454,9 +546,14 @@ object SettingsItemFactory {
      *
      * @param activity 当前 Activity
      * @param title 标题文本
+     * @param listener 点击回调
      */
     @Composable
-    fun ClearCache(activity: Activity, title: String) {
+    fun ClearCache(
+        activity: Activity,
+        title: String,
+        listener: ((context: Context) -> Unit)? = null,
+    ) {
         SettingsItemGo(
             mItemText = title,
             mItemIconRes = ResR.drawable.icon_delete_fill,
@@ -464,6 +561,7 @@ object SettingsItemFactory {
             mShowGo = true,
             mHeaderListener = {
                 clearCache(activity)
+                listener?.invoke(it)
             }
         )
     }

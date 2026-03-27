@@ -25,6 +25,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -47,6 +48,15 @@ import com.bihe0832.android.common.compose.ui.RefreshView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import com.bihe0832.android.lib.aaf.res.R as ResR
+
+/**
+ * 通过 CompositionLocal 向子组件提供 DrawerState
+ *
+ * 侧边栏内容可通过 LocalDrawerState.current 获取 DrawerState，
+ * 在 Item 点击后调用 drawerState.close() 关闭侧边栏。
+ * 默认值为 null，表示当前不在 Drawer 上下文中。
+ */
+val LocalDrawerState = compositionLocalOf<DrawerState?> { null }
 
 /**
  *

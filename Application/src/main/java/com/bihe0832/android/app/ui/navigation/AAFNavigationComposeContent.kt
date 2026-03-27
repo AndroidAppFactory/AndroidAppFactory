@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,11 +35,13 @@ import com.bihe0832.android.common.about.compose.item.SettingsItemCompose
 import com.bihe0832.android.common.about.compose.wrapper.SettingsItemFactory
 import com.bihe0832.android.common.about.compose.wrapper.SettingsItemGo
 import com.bihe0832.android.common.compose.state.RenderState
+import com.bihe0832.android.common.compose.ui.activity.LocalDrawerState
 import com.bihe0832.android.common.permission.settings.PermissionFragment
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
+import kotlinx.coroutines.launch
 import com.bihe0832.android.framework.R as FrameworkR
 import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.model.res.R as ModelResR
@@ -89,6 +92,8 @@ fun AAFNavigationContent() {
     val context = LocalContext.current
     val activity = context as? Activity
     val lifecycleOwner = LocalLifecycleOwner.current
+    val drawerState = LocalDrawerState.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
 
     // 观察更新 LiveData（通过 DisposableEffect + observe 避免依赖 runtime-livedata）
     var updateData by remember { mutableStateOf(UpdateInfoLiveData.value) }
@@ -139,6 +144,7 @@ fun AAFNavigationContent() {
 
         // 关于应用
         SettingsItemFactory.AboutAPP(cloud = updateData) {
+            scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
             RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT)
         }
 
@@ -146,6 +152,7 @@ fun AAFNavigationContent() {
         SettingsItemFactory.Message(
             msgNum = if (unreadNum > 0) unreadNum else -1
         ) {
+            scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
             RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
         }
 
@@ -156,6 +163,7 @@ fun AAFNavigationContent() {
             mShowDriver = true,
             mShowGo = true,
             mHeaderListener = {
+                scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
                 val title = context.getString(ModelResR.string.common_permission_item_title_privacy)
                 CommonRootActivity.startCommonRootActivity(
                     context,
@@ -166,10 +174,14 @@ fun AAFNavigationContent() {
         )
 
         // 意见反馈
-        SettingsItemFactory.FeedbackURL()
+        SettingsItemFactory.FeedbackURL {
+            scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
+        }
 
         // 分享应用
-        SettingsItemFactory.ShareAPP(canSendAPK = true)
+        SettingsItemFactory.ShareAPP(canSendAPK = true) {
+            scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
+        }
 
         // 语言切换
         SettingsItemGo(
@@ -178,16 +190,21 @@ fun AAFNavigationContent() {
             mShowDriver = true,
             mShowGo = true,
             mHeaderListener = {
+                scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
                 RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_LANGUAGE)
             }
         )
 
         // 清除缓存
         if (activity != null) {
-            SettingsItemFactory.ClearCache(activity)
+            SettingsItemFactory.ClearCache(activity) {
+                scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
+            }
         }
         // 关于开发者
-        SettingsItemFactory.Zixie()
+        SettingsItemFactory.Zixie {
+            scope.launch { drawerState?.snapTo(DrawerValue.Closed) }
+        }
     }
 }
 

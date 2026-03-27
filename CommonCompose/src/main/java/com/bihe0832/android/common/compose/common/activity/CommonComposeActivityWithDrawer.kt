@@ -3,12 +3,14 @@ package com.bihe0832.android.common.compose.common.activity
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.activity.CommonActivityToolbarView
 import com.bihe0832.android.common.compose.ui.activity.CommonActivityToolbarViewWithDrawer
+import com.bihe0832.android.common.compose.ui.activity.LocalDrawerState
 import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
@@ -73,7 +75,11 @@ abstract class CommonComposeActivityWithDrawer : CommonComposeActivity() {
                 CommonActivityToolbarViewWithDrawer(
                     icon = getNavigationIcon() ?: ImageVector.vectorResource(ResR.drawable.icon_menu),
                     drawerState = drawerState,
-                    drawerContent = { drawerContent.Content() },
+                    drawerContent = {
+                        CompositionLocalProvider(LocalDrawerState provides drawerState) {
+                            drawerContent.Content()
+                        }
+                    },
                     title = getTitleName(),
                     isCenter = isCenter(),
                     actions = {
