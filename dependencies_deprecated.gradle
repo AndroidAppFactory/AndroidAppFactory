@@ -54,7 +54,7 @@ ext.deprecatedModuleInfo = [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         "LibAAFResource", "LibOS", "LibRequest", "LibMedia", "LibTextView"
                 ]
         ],
@@ -85,7 +85,7 @@ ext.deprecatedModuleInfo = [
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         ext.androidsupport.annotation
                 ]
         ]

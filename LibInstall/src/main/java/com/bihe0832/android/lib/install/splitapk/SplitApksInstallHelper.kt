@@ -10,6 +10,7 @@ import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.content.IntentSanitizer
 import com.bihe0832.android.lib.install.InstallErrorCode
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils.TAG
@@ -147,10 +148,13 @@ object SplitApksInstallHelper {
 
     /**
      * 处理需要用户确认的情况
-     * 
-     * 安全说明：
-     * - 验证 Intent 来源，防止 Intent Redirection 攻击
-     * - 只接受来自系统 PackageInstaller 的 Intent
+     *
+     * 安全修复（Intent Redirection - Google Play Policy）：
+     * 使用 androidx.core.content.IntentSanitizer 清理从 Intent 中提取的嵌套 Intent，
+     * 确保只允许指向系统 PackageInstaller 组件的 Intent 被启动，
+     * 防止恶意 Intent 被转发到非预期的组件。
+     *
+     * @see <a href="https://support.google.com/faqs/answer/9267555">Google FAQ: Intent Redirection</a>
      */
     private fun handlePendingUserAction(context: Context, intent: Intent, sessionId: Int) {
         ZLog.d(TAG, "Requesting user confirmation for session $sessionId")
@@ -162,77 +166,51 @@ object SplitApksInstallHelper {
             intent.getParcelableExtra(Intent.EXTRA_INTENT)
         }
 
-        if (confirmIntent != null) {
-            // 安全检查：验证 Intent 是否来自系统 PackageInstaller
-            if (!isValidPackageInstallerIntent(confirmIntent)) {
-                ZLog.e(TAG, "Security check failed: Intent is not from system PackageInstaller")
-                notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, "Invalid intent source")
-                return
-            }
-            
-            try {
-                confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(confirmIntent)
-                installListenerMap[sessionId]?.listener?.onInstallStart()
-            } catch (e: Exception) {
-                ZLog.e(TAG, "Failed to start confirmation activity: ${e.message}")
-                notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, e.message ?: "")
-            }
-        } else {
+        if (confirmIntent == null) {
             ZLog.e(TAG, "Confirmation intent is null")
             notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, "Confirmation intent is null")
+            return
         }
-    }
-    
-    /**
-     * 验证 Intent 是否来自系统 PackageInstaller
-     * 
-     * 防止 Intent Redirection 攻击：
-     * - 检查 Intent 的目标组件是否属于系统包（com.android.* 或 com.google.android.*）
-     * - 检查 action 是否为 PackageInstaller 相关的 action
-     * 
-     * @param intent 待验证的 Intent
-     * @return true 如果是合法的系统 Intent，false 否则
-     */
-    private fun isValidPackageInstallerIntent(intent: Intent): Boolean {
-        // 检查目标组件
-        val component = intent.component
-        if (component != null) {
-            val packageName = component.packageName
-            // 只允许系统包
-            val isSystemPackage = packageName.startsWith("com.android.") ||
-                    packageName.startsWith("com.google.android.") ||
-                    packageName == "android"
-            
-            if (!isSystemPackage) {
-                ZLog.e(TAG, "Invalid package: $packageName")
-                return false
-            }
-            
-            ZLog.d(TAG, "Valid system package: $packageName")
-            return true
+
+        try {
+            // 使用 IntentSanitizer 清理嵌套 Intent，防止 Intent Redirection 攻击
+            // 只允许目标组件为系统包（com.android.* / com.google.android.* / android）
+            val sanitizer = IntentSanitizer.Builder()
+                .allowComponent { componentName ->
+                    val pkg = componentName.packageName
+                    pkg.startsWith("com.android.") ||
+                            pkg.startsWith("com.google.android.") ||
+                            pkg == "android"
+                }
+                .allowPackage { pkg ->
+                    pkg.startsWith("com.android.") ||
+                            pkg.startsWith("com.google.android.") ||
+                            pkg == "android"
+                }
+                .allowAction { true }
+                .allowData { true }
+                .allowType { true }
+                .allowCategory { true }
+                .allowHistoryStackFlags()
+                .allowExtra(PackageInstaller.EXTRA_STATUS, Int::class.java)
+                .allowExtra(PackageInstaller.EXTRA_STATUS_MESSAGE, String::class.java)
+                .allowExtra(PackageInstaller.EXTRA_SESSION_ID, Int::class.java)
+                .allowExtra(PackageInstaller.EXTRA_PACKAGE_NAME, String::class.java)
+                .allowExtra(Intent.EXTRA_INTENT, Intent::class.java)
+                .build()
+
+            val sanitizedIntent = sanitizer.sanitizeByThrowing(confirmIntent)
+            ZLog.d(TAG, "Launching system installer confirmation for session $sessionId")
+            sanitizedIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(sanitizedIntent)
+            installListenerMap[sessionId]?.listener?.onInstallStart()
+        } catch (e: SecurityException) {
+            ZLog.e(TAG, "Security: IntentSanitizer rejected intent: ${e.message}")
+            notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, "Intent rejected: ${e.message}")
+        } catch (e: Exception) {
+            ZLog.e(TAG, "Failed to start confirmation activity: ${e.message}")
+            notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, e.message ?: "")
         }
-        
-        // 如果没有组件，检查 action
-        val action = intent.action
-        if (action != null) {
-            // PackageInstaller 相关的合法 action
-            val validActions = listOf(
-                "android.content.pm.action.CONFIRM_INSTALL",
-                "android.content.pm.action.CONFIRM_PERMISSIONS",
-                "android.intent.action.INSTALL_PACKAGE",
-                "com.android.packageinstaller.action.CONFIRM_INSTALL"
-            )
-            
-            if (validActions.any { action.contains(it, ignoreCase = true) || it.contains(action, ignoreCase = true) }) {
-                ZLog.d(TAG, "Valid action: $action")
-                return true
-            }
-        }
-        
-        // 默认拒绝未知来源的 Intent
-        ZLog.e(TAG, "Unknown intent source: component=$component, action=$action")
-        return false
     }
 
     /**

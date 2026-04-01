@@ -61,15 +61,28 @@ def updateRealDependencies(String projectName, String moduleName, String current
             if (zixieIsDebug) println("add depenciese from " + moduleName + " to " + projectName + "; depenciese list:" + zixieModuleInfo[moduleName])
             if (!zixieIsPublish) {
                 // 处理 apidependenciesList
-                zixieModuleInfo[moduleName].get("apidependenciesList").each { item ->
-                    if (zixieIsDebug) println("will add " + item + " from " + moduleName + " to " + projectName + "; depenciese list:" + zixieModuleInfo[item])
-                    // 计算依赖类型和路径
-                    def isDirect = (projectName == moduleName)
-                    def newPath = isDirect ? currentPath : (currentPath + " → " + item)
+                def apiDepList = zixieModuleInfo[moduleName].get("apidependenciesList")
+                if (apiDepList == null) {
+                    println("\n[BUILD ERROR] 模块 '" + moduleName + "' 的 apidependenciesList 为 null")
+                    println("[BUILD ERROR] 请检查对应 dependencies_*.gradle 文件中 '" + moduleName + "' 的配置\n")
+                } else {
+                    apiDepList.each { item ->
+                        if (item == null) {
+                            println("\n[BUILD ERROR] 模块 '" + moduleName + "' 的 apidependenciesList 中存在 null 元素")
+                            println("[BUILD ERROR] 可能原因: 引用了不存在的变量（如 ext.androidsupport.xxx 拼写错误）")
+                            println("[BUILD ERROR] 请检查对应 dependencies_*.gradle 文件中 '" + moduleName + "' 的 apidependenciesList 配置")
+                            println("[BUILD ERROR] 当前列表内容: " + apiDepList + "\n")
+                            return // continue to next item
+                        }
+                        if (zixieIsDebug) println("will add " + item + " from " + moduleName + " to " + projectName + "; depenciese list:" + zixieModuleInfo[item])
+                        // 计算依赖类型和路径
+                        def isDirect = (projectName == moduleName)
+                        def newPath = isDirect ? currentPath : (currentPath + " → " + item)
 
-                    if (addDependencyToDepList(projectName, item, moduleName, isDirect, currentPath, "api")) {
-                        if (!item.contains(":")) {
-                            updateRealDependencies(projectName, item, currentPath + " → " + item)
+                        if (addDependencyToDepList(projectName, item, moduleName, isDirect, currentPath, "api")) {
+                            if (!item.contains(":")) {
+                                updateRealDependencies(projectName, item, currentPath + " → " + item)
+                            }
                         }
                     }
                 }
@@ -80,6 +93,13 @@ def updateRealDependencies(String projectName, String moduleName, String current
                     specialDeps.each { depType, depList ->
                         if (depList != null) {
                             depList.each { item ->
+                                if (item == null) {
+                                    println("\n[BUILD ERROR] 模块 '" + moduleName + "' 的 specialdependenciesList['" + depType + "'] 中存在 null 元素")
+                                    println("[BUILD ERROR] 可能原因: 引用了不存在的变量（如 ext.xxx 拼写错误）")
+                                    println("[BUILD ERROR] 请检查对应 dependencies_*.gradle 文件中 '" + moduleName + "' 的 specialdependenciesList 配置")
+                                    println("[BUILD ERROR] 当前 '" + depType + "' 列表内容: " + depList + "\n")
+                                    return // continue to next item
+                                }
                                 def isDirect = (projectName == moduleName)
                                 def depName = "[${depType}] ${item}"
                                 addDependencyToDepList(projectName, depName, moduleName, isDirect, currentPath, depType)
@@ -375,28 +395,51 @@ def autoDependencies(String projectName, String moduleName, HashMap<String, Arra
     if (zixieIsDebug) println("check " + projectName + " depenciese:" + moduleName)
 
     if (zixieModuleInfo[moduleName] != null) {
-        zixieModuleInfo[moduleName].get("apidependenciesList").each { item ->
-            if (zixieIsDebug) println(projectName + " addDependenciesOnce:" + item)
-            addDependenciesOnce(projectName, item, "", dependencies)
-            if (!zixieIsPublish) {
-                autoDependencies(projectName, item, dependencies)
+        def autoApiDepList = zixieModuleInfo[moduleName].get("apidependenciesList")
+        if (autoApiDepList == null) {
+            println("\n[BUILD ERROR] 模块 '" + moduleName + "' 的 apidependenciesList 为 null（autoDependencies 阶段）")
+            println("[BUILD ERROR] 请检查对应 dependencies_*.gradle 文件中 '" + moduleName + "' 的配置\n")
+        } else {
+            autoApiDepList.each { item ->
+                if (item == null) {
+                    println("\n[BUILD ERROR] 模块 '" + moduleName + "' 的 apidependenciesList 中存在 null 元素（autoDependencies 阶段）")
+                    println("[BUILD ERROR] 可能原因: 引用了不存在的变量（如 ext.androidsupport.xxx 拼写错误）")
+                    println("[BUILD ERROR] 请检查对应 dependencies_*.gradle 文件中 '" + moduleName + "' 的 apidependenciesList 配置")
+                    println("[BUILD ERROR] 当前列表内容: " + autoApiDepList + "\n")
+                    return // continue to next item
+                }
+                if (zixieIsDebug) println(projectName + " addDependenciesOnce:" + item)
+                addDependenciesOnce(projectName, item, "", dependencies)
+                if (!zixieIsPublish) {
+                    autoDependencies(projectName, item, dependencies)
+                }
             }
         }
 
         // specialdependenciesList 的依赖树记录已在 Settings 阶段由 updateRealDependencies 完成
         // 这里只负责实际添加依赖，不重复记录
-        zixieModuleInfo[moduleName].get("specialdependenciesList").each { item, data ->
-            if (zixieIsDebug) println(projectName + " specialdependenciesList from " + item + " list :" + data)
-            if (null != data) {
-                data.each { listItem ->
-                    if (zixieIsDebug) println(projectName + " " + item + " :" + listItem)
-                    if (listItem.contains(":")) {
-                        project(':' + projectName).dependencies.add(item, listItem)
-                    } else {
-                        if (null != zixieModuleInfo[listItem]) {
-                            def depCoord = zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version")
-                            project(':' + projectName).dependencies.add(item, depCoord)
-                            if (zixieIsDebug) println(item + " " + depCoord)
+        def autoSpecialDeps = zixieModuleInfo[moduleName].get("specialdependenciesList")
+        if (autoSpecialDeps != null) {
+            autoSpecialDeps.each { item, data ->
+                if (zixieIsDebug) println(projectName + " specialdependenciesList from " + item + " list :" + data)
+                if (null != data) {
+                    data.each { listItem ->
+                        if (listItem == null) {
+                            println("\n[BUILD ERROR] 模块 '" + moduleName + "' 的 specialdependenciesList['" + item + "'] 中存在 null 元素（autoDependencies 阶段）")
+                            println("[BUILD ERROR] 可能原因: 引用了不存在的变量（如 ext.xxx 拼写错误）")
+                            println("[BUILD ERROR] 请检查对应 dependencies_*.gradle 文件中 '" + moduleName + "' 的 specialdependenciesList 配置")
+                            println("[BUILD ERROR] 当前 '" + item + "' 列表内容: " + data + "\n")
+                            return // continue to next item
+                        }
+                        if (zixieIsDebug) println(projectName + " " + item + " :" + listItem)
+                        if (listItem.contains(":")) {
+                            project(':' + projectName).dependencies.add(item, listItem)
+                        } else {
+                            if (null != zixieModuleInfo[listItem]) {
+                                def depCoord = zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version")
+                                project(':' + projectName).dependencies.add(item, depCoord)
+                                if (zixieIsDebug) println(item + " " + depCoord)
+                            }
                         }
                     }
                 }

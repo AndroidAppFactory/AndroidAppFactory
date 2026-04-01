@@ -139,7 +139,7 @@ ext.libmoduleInfo = [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-device-network",
                 "apidependenciesList": [
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         "LibOS", "LibCommonUtils",
                         "LibText",
                         "LibThread",
@@ -187,7 +187,7 @@ ext.libmoduleInfo = [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         "LibEncrypt", "LibCommonUtils", "LibThread",
                         "LibOS", "LibLog", "LibRequest"
                 ]
@@ -366,7 +366,7 @@ ext.libmoduleInfo = [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": [
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         "LibAAFResource", "LibText", "LibThread"
                 ]
         ],
@@ -460,7 +460,7 @@ ext.libmoduleInfo = [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-theme",
                 "apidependenciesList": [
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         "LibConfig", "LibCustomView", "LibLanguage"
                 ]
         ],
@@ -504,7 +504,7 @@ ext.libmoduleInfo = [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-language",
                 "apidependenciesList": [
-                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcorenew,
                         "LibOS"
                 ]
         ],
