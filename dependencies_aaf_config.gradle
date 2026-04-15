@@ -3,6 +3,7 @@ ext {
     compose_version = '1.5.10'
     accompanist_version = '0.34.0'
     cmake_version = "3.22.1"
+    ndk_version = "28.0.13004108"
     lifecycle_version = "2.8.7"
 
     // AAF 基础库依赖的第三方库基本信息
@@ -22,7 +23,7 @@ ext {
 
     tencent = [
             tbssdk: "com.tencent.tbs:tbssdk:44286",
-            mmkv  : "com.tencent:mmkv:1.3.14"
+            mmkv  : "com.tencent:mmkv:2.4.0"
     ]
 
 
@@ -41,10 +42,10 @@ ext {
             annotation         : "androidx.annotation:annotation:1.6.0",
             multidex           : "androidx.multidex:multidex:2.0.1",
 
-            camera_core        : "androidx.camera:camera-core:1.1.0",
-            camera_camera2     : "androidx.camera:camera-camera2:1.1.0",
-            camera_camerax     : "androidx.camera:camera-lifecycle:1.1.0",
-            camera_view        : "androidx.camera:camera-view:1.1.0",
+            camera_core        : "androidx.camera:camera-core:1.4.0",
+            camera_camera2     : "androidx.camera:camera-camera2:1.4.0",
+            camera_camerax     : "androidx.camera:camera-lifecycle:1.4.0",
+            camera_view        : "androidx.camera:camera-view:1.4.0",
 
             recyclerview       : "androidx.recyclerview:recyclerview:1.2.1",
             swiperefreshlayout : "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0",

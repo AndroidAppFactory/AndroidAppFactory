@@ -7,6 +7,8 @@ import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
+import androidx.camera.core.resolutionselector.AspectRatioStrategy;
+import androidx.camera.core.resolutionselector.ResolutionSelector;
 import com.bihe0832.android.lib.log.ZLog;
 
 /**
@@ -50,7 +52,11 @@ public final class AspectRatioCameraConfig extends CameraConfig {
     @NonNull
     @Override
     public ImageAnalysis options(@NonNull ImageAnalysis.Builder builder) {
-        builder.setTargetAspectRatio(mAspectRatio);
+        ResolutionSelector resolutionSelector = new ResolutionSelector.Builder()
+                .setAspectRatioStrategy(new AspectRatioStrategy(
+                        mAspectRatio, AspectRatioStrategy.FALLBACK_RULE_AUTO))
+                .build();
+        builder.setResolutionSelector(resolutionSelector);
         return super.options(builder);
     }
 }

@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
+import androidx.camera.core.resolutionselector.ResolutionSelector;
+import androidx.camera.core.resolutionselector.ResolutionStrategy;
 import com.bihe0832.android.lib.log.ZLog;
 
 /**
@@ -61,7 +63,11 @@ public class ResolutionCameraConfig extends CameraConfig {
     @NonNull
     @Override
     public ImageAnalysis options(@NonNull ImageAnalysis.Builder builder) {
-        builder.setTargetResolution(mTargetSize);
+        ResolutionSelector resolutionSelector = new ResolutionSelector.Builder()
+                .setResolutionStrategy(new ResolutionStrategy(
+                        mTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER))
+                .build();
+        builder.setResolutionSelector(resolutionSelector);
         return super.options(builder);
     }
 }

@@ -23,7 +23,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AAF.AppTheme"
-        tools:replace="android:label">
+        tools:replace="android:name,android:label">
         <activity
             android:name="com.bihe0832.android.test.TestSplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
