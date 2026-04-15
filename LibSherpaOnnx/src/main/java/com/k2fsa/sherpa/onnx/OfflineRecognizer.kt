@@ -822,7 +822,7 @@ fun getOfflineModelConfig(type: Int): OfflineModelConfig? {
                     tokenizer = "$modelDir/Qwen3-0.6B",
                 ),
                 tokens = "",
-                numThreads=3,
+                numThreads = 3,
             )
         }
 
@@ -989,7 +989,7 @@ fun getOfflineModelConfig(type: Int): OfflineModelConfig? {
                     tokenizer = "$modelDir/tokenizer",
                 ),
                 tokens = "",
-                numThreads=3,
+                numThreads = 3,
             )
         }
 
