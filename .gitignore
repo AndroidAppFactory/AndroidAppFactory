@@ -88,3 +88,6 @@ build
 .codebuddy
 aafRepo
 bin
+
+# CodeBuddy 配置目录
+.codebuddy/
