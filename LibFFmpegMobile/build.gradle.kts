@@ -21,6 +21,12 @@ android {
         }
     }
 
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("libs")
+        }
+    }
+
     lint {
         abortOnError = false
     }

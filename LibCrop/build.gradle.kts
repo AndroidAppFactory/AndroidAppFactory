@@ -10,6 +10,7 @@ android {
     namespace = "com.bihe0832.android.lib.crop.jni"
     compileSdk = rootProject.extra["compileSdkVersion"] as Int
     buildToolsVersion = rootProject.extra["buildToolsVersion"] as String
+    ndkVersion = rootProject.extra["ndk_version"] as String
 
     defaultConfig {
         minSdk = rootProject.extra["libMinSdkVersion"] as Int

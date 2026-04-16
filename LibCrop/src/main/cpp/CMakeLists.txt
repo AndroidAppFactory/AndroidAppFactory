@@ -22,7 +22,12 @@ set(ENABLE_SHARED OFF CACHE BOOL "" FORCE)
 set(ENABLE_STATIC ON CACHE BOOL "" FORCE)
 set(WITH_TURBOJPEG OFF CACHE BOOL "" FORCE)
 set(WITH_JAVA OFF CACHE BOOL "" FORCE)
+# 禁用 SIMD/ASM，避免 CMake 3.22.1 + NDK 28 的 ASM 编译器不兼容问题
 set(REQUIRE_SIMD OFF CACHE BOOL "" FORCE)
+set(WITH_SIMD OFF CACHE BOOL "" FORCE)
+set(ENABLE_SIMD FALSE CACHE BOOL "" FORCE)
+# 强制设置 ASM 标志，防止 CMAKE_ASM_COMPILE_OBJECT 缺失
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -fno-integrated-as" CACHE STRING "" FORCE)
 FetchContent_MakeAvailable(libjpeg-turbo)
 
 # ==================== zlib (Android NDK 自带) ====================
