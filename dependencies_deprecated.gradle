@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "CommonCompose", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
@@ -10,21 +10,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "CommonAbout"           : [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "CommonList"
                 ]
         ],
         "CommonMessage"         : [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "common-message",
                 "apidependenciesList": [
                         "CommonList", "CommonMessageCompose"
                 ]
         ],
         "CommonNavigationDrawer": [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "common-navigation-drawer",
                 "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
         ],
@@ -51,7 +51,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         ext.androidsupport.androidxcorenew,
@@ -74,14 +74,14 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibRecycleviewExt"         : [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "lib-recycleview-ext",
                 "apidependenciesList": [
                         "LibRefresh", "LibTheme"
                 ]
         ],
         "LibBottomTab"              : [
-                "version"            : "8.4.2",
+                "version"            : "8.5.0",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",

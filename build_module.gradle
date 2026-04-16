@@ -326,10 +326,12 @@ def collectAllTransitiveDependencies(String moduleName, Set<String> visited) {
 def addDependentModuleLibs(String projectName, HashMap<String, ArrayList> dependencies) {
     if (zixieIsDebug) println("======== addDependentModuleLibs for " + projectName + " ========")
 
-    // 首先为模块自身 libs 目录添加 compileOnly 依赖
-    // 注意：AGP 不允许 Library 模块对本地 aar 使用 api 类型
+    // 为模块自身 libs 目录添加依赖
+    // Lib*/Framework*/Common* 模块使用 api（将 jar 内容编译进 AAR，上层无需再依赖）
+    // 其他模块使用 compileOnly（AGP 不允许 Library 模块对本地 aar 使用 api 类型）
     def ownLibsPath = rootDir.toString() + '/' + projectName + '/libs'
-    addLibsFromPath(projectName, ownLibsPath, "compileOnly", dependencies)
+    def ownDepType = (projectName.startsWith("Lib") || projectName.startsWith("Framework") || projectName.toLowerCase().startsWith("common")) ? "api" : "compileOnly"
+    addLibsFromPath(projectName, ownLibsPath, ownDepType, dependencies)
 
     // 递归收集所有传递依赖模块（包括直接依赖和间接依赖）
     def visited = [] as Set
