@@ -24,7 +24,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "8.5.0",
+                "version"            : "8.5.1",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -215,14 +215,14 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonMedia"           : [
-                "version"            : "8.5.0",
+                "version"            : "8.5.1",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
                         "CommonDeprecated", "LibFFmpegMobile", "CommonAudioWave"
                 ]
         ],
         "CommonCrop"            : [
-                "version"            : "8.5.0",
+                "version"            : "8.5.1",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "CommonDeprecated", "CommonBottomTab", "LibImageMetadata", "LibCrop"
