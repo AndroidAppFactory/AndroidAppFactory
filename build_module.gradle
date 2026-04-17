@@ -58,6 +58,10 @@ def updateRealDependencies(String projectName, String moduleName, String current
     if (zixieIsDebug) println("======== updateRealDependencies " + projectName + " from " + moduleName + " ========")
     if (zixieModuleInfo[moduleName] != null) {
         if (null != zixieModuleInfo[moduleName]) {
+            // 确保模块自身在 zixieDepenciesList 中有条目，即使没有任何依赖
+            if (projectName == moduleName && zixieDepenciesList[projectName] == null) {
+                zixieDepenciesList[projectName] = new HashMap<String, HashMap<String, Object>>()
+            }
             if (zixieIsDebug) println("add depenciese from " + moduleName + " to " + projectName + "; depenciese list:" + zixieModuleInfo[moduleName])
             if (!zixieIsPublish) {
                 // 处理 apidependenciesList
