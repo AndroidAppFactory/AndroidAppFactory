@@ -204,3 +204,40 @@
 }
 
 -keep class com.arthenica.mobileffmpeg.** { *; }
+
+# Compose ui-tooling animation（仅 IDE 预览引用，release 构建不包含，R8 可安全忽略）
+-dontwarn androidx.compose.**
+
+
+# kotlinx-coroutines：保留 Main Dispatcher 的 ServiceLoader 实现，防止 release 启动 crash
+# 报错 "Module with the Main dispatcher is missing" 由 R8 误删 AndroidDispatcherFactory 导致
+-keepnames class kotlinx.coroutines.**
+-keep class kotlinx.coroutines.**
+-dontwarn kotlinx.coroutines.**
+
+# 显式保留 ServiceLoader 的 provider 实现类（R8 full-mode 激进优化最易误删这两个）
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory { *; }
+-keep class kotlinx.coroutines.internal.MainDispatcherFactory { *; }
+-keep class * implements kotlinx.coroutines.internal.MainDispatcherFactory { *; }
+-keep class * implements kotlinx.coroutines.CoroutineExceptionHandler { *; }
+
+# 保留 ServiceLoader 相关属性（防止泛型签名被剥离影响反射）
+-keepclassmembers class kotlinx.coroutines.** {
+    volatile <fields>;
+}
+
+# MMKV：JNI 回调类（onMMKVCRCCheckFail / onMMKVFileLengthError 等）被 native 层反射调用
+# R8 若重命名会导致 native 回调失败
+-keep class com.tencent.mmkv.** { *; }
+-dontwarn com.tencent.mmkv.**
+
+# R8 full-mode（AGP 8+ 默认开启）下，Kotlin 反射 & Metadata 相关保护
+# 防止 Compose / Coroutines / 数据类反射失败
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.coroutines.Continuation
+-keepclassmembers class **$Companion { *; }
+-keepclassmembers class **$WhenMappings { *; }
+-keepclassmembers,allowobfuscation class * {
+    @kotlin.Metadata *;
+}
+-dontwarn kotlin.**
