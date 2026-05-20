@@ -173,7 +173,7 @@ public class HTTPServer {
 
     public BaseConnection getConnection(String url, Network network, int timeOut) {
         ZLog.e(LOG_TAG, "getConnection:" + url);
-        String finalUrl = HTTPRequestUtils.getRedirectUrl(url, timeOut);
+        String finalUrl = HTTPRequestUtils.getRedirectUrl(url, network, timeOut);
         ZLog.e(LOG_TAG, "getConnection getRedirectUrl:" + finalUrl);
         BaseConnection connection = null;
         if (finalUrl.startsWith("https:")) {

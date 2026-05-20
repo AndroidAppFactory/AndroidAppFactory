@@ -11,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+
+import android.net.Network;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,17 +119,26 @@ public class HTTPRequestUtils {
         return getRedirectUrl(url, CONNECT_TIMEOUT);
     }
 
-    //   可能第一步得获取重定向的url
     public static String getRedirectUrl(String url, int timeOut) {
+        return getRedirectUrl(url, null, timeOut);
+    }
+
+    //   可能第一步得获取重定向的url
+    public static String getRedirectUrl(String url, Network network, int timeOut) {
         try {
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            HttpURLConnection conn;
+            if (network != null) {
+                conn = (HttpURLConnection) network.openConnection(new URL(url));
+            } else {
+                conn = (HttpURLConnection) new URL(url).openConnection();
+            }
             conn.setInstanceFollowRedirects(false);
             conn.setConnectTimeout(timeOut);
             String redirectUrl = conn.getHeaderField("Location");
-            if (TextUtils.isEmpty(redirectUrl)) {
+            if (TextUtils.isEmpty(redirectUrl) || redirectUrl.equals(url)) {
                 return url;
             }
-            return getRedirectUrl(redirectUrl, timeOut);
+            return getRedirectUrl(redirectUrl, network, timeOut);
         } catch (Exception e) {
             e.printStackTrace();
         }
