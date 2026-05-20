@@ -643,7 +643,7 @@ def getPublishCommand() {
         System.err.println("发布：\n\t进入 ./aafRepo，压缩后上传至Maven 仓库提审，Version: ${zixieVersionName}\n")
         System.err.println("归档：\n\tgit checkout master && git merge build_temp --squash && git status\n")
         System.err.println("\tgit commit -am'ci(maven):auto update to version ${zixieVersionName} by build.sh'\n")
-        System.err.println("\tgit tag -a Tag_AAF_${zixieVersionName} -m 'auto update to version ${zixieVersionName} by build.sh' && git tag --sort=-v:refname -l &&  git push origin Tag_AAF_${zixieVersionName} && git push")
+        System.err.println("\tgit tag -a tag/Tag_AAF_${zixieVersionName} -m 'auto update to version ${zixieVersionName} by build.sh' && git tag --sort=-v:refname -l &&  git push origin tag/Tag_AAF_${zixieVersionName} && git push")
         System.err.println("\n\n========================================\n\n")
     } else {
         System.err.println("组件依赖关系处理已完成，没有组件需要更新...")
