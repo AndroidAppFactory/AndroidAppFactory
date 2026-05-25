@@ -19,6 +19,7 @@ import android.webkit.MimeTypeMap;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -225,6 +226,39 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
     }
 
     @Override
+    protected void recreateWebView() {
+        // 1. 从父布局移除旧 WebView 并销毁
+        if (mWebView != null) {
+            ViewGroup parent = (ViewGroup) mWebView.getParent();
+            if (parent != null) {
+                parent.removeView(mWebView);
+            }
+            mWebView.stopLoading();
+            mWebView.destroy();
+            mWebView = null;
+        }
+
+        // 2. 重新创建 WebView
+        createWebView();
+        ViewGroup mViewParent = getView().findViewById(R.id.app_webview);
+        addWebViewToLayout(mViewParent);
+
+        // 3. 重新初始化各项配置
+        initRefreshAndScrollChangedCallback();
+        initWebContentsDebuggingEnabled();
+        mJSBridgeProxy = getJsBridgeProxy();
+        initWebChromeClient();
+        initWebViewClient();
+        initUserAgentSupport();
+        initCookieSupport();
+
+        // 4. 重新加载之前的 URL
+        if (mIntentUrl != null && !mIntentUrl.equals("about:blank;")) {
+            loadUrl(mIntentUrl, mPostData);
+        }
+    }
+
+    @Override
     public void setCookie(String url, String name, String value) {
         NativeCookieManager.INSTANCE.setCookie(url, name, value);
     }
@@ -338,6 +372,31 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
                     }
 
             );
+        }
+
+        @RequiresApi(api = VERSION_CODES.O)
+        @Override
+        public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
+            ZLog.e(TAG, "onRenderProcessGone: didCrash=" + detail.didCrash()
+                    + ", rendererPriority=" + detail.rendererPriorityAtExit());
+
+            // 将出问题的 WebView 从父布局摘掉并销毁
+            if (view != null) {
+                ViewGroup parent = (ViewGroup) view.getParent();
+                if (parent != null) {
+                    parent.removeView(view);
+                }
+                view.destroy();
+            }
+            mWebView = null;
+
+            // 调用基类的恢复逻辑（显示错误页，等待用户点击重试）
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                getActivity().runOnUiThread(() -> onWebViewRenderProcessGone());
+            }
+
+            // 返回 true 告诉 Chromium "已处理"，阻止主进程被 kill -9
+            return true;
         }
     }
 

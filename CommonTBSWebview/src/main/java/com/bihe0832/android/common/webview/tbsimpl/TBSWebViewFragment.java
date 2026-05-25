@@ -227,6 +227,40 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
     }
 
     @Override
+    protected void recreateWebView() {
+        // 1. 从父布局移除旧 WebView 并销毁
+        if (mWebView != null) {
+            ViewGroup parent = (ViewGroup) mWebView.getParent();
+            if (parent != null) {
+                parent.removeView(mWebView);
+            }
+            mWebView.setOnScrollChangedCallback(null);
+            mWebView.stopLoading();
+            mWebView.destroy();
+            mWebView = null;
+        }
+
+        // 2. 重新创建 WebView
+        createWebView();
+        ViewGroup mViewParent = getView().findViewById(R.id.app_webview);
+        addWebViewToLayout(mViewParent);
+
+        // 3. 重新初始化各项配置
+        initRefreshAndScrollChangedCallback();
+        initWebContentsDebuggingEnabled();
+        mJSBridgeProxy = getJsBridgeProxy();
+        initWebChromeClient();
+        initWebViewClient();
+        initUserAgentSupport();
+        initCookieSupport();
+
+        // 4. 重新加载之前的 URL
+        if (mIntentUrl != null && !mIntentUrl.equals("about:blank;")) {
+            loadUrl(mIntentUrl, mPostData);
+        }
+    }
+
+    @Override
     public void setCookie(String url, String name, String value) {
         TBSCookieManager.INSTANCE.setCookie(url, name, value);
     }

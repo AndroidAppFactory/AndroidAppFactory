@@ -132,6 +132,12 @@ public class AceEditorView extends FrameLayout {
                     mPendingContent = null;
                 }
             }
+
+            @Override
+            public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail detail) {
+                // AceEditor 的 Renderer 挂了，返回 true 防止主进程被杀
+                return true;
+            }
         });
         webview.setWebChromeClient(new WebChromeClient() {
             @Override

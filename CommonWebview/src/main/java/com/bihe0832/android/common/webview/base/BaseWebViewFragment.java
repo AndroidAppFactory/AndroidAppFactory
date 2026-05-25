@@ -63,6 +63,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     protected String mIntentUrl;
     protected String mPostData;
     protected boolean mRefreshable = false;
+    protected int mRenderGoneCount = 0;
     protected MutableLiveData<Integer> _webViewScrollTopLiveData = new MutableLiveData<>();
     private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
         put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.new.js");
@@ -118,6 +119,8 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
 
     protected abstract BaseJsBridgeProxy getJsBridgeProxy();
 
+    protected abstract void recreateWebView();
+
     public LiveData<Integer> getWebViewScrollTopLiveData() {
         return mWebViewScrollTopLiveData;
     }
@@ -156,6 +159,23 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         }
     }
 
+    /**
+     * WebView Renderer 进程死亡时的处理。
+     * 显示错误页等待用户重试，无论重试次数多少都不自动关闭页面。
+     */
+    protected void onWebViewRenderProcessGone() {
+        mRenderGoneCount++;
+        ZLog.e(TAG, "onWebViewRenderProcessGone count=" + mRenderGoneCount);
+
+        // 显示错误页，等待用户点击重试（不自动 finish，让用户自己决定是否返回）
+        if (getView() != null) {
+            mNormalPage.setVisibility(View.GONE);
+            mErrorPage.setVisibility(View.VISIBLE);
+            mErrorUrl.setText(mIntentUrl);
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     protected void initView(@NonNull View view) {
         super.initView(view);
@@ -168,7 +188,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         mRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadUrl(mIntentUrl, mPostData);
+                recreateWebView();
             }
         });
         mRedirect.setOnClickListener(new View.OnClickListener() {

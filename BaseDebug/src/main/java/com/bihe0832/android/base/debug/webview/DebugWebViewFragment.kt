@@ -41,6 +41,7 @@ class DebugWebViewFragment : BaseDebugListFragment() {
             add(getDebugItem("X5内核打开本地调试页", View.OnClickListener { openTBSWeb("file:///android_asset/index.html") }))
             add(getDebugItem("H5与原生混排Demo", View.OnClickListener { startDebugActivity(DebugH5NativeWebFragment::class.java) }))
             add(getDebugItem("H5与原生混排实践", View.OnClickListener { startDebugActivity(DebugWebViewWithNativeFragment::class.java) }))
+            add(getDebugItem("测试 Renderer 崩溃恢复", View.OnClickListener { startDebugActivity(DebugRenderProcessGoneFragment::class.java) }))
 
         }
     }

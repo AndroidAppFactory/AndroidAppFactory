@@ -29,6 +29,7 @@ import com.bihe0832.android.base.compose.debug.toast.DebugToastComposeView
 import com.bihe0832.android.base.compose.debug.tts.DebugTTSComposeView
 import com.bihe0832.android.base.compose.debug.ui.DebugApplicaionUIView
 import com.bihe0832.android.base.compose.debug.ui.SampleMainActivity
+import com.bihe0832.android.base.compose.debug.webview.DebugWebViewComposeView
 import com.bihe0832.android.common.compose.debug.item.DebugComposeActivityItem
 import com.bihe0832.android.common.compose.debug.item.DebugComposeFragmentItem
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
@@ -105,6 +106,7 @@ fun AAFDebugModuleView() {
         DebugComposeFragmentItem("Google相关 调试", DebugGoogleFragment::class.java)
         DebugComposeItem("通知栏调试", "DebugNotifyComposeView") { DebugNotifyComposeView() }
         DebugComposeItem("多进程调试", "DebugIPCView") { DebugIPCView() }
+        DebugComposeItem("WebView 调试", "DebugWebViewComposeView") { DebugWebViewComposeView() }
         DebugComposeActivityItem("HTTP Request", DebugHttpActivity::class.java)
         DebugComposeActivityItem("示例主页（AAFCommonMainActivity）", SampleMainActivity::class.java)
     }
