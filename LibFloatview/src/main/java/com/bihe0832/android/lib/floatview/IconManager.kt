@@ -322,6 +322,13 @@ class IconManager(activity: Activity) {
 
         mIconView = null
     }
+
+    /**
+     * 检查悬浮窗是否正在显示
+     */
+    fun isIconViewShowing(): Boolean {
+        return mIconViewIsShowing
+    }
 }
 
 
