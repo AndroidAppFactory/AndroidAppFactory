@@ -7,7 +7,6 @@ import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.common.about.compose.AboutComposeActivity
 import com.bihe0832.android.common.about.compose.wrapper.SettingsItemFactory
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.lib.router.annotation.Module
 
@@ -63,6 +62,6 @@ open class AboutActivity : AboutComposeActivity() {
     }
 
     override fun onDebugAction() {
-        ZixieContext.showWaiting()
+        super.onDebugAction()
     }
 }

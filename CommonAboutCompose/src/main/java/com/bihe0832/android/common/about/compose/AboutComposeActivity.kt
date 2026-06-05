@@ -35,9 +35,11 @@ import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+
 import java.util.Calendar
 import com.bihe0832.android.framework.R as FrameworkR
 import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.framework.debug.DebugInfoUtils
 
 /**
  * Compose 版关于页面 Activity
@@ -178,6 +180,6 @@ open class AboutComposeActivity : CommonComposeActivity() {
      * Debug 连续点击触发的操作，子类可以 override
      */
     protected open fun onDebugAction() {
-        // 子类可以实现 debug 功能
+        DebugInfoUtils.showDebugInfo(this)
     }
 }

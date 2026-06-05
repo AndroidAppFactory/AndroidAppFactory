@@ -58,63 +58,27 @@ public class ShowDebugClick implements View.OnClickListener {
     }
 
     protected void sendInfo(Context ctx) {
-        String result = getDebugInfo(ctx) + "其他信息: \n" + getExtraInfo() + "\n";
-        sendInfo(ctx, result);
+        String result = getDebugInfo(ctx) + "其他信息: \\n" + getExtraInfo() + "\\n";
+        DebugInfoUtils.sendInfo(ctx, result);
     }
 
     public String getDebugInfo(Context ctx) {
-        return getBasicDebugInfo(ctx);
+        return DebugInfoUtils.getDebugInfo(ctx);
     }
 
     public static String getBasicDebugInfo(Context ctx) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getDebugVersionInfo(ctx, true));
-        builder.append(getDebugDeviceInfo(true));
-        return builder.toString();
+        return DebugInfoUtils.getDebugInfo(ctx);
     }
 
     public static String getDebugVersionInfo(Context ctx, boolean needSpaceLine) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("版本信息: " + "\n");
-        builder.append(
-                "应用版本: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode()
-                        + "\n");
-        builder.append("版本标识: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
-        builder.append("安装时间:" + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getVersionInstalledTime()) + "\n");
-        builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
-        builder.append("签名MD5: " + APKUtils.getSigMd5ByPkgName(ctx, ctx.getPackageName()) + "\n");
-        builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n");
-        if (needSpaceLine) {
-            builder.append("\n");
-        }
-        return builder.toString();
+        return DebugInfoUtils.getDebugVersionInfo(ctx, needSpaceLine);
     }
 
     public static String getDebugDeviceInfo(boolean needSpaceLine) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("设备信息: " + "\n");
-        builder.append("厂商&型号: " + ManufacturerUtil.INSTANCE.getMANUFACTURER() + ", "
-                + ManufacturerUtil.INSTANCE.getMODEL() + "\n");
-        if (ManufacturerUtil.INSTANCE.isHarmonyOs()) {
-            builder.append("系统版本: Android " + BuildUtils.INSTANCE.getRELEASE() + ", API "
-                    + BuildUtils.INSTANCE.getSDK_INT() + ", Harmony(" + ManufacturerUtil.INSTANCE.getHarmonyVersion()
-                    + ")\n");
-        } else {
-            builder.append("系统版本: Android " + BuildUtils.INSTANCE.getRELEASE() + ", API "
-                    + BuildUtils.INSTANCE.getSDK_INT() + "\n");
-        }
-        builder.append("系统指纹: " + ManufacturerUtil.INSTANCE.getFINGERPRINT() + "\n");
-        builder.append("设备标识: " + ZixieContext.INSTANCE.getDeviceId() + "\n");
-        if (needSpaceLine) {
-            builder.append("\n");
-        }
-        return builder.toString();
+        return DebugInfoUtils.getDebugDeviceInfo(needSpaceLine);
     }
 
     public static void sendInfo(Context ctx, String result) {
-        SendTextUtils.sendInfo(ctx, ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop_title),
-                ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop_content), result,
-                ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop_tips),
-                ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop), true);
+        DebugInfoUtils.sendInfo(ctx, result);
     }
 }
