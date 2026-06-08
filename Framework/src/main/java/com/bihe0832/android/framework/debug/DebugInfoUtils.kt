@@ -88,15 +88,15 @@ object DebugInfoUtils {
     @JvmStatic
     fun getDebugVersionInfo(context: Context, needSpaceLine: Boolean): String {
         val builder = StringBuilder()
-        builder.append("版本信息: \\n")
-        builder.append("应用版本: ${ZixieContext.getVersionName()}.${ZixieContext.getVersionCode()}\\n")
-        builder.append("版本标识: ${ZixieContext.getVersionTag()}\\n")
-        builder.append("安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}\\n")
-        builder.append("channel: ${ZixieContext.channelID}\\n")
-        builder.append("签名MD5: ${APKUtils.getSigMd5ByPkgName(context, context.packageName)}\\n")
-        builder.append("official: ${ZixieContext.isOfficial()}\\n")
+        builder.append("版本信息:\n")
+        builder.append("应用版本: ${ZixieContext.getVersionName()}.${ZixieContext.getVersionCode()}\n")
+        builder.append("版本标识: ${ZixieContext.getVersionTag()}\n")
+        builder.append("安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}\n")
+        builder.append("channel: ${ZixieContext.channelID}\n")
+        builder.append("签名MD5: ${APKUtils.getSigMd5ByPkgName(context, context.packageName)}\n")
+        builder.append("official: ${ZixieContext.isOfficial()}\n")
         if (needSpaceLine) {
-            builder.append("\\n")
+            builder.append("\n")
         }
         return builder.toString()
     }
@@ -110,17 +110,17 @@ object DebugInfoUtils {
     @JvmStatic
     fun getDebugDeviceInfo(needSpaceLine: Boolean): String {
         val builder = StringBuilder()
-        builder.append("设备信息: \\n")
-        builder.append("厂商&型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}\\n")
+        builder.append("设备信息:\n")
+        builder.append("厂商&型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}\n")
         if (ManufacturerUtil.isHarmonyOs()) {
-            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})\\n")
+            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})\n")
         } else {
-            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API ${BuildUtils.SDK_INT}\\n")
+            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API ${BuildUtils.SDK_INT}\n")
         }
-        builder.append("系统指纹: ${ManufacturerUtil.FINGERPRINT}\\n")
-        builder.append("设备标识: ${ZixieContext.deviceId}\\n")
+        builder.append("系统指纹: ${ManufacturerUtil.FINGERPRINT}\n")
+        builder.append("设备标识: ${ZixieContext.deviceId}\n")
         if (needSpaceLine) {
-            builder.append("\\n")
+            builder.append("\n")
         }
         return builder.toString()
     }
