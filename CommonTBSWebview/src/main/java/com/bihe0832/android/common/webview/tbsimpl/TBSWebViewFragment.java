@@ -364,6 +364,8 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+            ZLog.e(TAG, "onReceivedSslError: SslError getUrl=" + sslError.getUrl()
+                    + ", SslError=" + sslError);
             DialogUtils.INSTANCE.showConfirmDialog(
                     getContext(),
                     getResources().getString(com.bihe0832.android.model.res.R.string.dialog_title),
@@ -373,7 +375,12 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
                     new OnDialogListener() {
                         @Override
                         public void onPositiveClick() {
+                            ZLog.e(TAG, "onReceivedSslError: handler.proceed");
                             sslErrorHandler.proceed();
+                            ZLog.e(TAG, "onReceivedSslError: handler.proceed");
+                            ZLog.e(TAG, "onReceivedSslError:  mWebView.reload");
+                            mWebView.reload();
+                            ZLog.e(TAG, "onReceivedSslError: mWebView.reload");
                         }
 
                         @Override

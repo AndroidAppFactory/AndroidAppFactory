@@ -8,26 +8,25 @@ import android.net.http.SslError;
 import android.os.Build.VERSION_CODES;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.MimeTypeMap;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+
 import androidx.annotation.RequiresApi;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
@@ -38,6 +37,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -351,13 +351,21 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            ZLog.e(TAG, "onReceivedSslError: SslError getUrl=" + error.getUrl()
+                    + ", SslError=" + error);
             DialogUtils.INSTANCE.showConfirmDialog(getContext(), getResources().getString(com.bihe0832.android.model.res.R.string.dialog_title),
                     getResources().getString(com.bihe0832.android.model.res.R.string.com_bihe0832_web_ssl_error_message),
                     getResources().getString(com.bihe0832.android.model.res.R.string.dialog_button_ok),
                     getResources().getString(com.bihe0832.android.model.res.R.string.dialog_button_cancel), new OnDialogListener() {
                         @Override
                         public void onPositiveClick() {
+                            ZLog.e(TAG, "onReceivedSslError: handler.proceed");
                             handler.proceed();
+                            ZLog.e(TAG, "onReceivedSslError: handler.proceed");
+                            ZLog.e(TAG, "onReceivedSslError:  mWebView.reload");
+                            mWebView.reload();
+                            ZLog.e(TAG, "onReceivedSslError: mWebView.reload");
+
                         }
 
                         @Override
@@ -405,7 +413,7 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                FileChooserParams fileChooserParams) {
+                                         FileChooserParams fileChooserParams) {
             mPicUploadCallback = filePathCallback;
             String[] fileTypes = new String[]{"*/*"};
             if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.LOLLIPOP) {
@@ -444,7 +452,7 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         //处理confirm弹出框
         @Override
         public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
-                JsPromptResult result) {
+                                  JsPromptResult result) {
             ZLog.d(TAG, "onJsPrompt " + url);
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
