@@ -65,6 +65,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     protected boolean mRefreshable = false;
     protected int mRenderGoneCount = 0;
     protected MutableLiveData<Integer> _webViewScrollTopLiveData = new MutableLiveData<>();
+    protected SslErrorDialogHelper mSslErrorHelper = new SslErrorDialogHelper();
     private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
         put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.new.js");
     }};
@@ -319,6 +320,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         isLoadSuccess = true;
         mIntentUrl = url;
         mPostData = data;
+        mSslErrorHelper.resetForNewPage();
         String finalURL = getFinalURL(url);
         actionBeforeLoadURL(finalURL);
         loadFinalURL(finalURL, data);

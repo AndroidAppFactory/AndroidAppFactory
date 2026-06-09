@@ -29,13 +29,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
+import com.bihe0832.android.common.webview.base.SslErrorDialogHelper;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
-import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 import java.io.IOException;
@@ -351,35 +350,18 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            ZLog.e(TAG, "onReceivedSslError: SslError getUrl=" + error.getUrl()
-                    + ", SslError=" + error);
-            DialogUtils.INSTANCE.showConfirmDialog(getContext(), getResources().getString(com.bihe0832.android.model.res.R.string.dialog_title),
-                    getResources().getString(com.bihe0832.android.model.res.R.string.com_bihe0832_web_ssl_error_message),
-                    getResources().getString(com.bihe0832.android.model.res.R.string.dialog_button_ok),
-                    getResources().getString(com.bihe0832.android.model.res.R.string.dialog_button_cancel), new OnDialogListener() {
+            mSslErrorHelper.handleSslError(getContext(), TAG, error.getUrl(), error.toString(),
+                    new SslErrorDialogHelper.SslErrorHandlerWrapper() {
                         @Override
-                        public void onPositiveClick() {
-                            ZLog.e(TAG, "onReceivedSslError: handler.proceed");
+                        public void proceed() {
                             handler.proceed();
-                            ZLog.e(TAG, "onReceivedSslError: handler.proceed");
-                            ZLog.e(TAG, "onReceivedSslError:  mWebView.reload");
-                            mWebView.reload();
-                            ZLog.e(TAG, "onReceivedSslError: mWebView.reload");
-
                         }
 
                         @Override
-                        public void onNegativeClick() {
+                        public void cancel() {
                             handler.cancel();
                         }
-
-                        @Override
-                        public void onCancel() {
-                            onNegativeClick();
-                        }
-                    }
-
-            );
+                    });
         }
 
         @RequiresApi(api = VERSION_CODES.O)
