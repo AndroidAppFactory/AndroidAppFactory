@@ -72,18 +72,18 @@ public class SslErrorDialogHelper {
      */
     public void handleSslError(Context context, String tag, String url, String errorInfo,
                                SslErrorHandlerWrapper handler) {
-        ZLog.e(tag, "onReceivedSslError: url=" + url + ", sslError=" + errorInfo);
+        ZLog.info(tag, "onReceivedSslError: url=" + url + ", sslError=" + errorInfo);
 
         // 用户已经选择过"继续"，后续全部自动 proceed
         if (mSslUserProceeded) {
-            ZLog.i(tag, "onReceivedSslError: auto proceed (user already accepted), url=" + url);
+            ZLog.info(tag, "onReceivedSslError: auto proceed (user already accepted), url=" + url);
             handler.proceed();
             return;
         }
 
         // 对话框正在显示，将 handler 加入等待队列
         if (mSslDialogShowing) {
-            ZLog.i(tag, "onReceivedSslError: dialog showing, queued handler, url=" + url);
+            ZLog.info(tag, "onReceivedSslError: dialog showing, queued handler, url=" + url);
             mPendingHandlers.add(handler);
             return;
         }
@@ -100,7 +100,7 @@ public class SslErrorDialogHelper {
                 new OnDialogListener() {
                     @Override
                     public void onPositiveClick() {
-                        ZLog.i(TAG, "onReceivedSslError: user chose proceed, pending=" + mPendingHandlers.size());
+                        ZLog.info(TAG, "onReceivedSslError: user chose proceed, pending=" + mPendingHandlers.size());
                         mSslUserProceeded = true;
                         for (SslErrorHandlerWrapper h : mPendingHandlers) {
                             h.proceed();
@@ -111,7 +111,7 @@ public class SslErrorDialogHelper {
 
                     @Override
                     public void onNegativeClick() {
-                        ZLog.i(TAG, "onReceivedSslError: user chose cancel, pending=" + mPendingHandlers.size());
+                        ZLog.info(TAG, "onReceivedSslError: user chose cancel, pending=" + mPendingHandlers.size());
                         mSslDialogShowing = false;
                         for (SslErrorHandlerWrapper h : mPendingHandlers) {
                             h.cancel();
@@ -121,7 +121,7 @@ public class SslErrorDialogHelper {
 
                     @Override
                     public void onCancel() {
-                        ZLog.i(TAG, "onReceivedSslError: dialog dismissed");
+                        ZLog.info(TAG, "onReceivedSslError: dialog dismissed");
                         onNegativeClick();
                     }
                 });

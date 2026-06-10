@@ -274,6 +274,13 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         TBSCookieManager.INSTANCE.removeCookiesForDomain(url);
     }
 
+    @Override
+    protected void clearWebViewCache() {
+        if (mWebView != null) {
+            mWebView.clearCache(true);
+        }
+    }
+
     public interface WebViewRefreshCallback {
 
         void onRefresh(WebView webView);
@@ -342,6 +349,10 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
             ZLog.e(TAG, "onReceivedError: errorCode=" + errorCode + " description=" + description + " failingUrl="
                     + failingUrl);
             onWebClientReceivedError(errorCode);
+            if (mRetryErrorCount <= 1) {
+                view.stopLoading();
+                view.loadUrl("about:blank");
+            }
             return;
         }
 
@@ -351,7 +362,13 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
             ZLog.e(TAG, "onReceivedError: errorCode=" + webResourceError.getErrorCode() + " description="
                     + webResourceError.getDescription() + " failingUrl="
                     + webResourceRequest.getUrl().toString());
-            onWebClientReceivedError(webResourceError.getErrorCode());
+            if (webResourceRequest.isForMainFrame()) {
+                onWebClientReceivedError(webResourceError.getErrorCode());
+                if (mRetryErrorCount <= 1) {
+                    webView.stopLoading();
+                    webView.loadUrl("about:blank");
+                }
+            }
             return;
         }
 

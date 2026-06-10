@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -22,6 +23,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.common.webview.core.WebViewViewModel;
@@ -34,9 +36,11 @@ import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridgeProxy;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.network.IpUtils;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -57,6 +61,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     protected SwipeRefreshLayout mSwipeLayout;
     protected Boolean isLoadSuccess = true;
     protected TextView mErrorUrl;
+    protected TextView mErrorInfo;
     protected WebViewViewModel mWebViewViewModel;
     protected BaseJsBridgeProxy mJSBridgeProxy = null;
     protected ValueCallback<Uri[]> mPicUploadCallback;
@@ -64,6 +69,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     protected String mPostData;
     protected boolean mRefreshable = false;
     protected int mRenderGoneCount = 0;
+    protected int mRetryErrorCount = 0;
     protected MutableLiveData<Integer> _webViewScrollTopLiveData = new MutableLiveData<>();
     protected SslErrorDialogHelper mSslErrorHelper = new SslErrorDialogHelper();
     private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
@@ -122,6 +128,8 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
 
     protected abstract void recreateWebView();
 
+    protected abstract void clearWebViewCache();
+
     public LiveData<Integer> getWebViewScrollTopLiveData() {
         return mWebViewScrollTopLiveData;
     }
@@ -133,11 +141,18 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     //在页面加载结束之后执行操作
     protected void onWebClientPageFinished() {
         if (isLoadSuccess) {
+            // 加载成功，重置重试错误计数
+            mRetryErrorCount = 0;
             mNormalPage.setVisibility(View.VISIBLE);
             mErrorPage.setVisibility(View.GONE);
         } else {
-            mNormalPage.setVisibility(View.GONE);
-            mErrorPage.setVisibility(View.VISIBLE);
+            // 加载失败：仅首次显示错误页，重试后仍失败则保持当前页面状态不再弹错误页
+            if (mRetryErrorCount <= 1) {
+                mNormalPage.setVisibility(View.GONE);
+                mErrorPage.setVisibility(View.VISIBLE);
+            } else {
+                ZLog.info(TAG, "重试后仍然失败，保持当前页面，不再切换到错误页");
+            }
         }
         mProgressBar.setVisibility(View.GONE);
         mSwipeLayout.setRefreshing(false);
@@ -149,14 +164,95 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         mErrorPage.setVisibility(View.GONE);
     }
 
+    // 网络诊断功能
+    protected void performNetworkDiagnostics() {
+        new Thread(() -> {
+            try {
+                String host = new java.net.URL(mIntentUrl).getHost();
+                // 使用AAF的IpUtils进行DNS解析，支持重试和超时控制
+                java.net.InetAddress[] addrs = IpUtils.getDomainAddrList(host);
+                if (addrs != null && addrs.length > 0) {
+                    StringBuilder sb = new StringBuilder();
+                    for (java.net.InetAddress addr : addrs) {
+                        sb.append("\n  IP: ").append(addr.getHostAddress())
+                                .append(", 主机名: ").append(addr.getCanonicalHostName())
+                                .append(", 类型: ").append(addr instanceof java.net.Inet6Address ? "IPv6" : "IPv4");
+                    }
+                    ZLog.info(TAG, "DNS解析成功: " + host + " -> " + sb);
+                    // 测试网络连接
+                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(mIntentUrl).openConnection();
+                    connection.setConnectTimeout(5000);
+                    connection.setReadTimeout(5000);
+                    connection.connect();
+                    ZLog.info(TAG, "网络连接测试: 状态码=" + connection.getResponseCode());
+                    connection.disconnect();
+                } else {
+                    ZLog.info(TAG, "DNS解析失败: " + host + " 无法解析到任何IP地址");
+                }
+            } catch (Exception e) {
+                ZLog.info(TAG, "网络诊断失败: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    /**
+     * 将WebView数字错误码转换为可读的Chrome风格错误字符串。
+     * 例如：ERROR_HOST_LOOKUP (-2) → "net::ERR_NAME_NOT_RESOLVED"
+     */
+    protected String getReadableErrorCode(int errorCode) {
+        switch (errorCode) {
+            case WebViewClient.ERROR_HOST_LOOKUP:
+                return "net::ERR_NAME_NOT_RESOLVED";
+            case WebViewClient.ERROR_CONNECT:
+                return "net::ERR_CONNECTION_FAILED";
+            case WebViewClient.ERROR_IO:
+                return "net::ERR_CONNECTION_ABORTED";
+            case WebViewClient.ERROR_TOO_MANY_REQUESTS:
+                return "net::ERR_TOO_MANY_REDIRECTS";
+            case WebViewClient.ERROR_BAD_URL:
+                return "net::ERR_INVALID_URL";
+            case WebViewClient.ERROR_REDIRECT_LOOP:
+                return "net::ERR_TOO_MANY_REDIRECTS";
+            case WebViewClient.ERROR_FILE_NOT_FOUND:
+                return "net::ERR_FILE_NOT_FOUND";
+            case WebViewClient.ERROR_AUTHENTICATION:
+                return "net::ERR_UNAUTHORIZED";
+            case WebViewClient.ERROR_UNSUPPORTED_AUTH_SCHEME:
+                return "net::ERR_UNKNOWN_AUTH_SCHEME";
+            case WebViewClient.ERROR_PROXY_AUTHENTICATION:
+                return "net::ERR_PROXY_AUTH_FAILED";
+            case WebViewClient.ERROR_FILE:
+                return "net::ERR_ACCESS_DENIED";
+            case WebViewClient.ERROR_UNKNOWN:
+            default:
+                return "net::ERR_UNKNOWN";
+        }
+    }
+
     protected void onWebClientReceivedError(int errorCode) {
-        ZLog.e(TAG, "onWebClientReceivedError");
-        if (errorCode == WebViewClient.ERROR_CONNECT) {
-            // 处理网络连接错误
+        ZLog.info(TAG, "onWebClientReceivedError errorCode=" + errorCode + ", mRetryErrorCount=" + mRetryErrorCount);
+        if (errorCode == WebViewClient.ERROR_CONNECT || errorCode == WebViewClient.ERROR_HOST_LOOKUP) {
+            // 处理网络连接错误和DNS解析错误
             isLoadSuccess = false;
-            mErrorUrl.setText(mIntentUrl);
+            if (errorCode == WebViewClient.ERROR_HOST_LOOKUP) {
+                ZLog.info(TAG, "错误类型：DNS解析失败 (NET_ERR_NAME_NOT_RESOLVED)");
+                ZLog.info(TAG, "建议：检查Wi-Fi DNS设置或切换网络");
+                // 执行网络诊断
+                performNetworkDiagnostics();
+            } else if (errorCode == WebViewClient.ERROR_CONNECT) {
+                ZLog.info(TAG, "错误类型：网络连接失败");
+            }
+            // 首次错误直接显示错误页，重试后仍失败则不再重复弹错误页
+            mRetryErrorCount++;
+            if (mRetryErrorCount <= 1) {
+                String errorInfo = getString(R.string.web_load_failed_error) + "\n" + getReadableErrorCode(errorCode);
+                mErrorInfo.setText(errorInfo);
+                mErrorUrl.setText(mIntentUrl);
+            } else {
+                ZLog.info(TAG, "重试后仍然失败，不再重复弹出错误页（已弹出 " + mRetryErrorCount + " 次）");
+            }
         } else {
-            // 处理其他类型的错误
+            ZLog.w(TAG, "未处理的WebView错误码: " + errorCode);
         }
     }
 
@@ -166,7 +262,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
      */
     protected void onWebViewRenderProcessGone() {
         mRenderGoneCount++;
-        ZLog.e(TAG, "onWebViewRenderProcessGone count=" + mRenderGoneCount);
+        ZLog.info(TAG, "onWebViewRenderProcessGone count=" + mRenderGoneCount);
 
         // 显示错误页，等待用户点击重试（不自动 finish，让用户自己决定是否返回）
         if (getView() != null) {
@@ -186,9 +282,12 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         mRetry = (TextView) view.findViewById(R.id.web_retry);
         mRedirect = (TextView) view.findViewById(R.id.web_native_browser);
         mErrorUrl = (TextView) view.findViewById(R.id.web_error_url);
+        mErrorInfo = (TextView) view.findViewById(R.id.web_error_info);
         mRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 在重试前清除WebView的DNS缓存
+                clearWebViewCache();
                 recreateWebView();
             }
         });
@@ -261,9 +360,9 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         if (url.startsWith(BaseJsBridge.JS_BRIDGE_SCHEME)) {
             if (mJSBridgeProxy != null) {
                 mJSBridgeProxy.invoke(url);
-                ZLog.e(TAG, "new JSBridge invoke:" + url);
+                ZLog.info(TAG, "new JSBridge invoke:" + url);
             } else {
-                ZLog.e(TAG, "new mJSBridgeProxy is null");
+                ZLog.info(TAG, "new mJSBridgeProxy is null");
             }
             return true;
         } else if (url.startsWith(RouterAction.INSTANCE.getSCHEME())) {
@@ -286,7 +385,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     }
 
     protected boolean jumpToOtherApp(String url, Context context) {
-        ZLog.e(TAG, "jumpToOtherApp url:" + url);
+        ZLog.info(TAG, "jumpToOtherApp url:" + url);
         // TODO 兼容主流的应用schema打开方式，一般是call schema的同时，会跳转到下载页面，如果返回false就会报错
         return IntentUtils.startIntent(context, new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }

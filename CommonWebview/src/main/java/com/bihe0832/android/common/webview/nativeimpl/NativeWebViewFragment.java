@@ -272,6 +272,13 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         NativeCookieManager.INSTANCE.removeCookiesForDomain(url);
     }
 
+    @Override
+    protected void clearWebViewCache() {
+        if (mWebView != null) {
+            mWebView.clearCache(true);
+        }
+    }
+
     public interface WebViewRefreshCallback {
 
         void onRefresh(WebView webView);
@@ -338,13 +345,25 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             onWebClientReceivedError(errorCode);
+            if (mRetryErrorCount <= 1) {
+                view.stopLoading();
+                view.loadUrl("about:blank");
+            }
         }
 
         @RequiresApi(api = VERSION_CODES.M)
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.M) {
-                onWebClientReceivedError(error.getErrorCode());
+                if (request.isForMainFrame()) {
+                    onWebClientReceivedError(error.getErrorCode());
+                    if (mRetryErrorCount <= 1) {
+                        view.stopLoading();
+                        view.loadUrl("about:blank");
+                    }
+                } else {
+                    ZLog.info(TAG, "onReceivedError: sub-resource error (errorCode=" + error.getErrorCode() + "), ignoring for non-main-frame request");
+                }
             }
         }
 
