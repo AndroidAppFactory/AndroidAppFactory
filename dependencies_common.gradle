@@ -178,7 +178,7 @@ ext.commonmoduleInfo = [
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         ext.androidsupport.swiperefreshlayout,
-                        "CommonDeprecated", "LibJsBridge"
+                        "CommonDeprecated", "LibJsBridge", "LibDeviceNetwork"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
