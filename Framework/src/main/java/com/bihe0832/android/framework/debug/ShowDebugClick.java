@@ -59,7 +59,7 @@ public class ShowDebugClick implements View.OnClickListener {
 
     protected void sendInfo(Context ctx) {
         String result = getDebugInfo(ctx) + "其他信息: \\n" + getExtraInfo() + "\\n";
-        DebugInfoUtils.sendInfo(ctx, result);
+        DebugInfoUtils.INSTANCE.sendInfo(ctx, result);
     }
 
     public String getDebugInfo(Context ctx) {
@@ -79,6 +79,6 @@ public class ShowDebugClick implements View.OnClickListener {
     }
 
     public static void sendInfo(Context ctx, String result) {
-        DebugInfoUtils.sendInfo(ctx, result);
+        DebugInfoUtils.INSTANCE.sendInfo(ctx, result);
     }
 }
