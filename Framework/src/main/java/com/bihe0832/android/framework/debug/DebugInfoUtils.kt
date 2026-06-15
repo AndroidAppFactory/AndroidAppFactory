@@ -54,13 +54,24 @@ object DebugInfoUtils {
      * @param context 上下文
      * @param result 调试信息内容
      */
-    @JvmStatic
     fun sendInfo(context: Context, result: String) {
         SendTextUtils.sendInfo(
             context,
             context.getString(R.string.com_bihe0832_share_to_develop_title),
             context.getString(R.string.com_bihe0832_share_to_develop_content),
             result,
+            context.getString(R.string.com_bihe0832_share_to_develop_tips),
+            context.getString(R.string.com_bihe0832_share_to_develop),
+            true
+        )
+    }
+
+    fun sendInfo(context: Context, title: String, content: String) {
+        SendTextUtils.sendInfo(
+            context,
+            title,
+            content,
+            content,
             context.getString(R.string.com_bihe0832_share_to_develop_tips),
             context.getString(R.string.com_bihe0832_share_to_develop),
             true
