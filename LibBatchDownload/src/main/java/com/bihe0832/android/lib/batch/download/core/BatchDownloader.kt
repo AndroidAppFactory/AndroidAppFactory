@@ -104,14 +104,14 @@ class BatchDownloader(
     /** Context 引用（applicationContext） */
     private var contextRef: Context? = null
 
-    /** 下载子任务列表 */
-    private var downloadItems: List<DownloadItem> = emptyList()
+    /** 内部 DownloadListener，创建一次后复用 */
+    private val innerListener: DownloadListener by lazy { createInnerListener() }
 
-    /** URL 列表（去重后） */
+    /** 已提交给底层下载引擎的子任务：URL -> DownloadItem，仅包含活跃/已完成的 item，按需创建 */
+    private val activeItems = ConcurrentHashMap<String, DownloadItem>()
+
+    /** URL 列表（去重后），仅保存字符串，不创建 DownloadItem */
     private var urlList: List<String> = emptyList()
-
-    /** URL -> DownloadItem 映射，快速查找 */
-    private var urlToItemMap: Map<String, DownloadItem> = emptyMap()
 
     /** downloadId -> URL 映射 */
     private val downloadIdToUrlMap = ConcurrentHashMap<Long, String>()
@@ -157,27 +157,8 @@ class BatchDownloader(
         this.urlList = uniqueUrls
         this.contextRef = context.applicationContext
 
-        // 为每个 URL 创建 DownloadItem
-        this.downloadItems = uniqueUrls.map { url ->
-            DownloadItem().apply {
-                downloadURL = url
-                fileFolder = config.fileFolder
-                isDownloadWhenUseMobile = config.downloadWhenUseMobile
-                isDownloadWhenAdd = true  // 先不自动开始，由批量下载器统一调度
-                downloadPriority = DownloadItem.MIN_DOWNLOAD_PRIORITY  // 最低优先级
-            }
-        }
-
-        this.urlToItemMap = downloadItems.associateBy { it.downloadURL }
-
-        // 所有 URL 放入待调度队列
+        // 所有 URL 放入待调度队列（只存字符串，不创建 DownloadItem）
         uniqueUrls.forEach { pendingQueue.offer(it) }
-
-        // 为每个 DownloadItem 设置内部监听器
-        val innerListener = createInnerListener()
-        downloadItems.forEach { item ->
-            item.downloadListener = innerListener
-        }
 
         status = BatchStatus.RUNNING
 
@@ -186,7 +167,7 @@ class BatchDownloader(
             "startDownload: 批次 $batchId 创建成功，共 ${uniqueUrls.size} 个子任务，并发数 ${config.maxConcurrent}"
         )
 
-        // 启动首批下载
+        // 启动首批下载（此时才在 startNextTasks 中按需创建 DownloadItem）
         startNextTasks()
 
         return true
@@ -200,8 +181,7 @@ class BatchDownloader(
         status = BatchStatus.PAUSED
 
         // 遍历已提交给底层的子任务，逐个暂停
-        submittedUrls.forEach { url ->
-            val item = urlToItemMap[url] ?: return@forEach
+        activeItems.values.forEach { item ->
             val itemStatus = item.status
             if (itemStatus == DownloadStatus.STATUS_DOWNLOADING || itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING) {
                 DownloadFileUtils.pauseDownload(item.downloadID, false)
@@ -219,8 +199,7 @@ class BatchDownloader(
         status = BatchStatus.RUNNING
 
         // 恢复已暂停的子任务
-        submittedUrls.forEach { url ->
-            val item = urlToItemMap[url] ?: return@forEach
+        activeItems.values.forEach { item ->
             if (item.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
                 DownloadFileUtils.resumeDownload(item.downloadID, !config.downloadWhenUseMobile)
             }
@@ -242,14 +221,15 @@ class BatchDownloader(
         isPaused = true  // 阻止后续调度
 
         // 删除所有已提交的子任务
-        submittedUrls.forEach { url ->
-            val item = urlToItemMap[url] ?: return@forEach
+        activeItems.values.forEach { item ->
             DownloadFileUtils.deleteTask(item.downloadID, deleteFile)
         }
 
         // 释放引用
         contextRef = null
         pendingQueue.clear()
+        activeItems.clear()
+        submittedUrls.clear()
 
         ZLog.i(TAG, "cancel: 批次 $batchId 已取消并清理")
     }
@@ -265,7 +245,7 @@ class BatchDownloader(
         }
 
         failedUrls.forEach { url ->
-            val item = urlToItemMap[url] ?: return@forEach
+            val item = activeItems[url] ?: return@forEach
             retryCountMap[url] = 0
             failedMap.remove(url)
             DownloadFileUtils.resumeDownload(item.downloadID, !config.downloadWhenUseMobile)
@@ -287,7 +267,7 @@ class BatchDownloader(
             return
         }
 
-        val item = urlToItemMap[url] ?: run {
+        val item = activeItems[url] ?: run {
             ZLog.w(TAG, "resumeByUrl: 找不到 URL $url 对应的 DownloadItem")
             return
         }
@@ -305,15 +285,50 @@ class BatchDownloader(
     }
 
     /**
-     * 获取所有子任务
+     * 获取所有子任务（包括活跃、已完成、失败和待调度的）
+     *
+     * 注意：待调度的 URL 会创建轻量级 DownloadItem 占位对象返回，不会注册到底层下载引擎
      */
-    fun getAll(): List<DownloadItem> = downloadItems
+    fun getAll(): List<DownloadItem> {
+        val result = mutableListOf<DownloadItem>()
+        // 已提交的任务
+        result.addAll(activeItems.values)
+        // 已完成的（可能已从 activeItems 移除，补充进来）
+        completedMap.keys.forEach { url ->
+            if (!activeItems.containsKey(url)) {
+                result.add(DownloadItem().apply {
+                    downloadURL = url
+                    fileFolder = config.fileFolder
+                })
+            }
+        }
+        // 失败的（可能已从 activeItems 移除）
+        failedMap.keys.forEach { url ->
+            if (!activeItems.containsKey(url) && !completedMap.containsKey(url)) {
+                result.add(DownloadItem().apply {
+                    downloadURL = url
+                    fileFolder = config.fileFolder
+                })
+            }
+        }
+        // 待调度的（仅在 pendingQueue 中的）
+        val scheduledUrls = activeItems.keys.toSet() + completedMap.keys + failedMap.keys
+        pendingQueue.forEach { url ->
+            if (url !in scheduledUrls) {
+                result.add(DownloadItem().apply {
+                    downloadURL = url
+                    fileFolder = config.fileFolder
+                })
+            }
+        }
+        return result
+    }
 
     /**
      * 获取已完成的子任务
      */
     fun getFinished(): List<DownloadItem> {
-        return downloadItems.filter {
+        return activeItems.values.filter {
             it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD
         }
     }
@@ -322,7 +337,7 @@ class BatchDownloader(
      * 获取正在下载的子任务
      */
     fun getDownloading(): List<DownloadItem> {
-        return downloadItems.filter {
+        return activeItems.values.filter {
             it.status == DownloadStatus.STATUS_DOWNLOADING
         }
     }
@@ -331,32 +346,87 @@ class BatchDownloader(
      * 获取正在等待的子任务
      */
     fun getWaiting(): List<DownloadItem> {
-        return downloadItems.filter {
+        return activeItems.values.filter {
             it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING
         }
     }
 
     /**
-     * 查询指定 URL 的子任务
+     * 查询指定 URL 的子任务，如果还未提交到底层则返回 null
      */
     fun getTaskByDownloadURL(url: String): DownloadItem? {
-        return urlToItemMap[url]
+        return activeItems[url]
     }
 
     /**
      * 获取批次的聚合状态信息
      */
     fun getStatus(): BatchStatusInfo {
-        val taskStatusList = downloadItems.map { item ->
-            SubTaskStatus(
-                url = item.downloadURL,
-                downloadId = item.downloadID,
-                status = item.status,
-                progress = calculateItemProgress(item),
-                filePath = item.filePath ?: "",
-                errorCode = failedMap[item.downloadURL] ?: 0
+        val taskStatusList = mutableListOf<SubTaskStatus>()
+
+        // 已提交的任务（从 activeItems 获取完整状态）
+        activeItems.values.forEach { item ->
+            taskStatusList.add(
+                SubTaskStatus(
+                    url = item.downloadURL,
+                    downloadId = item.downloadID,
+                    status = item.status,
+                    progress = calculateItemProgress(item),
+                    filePath = item.filePath ?: "",
+                    errorCode = failedMap[item.downloadURL] ?: 0
+                )
             )
         }
+
+        // 已完成但可能已从 activeItems 清理的
+        completedMap.keys.forEach { url ->
+            if (!activeItems.containsKey(url)) {
+                taskStatusList.add(
+                    SubTaskStatus(
+                        url = url,
+                        downloadId = 0,
+                        status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED,
+                        progress = 100,
+                        filePath = completedMap[url] ?: "",
+                        errorCode = 0
+                    )
+                )
+            }
+        }
+
+        // 失败的但可能已从 activeItems 清理的
+        failedMap.keys.forEach { url ->
+            if (!activeItems.containsKey(url) && !completedMap.containsKey(url)) {
+                taskStatusList.add(
+                    SubTaskStatus(
+                        url = url,
+                        downloadId = 0,
+                        status = DownloadStatus.STATUS_DOWNLOAD_FAILED,
+                        progress = 0,
+                        filePath = "",
+                        errorCode = failedMap[url] ?: 0
+                    )
+                )
+            }
+        }
+
+        // 待调度的（仅在 pendingQueue 中，尚未创建 DownloadItem）
+        val scheduledUrls = activeItems.keys.toSet() + completedMap.keys + failedMap.keys
+        pendingQueue.forEach { url ->
+            if (url !in scheduledUrls) {
+                taskStatusList.add(
+                    SubTaskStatus(
+                        url = url,
+                        downloadId = 0,
+                        status = DownloadStatus.STATUS_DOWNLOAD_WAITING,
+                        progress = 0,
+                        filePath = "",
+                        errorCode = 0
+                    )
+                )
+            }
+        }
+
         return BatchStatusInfo(
             batchId = batchId,
             status = status,
@@ -383,8 +453,7 @@ class BatchDownloader(
         }
 
         // 统计当前已提交且正在活跃的子任务数
-        val activeCount = submittedUrls.count { url ->
-            val item = urlToItemMap[url] ?: return@count false
+        val activeCount = activeItems.values.count { item ->
             val itemStatus = item.status
             itemStatus == DownloadStatus.STATUS_DOWNLOADING ||
                     itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
@@ -395,8 +464,18 @@ class BatchDownloader(
 
         while (slotsAvailable > 0) {
             val url = pendingQueue.poll() ?: break
-            val item = urlToItemMap[url] ?: continue
 
+            // 按需创建 DownloadItem（仅当真正需要提交时）
+            val item = DownloadItem().apply {
+                downloadURL = url
+                fileFolder = config.fileFolder
+                isDownloadWhenUseMobile = config.downloadWhenUseMobile
+                isDownloadWhenAdd = true
+                downloadPriority = DownloadItem.MIN_DOWNLOAD_PRIORITY
+                downloadListener = innerListener
+            }
+
+            activeItems[url] = item
             submittedUrls.add(url)
             DownloadFileUtils.startDownload(context, item)
             downloadIdToUrlMap[item.downloadID] = url
@@ -427,7 +506,7 @@ class BatchDownloader(
                 val progress = calculateBatchProgress()
                 val completedCount = completedMap.size
                 val totalCount = urlList.size
-                val totalSpeed = downloadItems.sumOf { it.lastSpeed }
+                val totalSpeed = activeItems.values.map { it.lastSpeed }.sum()
 
                 // 进度节流：仅整数百分比变化时回调
                 if (progress != lastReportedProgress) {
@@ -454,7 +533,7 @@ class BatchDownloader(
 
                 // 检查自动重试
                 if (config.maxRetryCount > 0) {
-                    val retryCount = retryCountMap.getOrDefault(url, 0)
+                    val retryCount = if (retryCountMap.containsKey(url)) retryCountMap[url]!! else 0
                     if (retryCount < config.maxRetryCount) {
                         retryCountMap[url] = retryCount + 1
                         ZLog.i(
@@ -514,8 +593,7 @@ class BatchDownloader(
         val finishedCount = completedCount + failedCount
 
         if (finishedCount < totalCount) {
-            val hasActive = submittedUrls.any { url ->
-                val item = urlToItemMap[url] ?: return@any false
+            val hasActive = activeItems.values.any { item ->
                 val itemStatus = item.status
                 itemStatus == DownloadStatus.STATUS_DOWNLOADING ||
                         itemStatus == DownloadStatus.STATUS_DOWNLOAD_WAITING ||
@@ -557,9 +635,10 @@ class BatchDownloader(
         var knownCount = 0
         var knownTotalLength = 0L
 
-        downloadItems.forEach { item ->
-            val contentLength = item.contentLength
-            val finished = item.finished
+        val items: Collection<DownloadItem> = activeItems.values
+        items.forEach { item ->
+            val contentLength: Long = item.contentLength
+            val finished: Long = item.finished
 
             if (contentLength > 0) {
                 totalContentLength += contentLength
@@ -571,10 +650,13 @@ class BatchDownloader(
             }
         }
 
-        val unknownCount = downloadItems.size - knownCount
+        val totalItemCount = urlList.size
+        val unknownCount = totalItemCount - knownCount
         if (unknownCount > 0 && knownCount > 0) {
             val avgSize = knownTotalLength / knownCount
             totalContentLength += avgSize * unknownCount
+            // 已完成项贡献 avgSize 的下载量
+            totalFinished += avgSize * completedMap.size
         } else if (unknownCount > 0 && knownCount == 0) {
             return (completedMap.size * 100 / urlList.size)
         }
