@@ -101,6 +101,10 @@ class BatchDownloader(
     @Volatile
     private var lastReportedProgress: Int = -1
 
+    /** 上次回调的已完成数，用于检测完成时强制通知 */
+    @Volatile
+    private var lastReportedCompleted: Int = -1
+
     /** Context 引用（applicationContext） */
     private var contextRef: Context? = null
 
@@ -502,25 +506,7 @@ class BatchDownloader(
 
             override fun onProgress(item: DownloadItem) {
                 if (isPaused) return
-
-                val progress = calculateBatchProgress()
-                val completedCount = completedMap.size
-                val totalCount = urlList.size
-                val totalSpeed = activeItems.values.map { it.lastSpeed }.sum()
-
-                // 进度节流：仅整数百分比变化时回调
-                if (progress != lastReportedProgress) {
-                    lastReportedProgress = progress
-                    ThreadManager.getInstance().runOnUIThread {
-                        listener.onProgress(
-                            batchId,
-                            progress,
-                            completedCount,
-                            totalCount,
-                            totalSpeed
-                        )
-                    }
-                }
+                notifyBatchProgress()
             }
 
             override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
@@ -550,6 +536,7 @@ class BatchDownloader(
 
                 // 已达最大重试次数或不自动重试：标记为最终失败
                 failedMap[url] = errorCode
+                notifyBatchProgress()
 
                 // 根据 errorStrategy 决定是否立即回调
                 if (errorStrategy == ErrorStrategy.IMMEDIATE) {
@@ -569,6 +556,8 @@ class BatchDownloader(
                 ZLog.i(TAG, "onComplete: $url -> $filePath")
 
                 completedMap[url] = filePath
+                // 文件完成时强制通知进度（即使百分比未变，completedCount 已变）
+                notifyBatchProgress(force = true)
                 startNextTasks()
                 checkBatchCompletion()
 
@@ -621,6 +610,32 @@ class BatchDownloader(
                 }
             }
             ZLog.i(TAG, "checkBatchCompletion: 批次 $batchId 存在 $failedCount 个失败")
+        }
+    }
+
+    /**
+     * 通知批次进度
+     *
+     * @param force 是否强制通知（当文件完成/失败时，即使百分比未变也要通知，因为 completedCount 已变）
+     */
+    private fun notifyBatchProgress(force: Boolean = false) {
+        val progress = calculateBatchProgress()
+        val completedCount = completedMap.size
+        val totalCount = urlList.size
+        val totalSpeed = activeItems.values.sumOf { it.lastSpeed }
+
+        if (force || progress != lastReportedProgress) {
+            lastReportedProgress = progress
+            lastReportedCompleted = completedCount
+            ThreadManager.getInstance().runOnUIThread {
+                listener.onProgress(
+                    batchId,
+                    progress,
+                    completedCount,
+                    totalCount,
+                    totalSpeed
+                )
+            }
         }
     }
 
