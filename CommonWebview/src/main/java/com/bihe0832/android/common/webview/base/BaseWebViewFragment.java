@@ -165,10 +165,12 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     }
 
     // 网络诊断功能
-    protected void performNetworkDiagnostics() {
+    protected void performNetworkDiagnostics(final String failingUrl) {
         new Thread(() -> {
             try {
-                String host = new java.net.URL(mIntentUrl).getHost();
+                String urlForDiagnostic = TextUtils.isEmpty(failingUrl) ? mIntentUrl : failingUrl;
+                String host = new java.net.URL(urlForDiagnostic).getHost();
+                ZLog.info(TAG, "网络诊断开始: host=" + host + ", url=" + urlForDiagnostic);
                 // 使用AAF的IpUtils进行DNS解析，支持重试和超时控制
                 java.net.InetAddress[] addrs = IpUtils.getDomainAddrList(host);
                 if (addrs != null && addrs.length > 0) {
@@ -180,7 +182,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
                     }
                     ZLog.info(TAG, "DNS解析成功: " + host + " -> " + sb);
                     // 测试网络连接
-                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(mIntentUrl).openConnection();
+                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(urlForDiagnostic).openConnection();
                     connection.setConnectTimeout(5000);
                     connection.setReadTimeout(5000);
                     connection.connect();
@@ -229,30 +231,41 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         }
     }
 
-    protected void onWebClientReceivedError(int errorCode) {
-        ZLog.info(TAG, "onWebClientReceivedError errorCode=" + errorCode + ", mRetryErrorCount=" + mRetryErrorCount);
-        if (errorCode == WebViewClient.ERROR_CONNECT || errorCode == WebViewClient.ERROR_HOST_LOOKUP) {
-            // 处理网络连接错误和DNS解析错误
-            isLoadSuccess = false;
-            if (errorCode == WebViewClient.ERROR_HOST_LOOKUP) {
-                ZLog.info(TAG, "错误类型：DNS解析失败 (NET_ERR_NAME_NOT_RESOLVED)");
-                ZLog.info(TAG, "建议：检查Wi-Fi DNS设置或切换网络");
-                // 执行网络诊断
-                performNetworkDiagnostics();
-            } else if (errorCode == WebViewClient.ERROR_CONNECT) {
-                ZLog.info(TAG, "错误类型：网络连接失败");
-            }
-            // 首次错误直接显示错误页，重试后仍失败则不再重复弹错误页
-            mRetryErrorCount++;
-            if (mRetryErrorCount <= 1) {
-                String errorInfo = getString(R.string.web_load_failed_error) + "\n" + getReadableErrorCode(errorCode);
-                mErrorInfo.setText(errorInfo);
-                mErrorUrl.setText(mIntentUrl);
-            } else {
-                ZLog.info(TAG, "重试后仍然失败，不再重复弹出错误页（已弹出 " + mRetryErrorCount + " 次）");
-            }
+    protected void onWebClientReceivedError(int errorCode, String failingUrl) {
+        ZLog.info(TAG, "onWebClientReceivedError errorCode=" + errorCode
+                + " (" + getReadableErrorCode(errorCode) + ")"
+                + ", failingUrl=" + failingUrl
+                + ", mRetryErrorCount=" + mRetryErrorCount);
+
+        isLoadSuccess = false;
+        if (errorCode == WebViewClient.ERROR_HOST_LOOKUP) {
+            ZLog.info(TAG, "错误类型：DNS解析失败 (NET_ERR_NAME_NOT_RESOLVED), failingUrl=" + failingUrl);
+            ZLog.info(TAG, "建议：检查Wi-Fi DNS设置或切换网络");
+            performNetworkDiagnostics(failingUrl);
+        } else if (errorCode == WebViewClient.ERROR_CONNECT) {
+            ZLog.info(TAG, "错误类型：网络连接失败, failingUrl=" + failingUrl);
+        } else if (errorCode == WebViewClient.ERROR_TIMEOUT) {
+            ZLog.info(TAG, "错误类型：请求超时, failingUrl=" + failingUrl);
+        } else if (errorCode == WebViewClient.ERROR_IO) {
+            ZLog.info(TAG, "错误类型：连接中断, failingUrl=" + failingUrl);
+        } else if (errorCode == WebViewClient.ERROR_AUTHENTICATION || errorCode == WebViewClient.ERROR_UNSUPPORTED_AUTH_SCHEME || errorCode == WebViewClient.ERROR_PROXY_AUTHENTICATION) {
+            ZLog.info(TAG, "错误类型：认证失败 (errorCode=" + errorCode + "), failingUrl=" + failingUrl);
+        } else if (errorCode == WebViewClient.ERROR_BAD_URL) {
+            ZLog.info(TAG, "错误类型：无效URL, failingUrl=" + failingUrl);
+        } else if (errorCode == WebViewClient.ERROR_TOO_MANY_REQUESTS || errorCode == WebViewClient.ERROR_REDIRECT_LOOP) {
+            ZLog.info(TAG, "错误类型：重定向错误 (errorCode=" + errorCode + "), failingUrl=" + failingUrl);
         } else {
-            ZLog.w(TAG, "未处理的WebView错误码: " + errorCode);
+            ZLog.info(TAG, "错误类型：其他错误 (errorCode=" + errorCode + ", " + getReadableErrorCode(errorCode) + "), failingUrl=" + failingUrl);
+        }
+
+        // 首次错误直接显示错误页，重试后仍失败则不再重复弹错误页
+        mRetryErrorCount++;
+        if (mRetryErrorCount <= 1) {
+            String errorInfo = getString(R.string.web_load_failed_error) + "\n" + getReadableErrorCode(errorCode);
+            mErrorInfo.setText(errorInfo);
+            mErrorUrl.setText(mIntentUrl);
+        } else {
+            ZLog.info(TAG, "重试后仍然失败，不再重复弹出错误页（已弹出 " + mRetryErrorCount + " 次）");
         }
     }
 
@@ -286,6 +299,9 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         mRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 重试前重置错误状态，让新页面从正常流程开始
+                isLoadSuccess = true;
+                mRetryErrorCount = 0;
                 // 在重试前清除WebView的DNS缓存
                 clearWebViewCache();
                 recreateWebView();

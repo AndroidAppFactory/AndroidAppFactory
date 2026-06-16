@@ -346,9 +346,12 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            ZLog.e(TAG, "onReceivedError: errorCode=" + errorCode + " description=" + description + " failingUrl="
-                    + failingUrl);
-            onWebClientReceivedError(errorCode);
+            ZLog.info(TAG, "onReceivedError(deprecated): errorCode=" + errorCode
+                    + " (" + getReadableErrorCode(errorCode) + ")"
+                    + ", failingUrl=" + failingUrl
+                    + ", description=" + description
+                    + ", retryCount=" + mRetryErrorCount);
+            onWebClientReceivedError(errorCode, failingUrl);
             if (mRetryErrorCount <= 1) {
                 view.stopLoading();
                 view.loadUrl("about:blank");
@@ -359,15 +362,22 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         @Override
         public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest,
                 WebResourceError webResourceError) {
-            ZLog.e(TAG, "onReceivedError: errorCode=" + webResourceError.getErrorCode() + " description="
-                    + webResourceError.getDescription() + " failingUrl="
-                    + webResourceRequest.getUrl().toString());
             if (webResourceRequest.isForMainFrame()) {
-                onWebClientReceivedError(webResourceError.getErrorCode());
+                ZLog.info(TAG, "onReceivedError(main-frame): errorCode=" + webResourceError.getErrorCode()
+                        + " (" + getReadableErrorCode(webResourceError.getErrorCode()) + ")"
+                        + ", url=" + webResourceRequest.getUrl()
+                        + ", description=" + webResourceError.getDescription()
+                        + ", retryCount=" + mRetryErrorCount);
+                onWebClientReceivedError(webResourceError.getErrorCode(), webResourceRequest.getUrl().toString());
                 if (mRetryErrorCount <= 1) {
                     webView.stopLoading();
                     webView.loadUrl("about:blank");
                 }
+            } else {
+                ZLog.info(TAG, "onReceivedError(sub-resource): errorCode=" + webResourceError.getErrorCode()
+                        + " (" + getReadableErrorCode(webResourceError.getErrorCode()) + ")"
+                        + ", url=" + webResourceRequest.getUrl()
+                        + ", description=" + webResourceError.getDescription());
             }
             return;
         }
@@ -375,11 +385,26 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         @Override
         public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest,
                 WebResourceResponse webResourceResponse) {
+            ZLog.info(TAG, "onReceivedHttpError: statusCode=" + webResourceResponse.getStatusCode()
+                    + ", reason=" + webResourceResponse.getReasonPhrase()
+                    + ", url=" + webResourceRequest.getUrl()
+                    + ", isMainFrame=" + webResourceRequest.isForMainFrame());
             super.onReceivedHttpError(webView, webResourceRequest, webResourceResponse);
         }
 
         @Override
+        public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
+            ZLog.info(TAG, "onReceivedLoginRequest: realm=" + realm
+                    + ", account=" + account
+                    + ", args=" + args
+                    + ", url=" + view.getUrl());
+        }
+
+        @Override
         public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+            ZLog.info(TAG, "onReceivedSslError: url=" + sslError.getUrl()
+                    + ", primaryError=" + sslError.getPrimaryError()
+                    + ", certificate=" + sslError.getCertificate());
             mSslErrorHelper.handleSslError(getContext(), TAG, webView.getUrl(), sslError.toString(),
                     new SslErrorDialogHelper.SslErrorHandlerWrapper() {
                         @Override

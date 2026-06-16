@@ -344,8 +344,16 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            onWebClientReceivedError(errorCode);
-            if (mRetryErrorCount <= 1) {
+            ZLog.info(TAG, "onReceivedError(deprecated): errorCode=" + errorCode
+                    + " (" + getReadableErrorCode(errorCode) + ")"
+                    + ", failingUrl=" + failingUrl
+                    + ", description=" + description
+                    + ", retryCount=" + mRetryErrorCount);
+            // 仅当新API未处理（mRetryErrorCount未增加）时才执行旧API的处理，
+            // 避免Android 6.0+新旧API双重触发导致retryCount虚增
+            int retryCountBefore = mRetryErrorCount;
+            onWebClientReceivedError(errorCode, failingUrl);
+            if (mRetryErrorCount > retryCountBefore && mRetryErrorCount <= 1) {
                 view.stopLoading();
                 view.loadUrl("about:blank");
             }
@@ -356,19 +364,49 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.M) {
                 if (request.isForMainFrame()) {
-                    onWebClientReceivedError(error.getErrorCode());
-                    if (mRetryErrorCount <= 1) {
+                    ZLog.info(TAG, "onReceivedError(main-frame): errorCode=" + error.getErrorCode()
+                            + " (" + getReadableErrorCode(error.getErrorCode()) + ")"
+                            + ", url=" + request.getUrl()
+                            + ", description=" + error.getDescription()
+                            + ", retryCount=" + mRetryErrorCount);
+                    int retryCountBefore = mRetryErrorCount;
+                    onWebClientReceivedError(error.getErrorCode(), request.getUrl().toString());
+                    if (mRetryErrorCount > retryCountBefore && mRetryErrorCount <= 1) {
                         view.stopLoading();
                         view.loadUrl("about:blank");
                     }
                 } else {
-                    ZLog.info(TAG, "onReceivedError: sub-resource error (errorCode=" + error.getErrorCode() + "), ignoring for non-main-frame request");
+                    ZLog.info(TAG, "onReceivedError(sub-resource): errorCode=" + error.getErrorCode()
+                            + " (" + getReadableErrorCode(error.getErrorCode()) + ")"
+                            + ", url=" + request.getUrl()
+                            + ", description=" + error.getDescription());
                 }
             }
         }
 
         @Override
+        public void onReceivedHttpError(WebView webView, WebResourceRequest request,
+                WebResourceResponse response) {
+            ZLog.info(TAG, "onReceivedHttpError: statusCode=" + response.getStatusCode()
+                    + ", reason=" + response.getReasonPhrase()
+                    + ", url=" + request.getUrl()
+                    + ", isMainFrame=" + request.isForMainFrame());
+            super.onReceivedHttpError(webView, request, response);
+        }
+
+        @Override
+        public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
+            ZLog.info(TAG, "onReceivedLoginRequest: realm=" + realm
+                    + ", account=" + account
+                    + ", args=" + args
+                    + ", url=" + view.getUrl());
+        }
+
+        @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            ZLog.info(TAG, "onReceivedSslError: url=" + error.getUrl()
+                    + ", primaryError=" + error.getPrimaryError()
+                    + ", certificate=" + error.getCertificate());
             mSslErrorHelper.handleSslError(getContext(), TAG, error.getUrl(), error.toString(),
                     new SslErrorDialogHelper.SslErrorHandlerWrapper() {
                         @Override
