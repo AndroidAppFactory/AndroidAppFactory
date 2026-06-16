@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -302,7 +303,7 @@ class BatchDownloader(
             if (!activeItems.containsKey(url)) {
                 result.add(DownloadItem().apply {
                     downloadURL = url
-                    fileFolder = config.fileFolder
+                    filePath = DownloadFileManager.getFilePath(url, "", config.fileFolder, "")
                 })
             }
         }
@@ -311,7 +312,7 @@ class BatchDownloader(
             if (!activeItems.containsKey(url) && !completedMap.containsKey(url)) {
                 result.add(DownloadItem().apply {
                     downloadURL = url
-                    fileFolder = config.fileFolder
+                    filePath = DownloadFileManager.getFilePath(url, "", config.fileFolder, "")
                 })
             }
         }
@@ -321,7 +322,7 @@ class BatchDownloader(
             if (url !in scheduledUrls) {
                 result.add(DownloadItem().apply {
                     downloadURL = url
-                    fileFolder = config.fileFolder
+                    filePath = DownloadFileManager.getFilePath(url, "", config.fileFolder, "")
                 })
             }
         }
@@ -472,7 +473,7 @@ class BatchDownloader(
             // 按需创建 DownloadItem（仅当真正需要提交时）
             val item = DownloadItem().apply {
                 downloadURL = url
-                fileFolder = config.fileFolder
+                filePath = DownloadFileManager.getFilePath(url, "", config.fileFolder, "")
                 isDownloadWhenUseMobile = config.downloadWhenUseMobile
                 isDownloadWhenAdd = true
                 downloadPriority = DownloadItem.MIN_DOWNLOAD_PRIORITY
