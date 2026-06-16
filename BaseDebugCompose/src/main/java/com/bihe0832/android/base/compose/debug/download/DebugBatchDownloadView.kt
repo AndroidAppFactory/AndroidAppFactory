@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.batch.download.BatchDownloadListener
 import com.bihe0832.android.lib.batch.download.ErrorStrategy
 import com.bihe0832.android.lib.batch.download.core.BatchDownloader
 import com.bihe0832.android.lib.batch.download.wrapper.BatchDownloadManager
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 
 private const val TAG = "BatchDownloadTest"
@@ -23,6 +24,7 @@ private val TEST_URLS = listOf(
     "https://cdn.bihe0832.com/app/update/get_apk.json",
     "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a",
     "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk",
+    "https://dlied4.myapp.com/myapp/1104922185/cos.release-77942/10053761_com.tencent.tmgp.speedmobile_a2238881_1.32.0.2188_uPIKoV.apk",
     "http://dldir1.qq.com/INO/assistant/com.google.android.tts.apk"
 )
 
@@ -100,7 +102,7 @@ fun DebugBatchDownloadView() {
         DebugItem("查询批次状态") {
             currentDownloader?.let { downloader ->
                 val statusInfo = downloader.getStatus()
-                ZLog.i(TAG, "批次状态: ${statusInfo.status}, 进度: ${statusInfo.progress}%")
+            ZLog.i(TAG, "批次状态: ${statusInfo.status}, 完成: ${statusInfo.completedCount}/${statusInfo.totalCount}")
                 ZLog.i(TAG, "  完成: ${statusInfo.completedCount}/${statusInfo.totalCount}")
                 ZLog.i(TAG, "  错误策略: ${statusInfo.errorStrategy}")
                 statusInfo.taskStatusList.forEach { task ->
@@ -144,7 +146,7 @@ fun DebugBatchDownloadView() {
             ZLog.i(TAG, "活跃批次数: ${batches.size}")
             batches.forEach { downloader ->
                 val status = downloader.getStatus()
-                ZLog.i(TAG, "  ${downloader.batchId}: ${status.status}, 进度=${status.progress}%, ${status.completedCount}/${status.totalCount}")
+                ZLog.i(TAG, "  ${downloader.batchId}: ${status.status}, ${status.completedCount}/${status.totalCount}")
             }
         }
     }
@@ -162,8 +164,8 @@ private fun startBatchDownload(context: Context, maxConcurrent: Int, maxRetryCou
     )
 
     val listener = object : BatchDownloadListener {
-        override fun onProgress(batchId: String, progress: Int, completedCount: Int, totalCount: Int, speed: Long) {
-            ZLog.i(TAG, "onProgress: 批次=$batchId, 进度=$progress%, 完成=$completedCount/$totalCount, 速度=${speed / 1024}KB/s")
+        override fun onProgress(batchId: String, completedCount: Int, totalCount: Int, speed: Long) {
+            ZLog.i(TAG, "onProgress: 批次=$batchId, 完成=$completedCount/$totalCount, 速度=${FileUtils.getFileLength(speed)}/s")
         }
 
         override fun onComplete(batchId: String, filePaths: Map<String, String>) {
@@ -200,8 +202,8 @@ private fun startBatchDownloadImmediate(context: Context) {
     )
 
     val listener = object : BatchDownloadListener {
-        override fun onProgress(batchId: String, progress: Int, completedCount: Int, totalCount: Int, speed: Long) {
-            ZLog.i(TAG, "onProgress[IMMEDIATE]: 进度=$progress%, 完成=$completedCount/$totalCount")
+        override fun onProgress(batchId: String, completedCount: Int, totalCount: Int, speed: Long) {
+            ZLog.i(TAG, "onProgress[IMMEDIATE]: 完成=$completedCount/$totalCount")
         }
 
         override fun onComplete(batchId: String, filePaths: Map<String, String>) {

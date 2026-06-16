@@ -13,15 +13,26 @@ package com.bihe0832.android.lib.batch.download
 interface BatchDownloadListener {
 
     /**
+     * 单个子任务下载完成回调
+     *
+     * 每完成一个子任务（无论成功或失败）都会回调，便于业务侧按文件粒度处理。
+     *
+     * @param batchId 批次唯一标识
+     * @param url 下载 URL
+     * @param filePath 本地文件路径（失败时为空字符串）
+     * @param isSuccess true 成功，false 失败
+     */
+    fun onTaskComplete(batchId: String, url: String, filePath: String, isSuccess: Boolean) {}
+
+    /**
      * 批次下载进度回调
      *
      * @param batchId 批次唯一标识
-     * @param progress 总进度（0~100）
      * @param completedCount 已完成子任务数
      * @param totalCount 子任务总数
      * @param speed 汇总下载速度（字节/秒）
      */
-    fun onProgress(batchId: String, progress: Int, completedCount: Int, totalCount: Int, speed: Long)
+    fun onProgress(batchId: String, completedCount: Int, totalCount: Int, speed: Long)
 
     /**
      * 批次全部下载完成回调

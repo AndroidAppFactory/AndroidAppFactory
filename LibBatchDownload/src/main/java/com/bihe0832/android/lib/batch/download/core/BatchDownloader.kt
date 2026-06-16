@@ -26,7 +26,7 @@ import java.util.concurrent.LinkedBlockingQueue
  * 提供：
  * - URL 去重与参数校验
  * - 批次层面的并发控制（maxConcurrent）
- * - 总进度聚合与节流回调
+ * - 总进度聚合与时间节流实时速度回调（progressIntervalMs）
  * - 失败自动重试（maxRetryCount）
  * - 两种错误回调策略（WAIT_ALL / IMMEDIATE）
  * - 暂停/恢复/取消/重试等批次操作
@@ -80,7 +80,13 @@ class BatchDownloader(
         }
         // 重试次数校验
         val maxRetryCount = config.maxRetryCount.coerceIn(0, 3)
-        this.config = config.copy(maxConcurrent = maxConcurrent, maxRetryCount = maxRetryCount)
+        // 进度回调间隔校验：100ms ~ 3000ms
+        val progressIntervalMs = config.progressIntervalMs.coerceIn(100L, 3000L)
+        this.config = config.copy(
+            maxConcurrent = maxConcurrent,
+            maxRetryCount = maxRetryCount,
+            progressIntervalMs = progressIntervalMs
+        )
     }
 
     // ==================== 实例状态 ====================
@@ -98,13 +104,13 @@ class BatchDownloader(
     @Volatile
     private var isPaused: Boolean = false
 
-    /** 上次回调的整数百分比，用于进度节流 */
-    @Volatile
-    private var lastReportedProgress: Int = -1
-
     /** 上次回调的已完成数，用于检测完成时强制通知 */
     @Volatile
     private var lastReportedCompleted: Int = -1
+
+    /** 上次回调的时间戳，用于时间节流 */
+    @Volatile
+    private var lastReportedTime: Long = 0L
 
     /** Context 引用（applicationContext） */
     private var contextRef: Context? = null
@@ -435,7 +441,6 @@ class BatchDownloader(
         return BatchStatusInfo(
             batchId = batchId,
             status = status,
-            progress = calculateBatchProgress(),
             completedCount = completedMap.size,
             totalCount = urlList.size,
             errorStrategy = errorStrategy,
@@ -537,6 +542,10 @@ class BatchDownloader(
 
                 // 已达最大重试次数或不自动重试：标记为最终失败
                 failedMap[url] = errorCode
+                // 单个子任务失败回调
+                ThreadManager.getInstance().runOnUIThread {
+                    listener.onTaskComplete(batchId, url, "", false)
+                }
                 notifyBatchProgress()
 
                 // 根据 errorStrategy 决定是否立即回调
@@ -557,6 +566,10 @@ class BatchDownloader(
                 ZLog.i(TAG, "onComplete: $url -> $filePath")
 
                 completedMap[url] = filePath
+                // 单个子任务完成回调
+                ThreadManager.getInstance().runOnUIThread {
+                    listener.onTaskComplete(batchId, url, filePath, true)
+                }
                 // 文件完成时强制通知进度（即使百分比未变，completedCount 已变）
                 notifyBatchProgress(force = true)
                 startNextTasks()
@@ -617,70 +630,31 @@ class BatchDownloader(
     /**
      * 通知批次进度
      *
-     * @param force 是否强制通知（当文件完成/失败时，即使百分比未变也要通知，因为 completedCount 已变）
+     * 采用时间节流：至少间隔 config.progressIntervalMs 才回调一次，
+     * 保证在下载过程中能实时回调速度。
+     * 并发速度通过 activeItems.values.sumOf { it.lastSpeed } 汇总。
+     *
+     * @param force 是否强制通知（当文件完成/失败时，无视时间间隔立即回调）
      */
     private fun notifyBatchProgress(force: Boolean = false) {
-        val progress = calculateBatchProgress()
+        val now = System.currentTimeMillis()
         val completedCount = completedMap.size
         val totalCount = urlList.size
         val totalSpeed = activeItems.values.sumOf { it.lastSpeed }
 
-        if (force || progress != lastReportedProgress) {
-            lastReportedProgress = progress
+        // force（完成/失败事件）始终回调；否则按时间间隔节流，且完成数有变化才回调
+        val shouldNotify = force || (now - lastReportedTime >= config.progressIntervalMs)
+        if (shouldNotify) {
             lastReportedCompleted = completedCount
+            lastReportedTime = now
             ThreadManager.getInstance().runOnUIThread {
                 listener.onProgress(
                     batchId,
-                    progress,
                     completedCount,
                     totalCount,
                     totalSpeed
                 )
             }
-        }
-    }
-
-    /**
-     * 计算批次总进度
-     */
-    private fun calculateBatchProgress(): Int {
-        if (urlList.isEmpty()) return 0
-
-        var totalFinished = 0L
-        var totalContentLength = 0L
-        var knownCount = 0
-        var knownTotalLength = 0L
-
-        val items: Collection<DownloadItem> = activeItems.values
-        items.forEach { item ->
-            val contentLength: Long = item.contentLength
-            val finished: Long = item.finished
-
-            if (contentLength > 0) {
-                totalContentLength += contentLength
-                totalFinished += finished
-                knownCount++
-                knownTotalLength += contentLength
-            } else {
-                totalFinished += finished
-            }
-        }
-
-        val totalItemCount = urlList.size
-        val unknownCount = totalItemCount - knownCount
-        if (unknownCount > 0 && knownCount > 0) {
-            val avgSize = knownTotalLength / knownCount
-            totalContentLength += avgSize * unknownCount
-            // 已完成项贡献 avgSize 的下载量
-            totalFinished += avgSize * completedMap.size
-        } else if (unknownCount > 0 && knownCount == 0) {
-            return (completedMap.size * 100 / urlList.size)
-        }
-
-        return if (totalContentLength > 0) {
-            (totalFinished * 100 / totalContentLength).toInt().coerceIn(0, 100)
-        } else {
-            0
         }
     }
 

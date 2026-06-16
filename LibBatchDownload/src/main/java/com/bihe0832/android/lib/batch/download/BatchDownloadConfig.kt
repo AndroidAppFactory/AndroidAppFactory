@@ -9,10 +9,12 @@ package com.bihe0832.android.lib.batch.download
  * @param downloadWhenUseMobile 是否允许移动网络下载，默认 false
  * @param maxConcurrent 批次层面的最大并发数，默认 3，范围 1~5
  * @param maxRetryCount 子任务自动重试次数，默认 0（不自动重试），范围 0~3
+ * @param progressIntervalMs 进度回调最小间隔（毫秒），默认 1000ms，用于节流避免过度回调
  */
 data class BatchDownloadConfig(
     val fileFolder: String,
     val downloadWhenUseMobile: Boolean = false,
     val maxConcurrent: Int = 3,
-    val maxRetryCount: Int = 0
+    val maxRetryCount: Int = 0,
+    val progressIntervalMs: Long = 200L
 )
