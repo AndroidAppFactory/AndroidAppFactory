@@ -22,6 +22,11 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true">
         <activity
+            android:name="com.bihe0832.android.base.compose.debug.httpdns.HttpDnsTestActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
             android:name="com.bihe0832.android.base.compose.debug.list.model.DebugPageListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />

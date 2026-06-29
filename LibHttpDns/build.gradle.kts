@@ -1,0 +1,26 @@
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+}
+
+apply(from = "$rootDir/build_aar.gradle")
+
+android {
+    namespace = "com.bihe0832.android.lib.http.dns"
+    compileSdk = rootProject.extra["compileSdkVersion"] as Int
+    buildToolsVersion = rootProject.extra["buildToolsVersion"] as String
+
+    defaultConfig {
+        minSdk = rootProject.extra["libMinSdkVersion"] as Int
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
+    }
+
+    lint {
+        abortOnError = false
+    }
+}

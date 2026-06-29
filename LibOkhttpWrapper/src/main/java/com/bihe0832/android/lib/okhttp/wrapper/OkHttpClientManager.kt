@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.log.ZLog
 import okhttp3.Cache
 import okhttp3.ConnectionPool
 import okhttp3.Dispatcher
+import okhttp3.Dns
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
@@ -54,23 +55,47 @@ object OkHttpClientManager {
     /** 默认连接存活时间（分钟） */
     private const val DEFAULT_KEEP_ALIVE_DURATION = 3L
 
-    /** HTTP/2 协议优先的全局客户端 */
+    /** HTTPDNS + HTTP/2 协议优先的全局客户端 */
     private val http2Client: OkHttpClient by lazy {
         createOkHttpClient(
             protocols = listOf(Protocol.HTTP_2, Protocol.HTTP_1_1),
             connectTimeout = DEFAULT_CONNECT_TIMEOUT,
             readTimeout = DEFAULT_READ_TIMEOUT,
-            writeTimeout = DEFAULT_WRITE_TIMEOUT
+            writeTimeout = DEFAULT_WRITE_TIMEOUT,
+            dns = getOkHttpDns()
         )
     }
 
-    /** HTTP/1.1 降级客户端 */
+    /** HTTPDNS + HTTP/1.1 降级客户端 */
     private val http1Client: OkHttpClient by lazy {
         createOkHttpClient(
             protocols = listOf(Protocol.HTTP_1_1),
             connectTimeout = DEFAULT_CONNECT_TIMEOUT,
             readTimeout = DEFAULT_READ_TIMEOUT,
-            writeTimeout = DEFAULT_WRITE_TIMEOUT
+            writeTimeout = DEFAULT_WRITE_TIMEOUT,
+            dns = getOkHttpDns()
+        )
+    }
+
+    /** 系统 DNS + HTTP/2 客户端 */
+    private val http2ClientSysDns: OkHttpClient by lazy {
+        createOkHttpClient(
+            protocols = listOf(Protocol.HTTP_2, Protocol.HTTP_1_1),
+            connectTimeout = DEFAULT_CONNECT_TIMEOUT,
+            readTimeout = DEFAULT_READ_TIMEOUT,
+            writeTimeout = DEFAULT_WRITE_TIMEOUT,
+            dns = Dns.SYSTEM
+        )
+    }
+
+    /** 系统 DNS + HTTP/1.1 客户端 */
+    private val http1ClientSysDns: OkHttpClient by lazy {
+        createOkHttpClient(
+            protocols = listOf(Protocol.HTTP_1_1),
+            connectTimeout = DEFAULT_CONNECT_TIMEOUT,
+            readTimeout = DEFAULT_READ_TIMEOUT,
+            writeTimeout = DEFAULT_WRITE_TIMEOUT,
+            dns = Dns.SYSTEM
         )
     }
 
@@ -106,6 +131,7 @@ object OkHttpClientManager {
      * @param writeTimeout 写入超时时间（毫秒）
      * @param maxIdleConnections 最大空闲连接数
      * @param keepAliveDuration 连接存活时间（分钟）
+     * @param dns DNS 解析器，null 时使用 OkHttp 默认（系统 DNS）
      * @return OkHttpClient 实例
      */
     fun createOkHttpClient(
@@ -114,9 +140,10 @@ object OkHttpClientManager {
         readTimeout: Long = DEFAULT_READ_TIMEOUT,
         writeTimeout: Long = DEFAULT_WRITE_TIMEOUT,
         maxIdleConnections: Int = DEFAULT_MAX_IDLE_CONNECTIONS,
-        keepAliveDuration: Long = DEFAULT_KEEP_ALIVE_DURATION
+        keepAliveDuration: Long = DEFAULT_KEEP_ALIVE_DURATION,
+        dns: Dns? = null
     ): OkHttpClient {
-        return OkHttpClient.Builder()
+        val builder = OkHttpClient.Builder()
             .protocols(protocols)
             .connectionPool(
                 ConnectionPool(
@@ -129,7 +156,29 @@ object OkHttpClientManager {
             .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
             .retryOnConnectionFailure(true)
-            .build()
+
+        if (dns != null) {
+            builder.dns(dns)
+        }
+
+        return builder.build()
+    }
+
+    /**
+     * 获取 OkHttp Dns 实例
+     *
+     * 优先使用 AAFOkHttpDns（HTTPDNS），
+     * 如果 LibHttpDns 模块不可用则降级到系统 DNS。
+     *
+     * @return OkHttp Dns 实例
+     */
+    private fun getOkHttpDns(): Dns {
+        return try {
+            com.bihe0832.android.lib.http.dns.AAFOkHttpDns
+        } catch (e: Throwable) {
+            ZLog.w(TAG, "HTTPDNS 不可用，降级到系统 DNS: ${e.message}")
+            Dns.SYSTEM
+        }
     }
 
     /**
@@ -173,6 +222,7 @@ object OkHttpClientManager {
 
         return OkHttpClient.Builder()
             .protocols(protocols)
+            .dns(getOkHttpDns())
             .connectionPool(connectionPool)
             .cache(cache)
             .dispatcher(dispatcher)
@@ -188,12 +238,13 @@ object OkHttpClientManager {
      *
      * @param url 目标 URL
      * @param preferHttp2 是否优先使用 HTTP/2
+     * @param useHttpDns 是否使用 HTTPDNS（默认 true）
      * @return OkHttpClient 实例
      */
-    fun getClient(url: String, preferHttp2: Boolean = true): OkHttpClient {
+    fun getClient(url: String, preferHttp2: Boolean = true, useHttpDns: Boolean = true): OkHttpClient {
         if (!preferHttp2) {
             ZLog.d(TAG, "配置禁用 HTTP/2，使用 HTTP/1.1")
-            return http1Client
+            return if (useHttpDns) http1Client else http1ClientSysDns
         }
 
         val host = extractHost(url)
@@ -202,16 +253,16 @@ object OkHttpClientManager {
         return when (supportsHttp2) {
             true -> {
                 ZLog.d(TAG, "$host 使用 HTTP/2 客户端")
-                http2Client
+                if (useHttpDns) http2Client else http2ClientSysDns
             }
             false -> {
                 ZLog.d(TAG, "$host 降级使用 HTTP/1.1 客户端")
-                http1Client
+                if (useHttpDns) http1Client else http1ClientSysDns
             }
             null -> {
                 // 首次请求，默认尝试 HTTP/2
                 ZLog.d(TAG, "$host 首次请求，尝试 HTTP/2")
-                http2Client
+                if (useHttpDns) http2Client else http2ClientSysDns
             }
         }
     }
@@ -221,10 +272,11 @@ object OkHttpClientManager {
      *
      * @param request OkHttp 请求对象
      * @param preferHttp2 是否优先使用 HTTP/2
+     * @param useHttpDns 是否使用 HTTPDNS（默认 true）
      * @return Response 响应对象
      */
-    fun executeRequest(request: Request, preferHttp2: Boolean = true): Response {
-        val client = getClient(request.url.toString(), preferHttp2)
+    fun executeRequest(request: Request, preferHttp2: Boolean = true, useHttpDns: Boolean = true): Response {
+        val client = getClient(request.url.toString(), preferHttp2, useHttpDns)
         val response = client.newCall(request).execute()
 
         // 记录实际使用的协议
@@ -273,12 +325,17 @@ object OkHttpClientManager {
     }
 
     /**
-     * 清除 HTTP/2 支持缓存
+     * 清除所有协议和 DNS 缓存
      */
     fun clearProtocolCache() {
         http2SupportCache.clear()
         urlProtocolCache.clear()
         hostProtocolCache.clear()
+        try {
+            com.bihe0832.android.lib.http.dns.AAFHttpDnsManager.clearCache()
+        } catch (e: Throwable) {
+            ZLog.w(TAG, "清除 DNS 缓存失败（LibHttpDns 可能未引入）: ${e.message}")
+        }
         ZLog.d(TAG, "HTTP/2 支持缓存已清除")
     }
 

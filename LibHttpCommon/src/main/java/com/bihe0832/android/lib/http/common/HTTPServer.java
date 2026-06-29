@@ -176,10 +176,27 @@ public class HTTPServer {
         String finalUrl = HTTPRequestUtils.getRedirectUrl(url, network, timeOut);
         ZLog.e(LOG_TAG, "getConnection getRedirectUrl:" + finalUrl);
         BaseConnection connection = null;
+
+        // HTTPDNS 解析：尝试将域名替换为 IP 地址
+        String resolvedUrl = finalUrl;
+        try {
+            resolvedUrl = com.bihe0832.android.lib.http.dns.AAFHttpDnsManager.INSTANCE.resolveUrlForConnection(finalUrl);
+            if (!resolvedUrl.equals(finalUrl)) {
+                String dnsName = com.bihe0832.android.lib.http.dns.AAFHttpDnsManager.INSTANCE.getCurrentProviderName();
+                ZLog.i(LOG_TAG, "[" + dnsName + "] HTTPDNS 解析成功: " + finalUrl + " -> " + resolvedUrl);
+            }
+        } catch (Exception e) {
+            ZLog.w(LOG_TAG, "HTTPDNS 解析失败（LibHttpDns 可能未引入），使用原始 URL: " + e.getMessage());
+        }
+
+        // 如果解析后的 URL 与原始不同（即替换为了 IP），传入原始 URL 用于 Host 头设置
+        boolean isDnsChanged = !resolvedUrl.equals(finalUrl);
         if (finalUrl.startsWith("https:")) {
-            connection = new HTTPSConnection(finalUrl, network);
+            connection = new HTTPSConnection(resolvedUrl, network,
+                    isDnsChanged ? finalUrl : null);
         } else {
-            connection = new HTTPConnection(finalUrl, network);
+            connection = new HTTPConnection(resolvedUrl, network,
+                    isDnsChanged ? finalUrl : null);
         }
         return connection;
     }

@@ -59,6 +59,14 @@ ext.libmoduleInfo = [
                         "org.jetbrains.kotlin:kotlin-stdlib:${ext.kotlin_version}"
                 ]
         ],
+        "LibHttpDns"          : [
+                "version"            : "8.5.15",
+                "artifactId"         : "lib-http-dns",
+                "apidependenciesList": [
+                        "LibAndroid", "LibLog",
+                        ext.okhttp.okhttp,
+                ]
+        ],
         "LibLog"              : [
                 "version"            : "8.2.0",
                 "artifactId"         : "lib-log",
@@ -115,10 +123,11 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpCommon"       : [
-                "version"            : "8.5.3",
+                "version"            : "8.5.15",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": [
                         "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils", "LibRequest",
+                        "LibHttpDns",
                 ]
         ],
         "LibHttpAdvanced"     : [
@@ -245,10 +254,10 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"    : [
-                "version"            : "8.5.3",
+                "version"            : "8.5.15",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
-                        "LibLog", "LibHttpCommon", "LibGson",
+                        "LibLog", "LibHttpCommon", "LibGson", "LibHttpDns",
                         ext.okhttp.okhttp,
                         ext.okhttp.logging_interceptor,
                         ext.okhttp.retrofit

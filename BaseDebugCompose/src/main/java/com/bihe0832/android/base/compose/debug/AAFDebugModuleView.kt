@@ -12,6 +12,7 @@ import com.bihe0832.android.base.compose.debug.download.DebugDownloadTestView
 import com.bihe0832.android.base.compose.debug.encrypt.DebugEncryptView
 import com.bihe0832.android.base.compose.debug.file.DebugFileComposeView
 import com.bihe0832.android.base.compose.debug.google.DebugGoogleFragment
+import com.bihe0832.android.base.compose.debug.httpdns.HttpDnsTestActivity
 import com.bihe0832.android.base.compose.debug.intent.DebugIntentComposeView
 import com.bihe0832.android.base.compose.debug.ipc.DebugIPCView
 import com.bihe0832.android.base.compose.debug.list.DebugListComposeView
@@ -107,6 +108,7 @@ fun AAFDebugModuleView() {
         DebugComposeItem("通知栏调试", "DebugNotifyComposeView") { DebugNotifyComposeView() }
         DebugComposeItem("多进程调试", "DebugIPCView") { DebugIPCView() }
         DebugComposeItem("WebView 调试", "DebugWebViewComposeView") { DebugWebViewComposeView() }
+        DebugComposeActivityItem("HTTPDNS 测试", HttpDnsTestActivity::class.java)
         DebugComposeActivityItem("HTTP Request", DebugHttpActivity::class.java)
         DebugComposeActivityItem("示例主页（AAFCommonMainActivity）", SampleMainActivity::class.java)
     }

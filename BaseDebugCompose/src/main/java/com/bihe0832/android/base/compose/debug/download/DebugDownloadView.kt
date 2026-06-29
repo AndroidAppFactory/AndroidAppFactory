@@ -4,18 +4,45 @@ import android.app.Activity
 import android.content.Context
 import android.provider.Settings
 import androidx.compose.runtime.Composable
+import com.bihe0832.android.base.compose.debug.httpdns.AliDnsProvider
+import com.bihe0832.android.base.compose.debug.httpdns.DnspodProvider
 import com.bihe0832.android.common.compose.debug.item.DebugItem
+import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
+import com.bihe0832.android.lib.http.dns.AAFDnsConfig
+import com.bihe0832.android.lib.http.dns.AAFHttpDnsManager
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 @Composable
 fun DebugDownloadView() {
     DebugContent {
+
+        // ========== DNS 模式选择 ==========
+        DebugTips("🌐 DNS 模式（与 HTTP 请求页面共享，切换后所有下载自动走该 DNS）")
+
+        DebugItem("🔄 无 DNS（系统 DNS）") {
+            AAFHttpDnsManager.reset()
+            ZLog.i("DownloadDNS", "DNS 模式: 已切换为系统 DNS")
+        }
+
+        DebugItem("☁️ AliDNS（阿里公共 DNS DoH）") {
+            AAFHttpDnsManager.init(AliDnsProvider(), AAFDnsConfig(cacheExpireMs = 0))
+            ZLog.i("DownloadDNS", "DNS 模式: 已切换为 AliDNS")
+        }
+
+        DebugItem("🐧 DNSPod（腾讯 DNSPod DoH）") {
+            AAFHttpDnsManager.init(DnspodProvider(), AAFDnsConfig(cacheExpireMs = 0))
+            ZLog.i("DownloadDNS", "DNS 模式: 已切换为 DNSPod")
+        }
+
+        // ========== 下载测试 ==========
+        DebugTips("📥 下载测试")
 
         DebugItem("下载并计算文件的具体信息") { testDownload(it) }
         DebugItem("测试带进度下载") {

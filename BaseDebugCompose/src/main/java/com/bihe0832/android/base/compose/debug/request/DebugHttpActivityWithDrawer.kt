@@ -3,6 +3,7 @@ package com.bihe0832.android.base.compose.debug.request
 import android.net.Uri
 import android.text.TextUtils
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import com.bihe0832.android.base.compose.debug.httpdns.AliDnsProvider
+import com.bihe0832.android.base.compose.debug.httpdns.DnspodProvider
 import com.bihe0832.android.base.compose.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.compose.debug.request.basic.BasicPostRequest
 import com.bihe0832.android.base.compose.debug.request.okhttp.debugOKHttp1
@@ -37,11 +40,14 @@ import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.BaseConnection
 import com.bihe0832.android.lib.http.common.core.FileInfo
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
+import com.bihe0832.android.lib.http.dns.AAFDnsConfig
+import com.bihe0832.android.lib.http.dns.AAFHttpDnsManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.encrypt.compression.GzipUtils
 import org.json.JSONObject
 import java.io.File
+import java.net.InetAddress
 import java.net.URLDecoder
 
 
@@ -151,6 +157,82 @@ class DebugHttpActivity : DebugBaseComposeActivityWithDrawer() {
                 Text("清空网络请求结果")
             }
 
+            // DNS 测试标题
+            Text(
+                text = "DNS 解析测试（选择模式后，上方网络请求自动走该 DNS）：",
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 30.dp, bottom = 10.dp)
+            )
+
+            // DNS 模式选择
+            var dnsModeName by remember { mutableStateOf("无 DNS") }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            ) {
+                Button(
+                    onClick = {
+                        dnsModeName = "无 DNS"
+                        AAFHttpDnsManager.reset()
+                        showResult("[DNS 模式] 已切换为系统 DNS")
+                    },
+                    modifier = Modifier.weight(1f).padding(end = 4.dp)
+                ) { Text("无 DNS") }
+                Button(
+                    onClick = {
+                        dnsModeName = "AliDNS"
+                        setDnsMode(AliDnsProvider())
+                        showResult("[DNS 模式] 已切换为 AliDNS，上方请求将使用 AliDNS 解析")
+                    },
+                    modifier = Modifier.weight(1f).padding(horizontal = 4.dp)
+                ) { Text("AliDNS") }
+                Button(
+                    onClick = {
+                        dnsModeName = "DNSPod"
+                        setDnsMode(DnspodProvider())
+                        showResult("[DNS 模式] 已切换为 DNSPod，上方请求将使用 DNSPod 解析")
+                    },
+                    modifier = Modifier.weight(1f).padding(start = 4.dp)
+                ) { Text("DNSPod") }
+            }
+
+            // 当前 DNS 模式提示
+            Text(
+                text = "当前 DNS: $dnsModeName",
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 8.dp),
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            // DNS 域名输入 + 解析测试
+            var dnsHostname by remember { mutableStateOf("www.qq.com") }
+            OutlinedTextField(
+                value = dnsHostname,
+                onValueChange = { dnsHostname = it },
+                label = { Text("DNS 域名") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 8.dp)
+            ) {
+                Button(
+                    onClick = { testDnsLookup(dnsHostname) },
+                    modifier = Modifier.weight(1f).padding(end = 4.dp)
+                ) { Text("解析测试") }
+                Button(
+                    onClick = { testSystemDnsLookup(dnsHostname) },
+                    modifier = Modifier.weight(1f).padding(start = 4.dp)
+                ) { Text("系统 DNS(对比)") }
+            }
+
             // 结果显示区域
             Text(
                 text = resultText,
@@ -171,6 +253,92 @@ class DebugHttpActivity : DebugBaseComposeActivityWithDrawer() {
             .let {
                 showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
             }
+    }
+
+    // ──────────────────────── DNS 管理 ────────────────────────
+
+    /**
+     * 设置全局 DNS 模式（供上方 HTTP 请求自动使用）
+     *
+     * 通过 [AAFHttpDnsManager.init] 注入 Provider 后，
+     * [HTTPServer.getConnection] 内部会调用 [AAFHttpDnsManager.resolveUrlForConnection]，
+     * 所有 Basic/Advanced/Gzip/Upload 请求自动走 HTTPDNS。
+     * OkHttp 客户端同样会通过 [AAFOkHttpDns] 适配器使用 HTTPDNS。
+     */
+    private fun setDnsMode(provider: com.bihe0832.android.lib.http.dns.AAFHttpDnsProvider) {
+        AAFHttpDnsManager.init(provider, AAFDnsConfig(cacheExpireMs = 0))
+    }
+
+    /**
+     * DNS 解析测试 — 使用当前选择的 DNS 模式解析域名
+     */
+    fun testDnsLookup(dnsHostname: String) {
+        if (dnsHostname.isEmpty()) {
+            showResult("请输入域名")
+            return
+        }
+        Thread {
+            val start = System.currentTimeMillis()
+            try {
+                val result = AAFHttpDnsManager.lookup(dnsHostname)
+                val elapsed = System.currentTimeMillis() - start
+                runOnUiThread {
+                    showResult(buildString {
+                        appendLine("[DNS 解析]  耗时: ${elapsed}ms")
+                        appendLine()
+                        if (result.isNullOrEmpty()) {
+                            appendLine("❌ 解析失败")
+                        } else {
+                            appendLine("✅ 解析成功，共 ${result.size} 个 IP：")
+                            result.forEach { ip -> appendLine("  → ${ip.hostAddress}") }
+                        }
+                    })
+                }
+            } catch (e: Exception) {
+                val elapsed = System.currentTimeMillis() - start
+                runOnUiThread {
+                    showResult(buildString {
+                        appendLine("[DNS 解析]  耗时: ${elapsed}ms")
+                        appendLine()
+                        appendLine("❌ 异常: ${e.message}")
+                    })
+                }
+            }
+        }.start()
+    }
+
+    /**
+     * 直接用系统 DNS 解析（不走 HTTPDNS），用于对比测试
+     */
+    fun testSystemDnsLookup(dnsHostname: String) {
+        if (dnsHostname.isEmpty()) {
+            showResult("请输入域名")
+            return
+        }
+        Thread {
+            val start = System.currentTimeMillis()
+            try {
+                val result = InetAddress.getAllByName(dnsHostname)
+                val elapsed = System.currentTimeMillis() - start
+                runOnUiThread {
+                    showResult(buildString {
+                        appendLine("[系统 DNS(对比)]  耗时: ${elapsed}ms")
+                        appendLine()
+                        appendLine("✅ 解析成功，共 ${result.size} 个 IP：")
+                        result.forEach { ip -> appendLine("  → ${ip.hostAddress}") }
+                    })
+                }
+            } catch (e: Exception) {
+                val elapsed = System.currentTimeMillis() - start
+                runOnUiThread {
+                    showResult(buildString {
+                        appendLine("[系统 DNS(对比)]  耗时: ${elapsed}ms")
+                        appendLine()
+                        appendLine("❌ 异常: ${e.message}")
+                    })
+                }
+            }
+        }.start()
     }
 
     fun uploadFile() {
