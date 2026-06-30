@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -33,7 +33,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "Router"              : [
-                "version"            : "8.4.2",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-router",
                 "apidependenciesList": [
                         ext.androidsupport.fragment,
@@ -60,7 +60,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpDns"          : [
-                "version"            : "8.5.15",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-http-dns",
                 "apidependenciesList": [
                         "LibAndroid", "LibLog",
@@ -123,7 +123,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpCommon"       : [
-                "version"            : "8.5.15",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": [
                         "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils", "LibRequest",
@@ -131,7 +131,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpAdvanced"     : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": [
                         "LibHttpCommon", "LibGson", "LibAAF"
@@ -209,7 +209,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -254,7 +254,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"    : [
-                "version"            : "8.5.15",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon", "LibGson", "LibHttpDns",
@@ -525,7 +525,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibBatchDownload"   : [
-                "version"            : "8.5.14",
+                "version"            : "8.6.0",
                 "artifactId"         : "lib-batch-download",
                 "apidependenciesList": [
                         "LibDownload", "LibThread"
