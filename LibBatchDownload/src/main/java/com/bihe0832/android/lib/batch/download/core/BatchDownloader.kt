@@ -7,6 +7,7 @@ import com.bihe0832.android.lib.batch.download.BatchStatus
 import com.bihe0832.android.lib.batch.download.BatchStatusInfo
 import com.bihe0832.android.lib.batch.download.ErrorStrategy
 import com.bihe0832.android.lib.batch.download.SubTaskStatus
+import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
@@ -112,6 +113,10 @@ class BatchDownloader(
     @Volatile
     private var lastReportedTime: Long = 0L
 
+    /** 批次级别重试计数：所有子任务因网络错误失败时递增，成功后清零 */
+    @Volatile
+    private var batchRetryCount = 0
+
     /** Context 引用（applicationContext） */
     private var contextRef: Context? = null
 
@@ -167,6 +172,14 @@ class BatchDownloader(
 
         this.urlList = uniqueUrls
         this.contextRef = context.applicationContext
+        batchRetryCount = 0
+
+        // 按批次配置初始化底层下载引擎（仅在未初始化时生效）
+        DownloadFileManager.init(
+            context.applicationContext,
+            config.maxConcurrent,
+            ZLog.isLogEnabled()
+        )
 
         // 所有 URL 放入待调度队列（只存字符串，不创建 DownloadItem）
         uniqueUrls.forEach { pendingQueue.offer(it) }
@@ -229,6 +242,7 @@ class BatchDownloader(
      */
     fun cancel(deleteFile: Boolean = true) {
         status = BatchStatus.CANCELLED
+        batchRetryCount = 0
         isPaused = true  // 阻止后续调度
 
         // 删除所有已提交的子任务
@@ -483,6 +497,7 @@ class BatchDownloader(
                 isDownloadWhenAdd = true
                 downloadPriority = DownloadItem.MIN_DOWNLOAD_PRIORITY
                 downloadListener = innerListener
+                downloadClientConfig = config.downloadClientConfig
             }
 
             activeItems[url] = item
@@ -564,6 +579,7 @@ class BatchDownloader(
             override fun onComplete(filePath: String, item: DownloadItem): String {
                 val url = item.downloadURL
                 ZLog.i(TAG, "onComplete: $url -> $filePath")
+                batchRetryCount = 0
 
                 completedMap[url] = filePath
                 // 单个子任务完成回调
@@ -615,6 +631,24 @@ class BatchDownloader(
             }
             ZLog.i(TAG, "checkBatchCompletion: 批次 $batchId 全部完成")
         } else {
+            // 尝试批次级延迟重试：仅当所有失败都是网络型错误且未超过最大次数时
+            if (config.batchRetryMax > 0 && batchRetryCount < config.batchRetryMax
+                && failedMap.values.all { isBatchRetryRecoverable(it) }
+            ) {
+                batchRetryCount++
+                val delay = config.batchRetryDelayMs * batchRetryCount
+                ZLog.w(
+                    TAG,
+                    "checkBatchCompletion: 批次 $batchId 全部失败均为网络错误，${delay}ms 后第 ${batchRetryCount}/${config.batchRetryMax} 次批次重试..."
+                )
+                ThreadManager.getInstance().start({
+                    if (status != BatchStatus.CANCELLED) {
+                        resumeFailed()
+                    }
+                }, delay)
+                return
+            }
+
             status = BatchStatus.FAILED
             if (errorStrategy == ErrorStrategy.WAIT_ALL) {
                 val failedUrls = HashMap(failedMap)
@@ -625,6 +659,21 @@ class BatchDownloader(
             }
             ZLog.i(TAG, "checkBatchCompletion: 批次 $batchId 存在 $failedCount 个失败")
         }
+    }
+
+    /**
+     * 判断错误码是否可恢复（用于批次重试判断）
+     *
+     * 仅网络型错误（DNS 闪断、连接中断、超时、服务端 5xx）可恢复；
+     * 本地错误（磁盘满、文件权限）或客户端错误（404）不可恢复。
+     */
+    private fun isBatchRetryRecoverable(errorCode: Int): Boolean {
+        // ERR_HTTP_EXCEPTION(-11) 是网络类型异常的唯一收敛值
+        // ERR_HTTP_FAILED(-5) 可能包含服务端 5xx（可恢复）和 4xx（不可恢复），采用保守策略
+        // ERR_BAD_URL(-1) 在批次场景中可能是临时 DNS 解析失败
+        return errorCode == DownloadErrorCode.ERR_HTTP_EXCEPTION
+                || errorCode == DownloadErrorCode.ERR_HTTP_FAILED
+                || errorCode == DownloadErrorCode.ERR_BAD_URL
     }
 
     /**
