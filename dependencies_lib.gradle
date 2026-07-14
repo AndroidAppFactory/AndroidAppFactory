@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.6.1",
+                "version"            : "8.6.2",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -209,7 +209,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "8.6.1",
+                "version"            : "8.6.2",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -254,7 +254,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"    : [
-                "version"            : "8.6.0",
+                "version"            : "8.6.2",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon", "LibGson", "LibHttpDns",
@@ -525,7 +525,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibBatchDownload"   : [
-                "version"            : "8.6.1",
+                "version"            : "8.6.2",
                 "artifactId"         : "lib-batch-download",
                 "apidependenciesList": [
                         "LibDownload", "LibThread"
