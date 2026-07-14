@@ -9,27 +9,28 @@
 package com.bihe0832.android.lib.ui.dialog.input;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
-import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.ui.dialog.callback.DialogStringCallback;
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2022/5/25.
- *         Description: Description
+ * Created on 2022/5/25.
+ * Description: Description
  */
 public class InputDialogUtils {
 
     public static void showInputDialog(final Context context, final CommonDialog dialog, String titleName, String msg,
-            String positive, String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue,
-            String hint, final DialogStringCallback listener) {
+                                       String positive, String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue,
+                                       String hint, final DialogStringCallback listener) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
@@ -61,12 +62,16 @@ public class InputDialogUtils {
                     editText.selectAll();
                 }
 
+                // 移除 Android 系统自动注入的 InputFilter.LengthFilter，避免超长文本被截断（默认限制5000字符）
+                editText.setFilters(new InputFilter[]{});
+
                 dialog.addViewToContent(editText);
                 dialog.setOnClickBottomListener(new OnDialogListener() {
                     @Override
                     public void onPositiveClick() {
                         try {
-                            listener.onPositiveClick(editText.getText().toString());
+                            String result = editText.getText().toString();
+                            listener.onPositiveClick(result);
                             dialog.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
