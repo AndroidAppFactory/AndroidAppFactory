@@ -526,54 +526,23 @@ class BatchDownloader(
             }
 
             override fun onProgress(item: DownloadItem) {
+                batchRetryCount = 0
                 if (isPaused) return
                 notifyBatchProgress()
             }
 
             override fun onPause(item: DownloadItem, @DownloadPauseType pauseType: Int) {
                 ZLog.d(TAG, "onPause: ${item.downloadURL}, pauseType=$pauseType")
+                // 网络异常暂停：视为可恢复错误，尝试自动重试
+                if (pauseType == DownloadPauseType.PAUSED_BY_NETWORK_ERROR) {
+                    ZLog.w(TAG, "onPause: 网络异常暂停 ${item.downloadURL}, 尝试自动重试")
+                    handleRetryOrFail(item, DownloadErrorCode.ERR_HTTP_EXCEPTION)
+                }
             }
 
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                val url = item.downloadURL
-                ZLog.w(TAG, "onFail: $url, errorCode=$errorCode, msg=$msg")
-
-                // 检查自动重试
-                if (config.maxRetryCount > 0) {
-                    val retryCount = if (retryCountMap.containsKey(url)) retryCountMap[url]!! else 0
-                    if (retryCount < config.maxRetryCount) {
-                        retryCountMap[url] = retryCount + 1
-                        ZLog.i(
-                            TAG,
-                            "onFail: 自动重试 $url, 第 ${retryCount + 1}/${config.maxRetryCount} 次"
-                        )
-                        DownloadFileUtils.resumeDownload(
-                            item.downloadID,
-                            !config.downloadWhenUseMobile
-                        )
-                        return
-                    }
-                }
-
-                // 已达最大重试次数或不自动重试：标记为最终失败
-                failedMap[url] = errorCode
-                // 单个子任务失败回调
-                ThreadManager.getInstance().runOnUIThread {
-                    listener.onTaskComplete(batchId, url, "", false)
-                }
-                notifyBatchProgress()
-
-                // 根据 errorStrategy 决定是否立即回调
-                if (errorStrategy == ErrorStrategy.IMMEDIATE) {
-                    val failedEntry = mapOf(url to errorCode)
-                    val completedUrls = completedMap.keys.toList()
-                    ThreadManager.getInstance().runOnUIThread {
-                        listener.onError(batchId, failedEntry, completedUrls)
-                    }
-                }
-
-                startNextTasks()
-                checkBatchCompletion()
+                ZLog.w(TAG, "onFail: ${item.downloadURL}, errorCode=$errorCode, msg=$msg")
+                handleRetryOrFail(item, errorCode)
             }
 
             override fun onComplete(filePath: String, item: DownloadItem): String {
@@ -598,6 +567,42 @@ class BatchDownloader(
                 ZLog.d(TAG, "onDelete: ${item.downloadURL}")
             }
         }
+    }
+
+    /**
+     * 统一处理重试或标记失败逻辑（onPause 网络异常 / onFail 共用）
+     */
+    private fun handleRetryOrFail(item: DownloadItem, errorCode: Int) {
+        val url = item.downloadURL
+
+        // 检查自动重试
+        if (config.maxRetryCount > 0) {
+            val retryCount = retryCountMap.getOrDefault(url, 0)
+            if (retryCount < config.maxRetryCount) {
+                retryCountMap[url] = retryCount + 1
+                ZLog.i(TAG, "handleRetryOrFail: 自动重试 $url, 第 ${retryCount + 1}/${config.maxRetryCount} 次")
+                DownloadFileUtils.resumeDownload(item.downloadID, !config.downloadWhenUseMobile)
+                return
+            }
+        }
+
+        // 已达最大重试次数或不自动重试：标记为最终失败
+        failedMap[url] = errorCode
+        ThreadManager.getInstance().runOnUIThread {
+            listener.onTaskComplete(batchId, url, "", false)
+        }
+        notifyBatchProgress()
+
+        if (errorStrategy == ErrorStrategy.IMMEDIATE) {
+            val failedEntry = mapOf(url to errorCode)
+            val completedUrls = completedMap.keys.toList()
+            ThreadManager.getInstance().runOnUIThread {
+                listener.onError(batchId, failedEntry, completedUrls)
+            }
+        }
+
+        startNextTasks()
+        checkBatchCompletion()
     }
 
     /**
