@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.6.0",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -209,7 +209,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "8.6.0",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -233,14 +233,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibSuperAPP"         : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
                 ]
         ],
         "LibDebug"            : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": [
                         "LibDialog", "LibToast", "LibFloatview"
@@ -349,7 +349,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDialog"           : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         ext.androidsupport.constraintlayout,
@@ -403,7 +403,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPermission"       : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -412,7 +412,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImmersive"        : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibColor",
@@ -420,7 +420,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"       : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -428,7 +428,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFloatview"        : [
-                "version"                : "8.5.3",
+                "version"                : "8.6.1",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         ext.androidsupport.constraintlayout,
@@ -450,7 +450,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"        : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
@@ -474,7 +474,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibColor"            : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-color",
                 "apidependenciesList": [
                         ext.androidsupport.annotation,
@@ -482,7 +482,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"            : [
-                "version"            : "8.5.3",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         ext.androidsupport.annotation,
@@ -525,7 +525,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibBatchDownload"   : [
-                "version"            : "8.6.0",
+                "version"            : "8.6.1",
                 "artifactId"         : "lib-batch-download",
                 "apidependenciesList": [
                         "LibDownload", "LibThread"
