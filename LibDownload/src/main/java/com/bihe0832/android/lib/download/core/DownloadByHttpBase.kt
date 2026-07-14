@@ -12,11 +12,9 @@ import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.dabase.DownloadPartInfoTableModel
 import com.bihe0832.android.lib.download.core.part.DOWNLOAD_PART_SIZE
 import com.bihe0832.android.lib.download.core.part.DownloadThread
-import com.bihe0832.android.lib.okhttp.wrapper.OkHttpClientManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import okhttp3.Protocol
 import java.io.File
 
 /**
@@ -34,8 +32,7 @@ import java.io.File
  */
 abstract class DownloadByHttpBase(
     private var maxNum: Int,
-    protected val isDebug: Boolean = false,
-    protected val downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
+    protected val isDebug: Boolean = false
 ) {
 
     companion object {
@@ -122,14 +119,6 @@ abstract class DownloadByHttpBase(
         if (file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength) {
              ZLog.e(TAG, "✅ 进入断点续传逻辑")
             
-            // 断点续传：如果协议信息丢失，从缓存查询或使用保守策略
-            if (info.protocol == Protocol.HTTP_1_1 && info.realURL.isNotEmpty()) {
-                OkHttpClientManager.getProtocolFromCache(info.realURL)?.let {
-                    info.protocol = it
-                    ZLog.d(TAG, "断点续传：从缓存恢复协议信息 ${info.realURL}: $it")
-                }
-            }
-            
             //断点续传逻辑
             ZLog.e(
                 TAG,
@@ -204,14 +193,18 @@ abstract class DownloadByHttpBase(
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ startNew ~~~~~~~~~~~~~~~~~~")
         ZLog.e(TAG, "开启新下载: startNew: start：$rangeStart, rangeLength: $rangeLength,localStart:$localStart $info ")
         
-        // 使用 DownloadItem 中已记录的协议版本，而不是重新检测
-        // 这确保了分片策略与实际下载使用相同的协议判断
-        val isHttp2 = downloadClientConfig.enableHttp2 && info.isHttp2
-        
-        val maxThreadNum = downloadClientConfig.getMaxChunks(isHttp2)
-        val minChunkSize = downloadClientConfig.getMinChunkSize(isHttp2)
-        
-        if (downloadClientConfig.logProtocolInfo) {
+        // 使用 DownloadItem 中记录的配置
+        // 这确保了每个下载任务可以使用独立的下载策略
+        // 设计意图：downloadClientConfig 是 transient 的，断点续传恢复后会重置为默认值（enableHttp2=true），
+        // 这意味着恢复后会重新尝试 HTTP/2，如果服务端不支持会再次自动降级。
+        // 这是有意为之的行为——避免因一次临时故障导致永久降级。
+        val clientConfig = info.downloadClientConfig
+        val isHttp2 = clientConfig.enableHttp2 && info.isHttp2
+
+        val maxThreadNum = clientConfig.getMaxChunks(isHttp2)
+        val minChunkSize = clientConfig.getMinChunkSize(isHttp2)
+
+        if (clientConfig.logProtocolInfo) {
             ZLog.e(TAG, "开启新下载: 协议类型: ${info.protocol}, 最大分片数: $maxThreadNum, 最小分片大小: ${FileUtils.getFileLength(minChunkSize)}")
         }
         
@@ -312,7 +305,9 @@ abstract class DownloadByHttpBase(
             this.partLength = length
             this.partFinished = finished
             this.partFinishedBefore = finished
-            this.protocol = info.protocol  // 传递协议信息到分片
+            // 共用 DownloadItem 的 downloadClientConfig 引用
+            // 降级时修改 config.enableHttp2 = false，所有分片自动生效
+            this.downloadClientConfig = info.downloadClientConfig
         }.also {
             ZLog.d(TAG, "分片下载数据 ${info.downloadID} - $partNo: 开始:$it")
         })

@@ -56,18 +56,17 @@ object DownloadFileManager : DownloadManager() {
     private const val DOWNLOAD_START_DELAY = 1000L
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForFile(innerDownloadListener, maxNum, isDebug, downloadClientConfig)
+        DownloadByHttpForFile(innerDownloadListener, maxNum, isDebug)
     }
 
     override fun init(
         context: Context,
         maxNum: Int,
-        downloadClientConfig: DownloadClientConfig,
         isDebug: Boolean
     ) {
-        super.init(context, maxNum, downloadClientConfig, isDebug)
-        if (!hasInit) {
-            hasInit = true
+        val wasInit = hasInit
+        super.init(context, maxNum, isDebug)
+        if (!wasInit) {
             DownloadFileNotify.init(context)
         }
     }

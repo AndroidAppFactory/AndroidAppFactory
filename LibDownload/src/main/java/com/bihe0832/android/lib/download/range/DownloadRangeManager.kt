@@ -30,7 +30,7 @@ import com.bihe0832.android.lib.aaf.res.R as ResR
 object DownloadRangeManager : DownloadManager() {
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug, downloadClientConfig)
+        DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug)
     }
 
     private val innerDownloadListener = object : DownloadListener {

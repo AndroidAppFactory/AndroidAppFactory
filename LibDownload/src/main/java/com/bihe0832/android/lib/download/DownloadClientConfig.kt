@@ -14,13 +14,15 @@ package com.bihe0832.android.lib.download
  *
  * @since 7.2.9
  */
-class DownloadClientConfig {
+class DownloadClientConfig : java.io.Serializable {
 
     /**
      * 是否启用 HTTP/2 支持
      * 
      * 默认开启，如果遇到兼容性问题可以关闭降级到 HTTP/1.1
+     * 使用 @Volatile 保证多线程可见性（多个分片线程共享同一个 config 实例）
      */
+    @Volatile
     var enableHttp2 = true
 
     /**

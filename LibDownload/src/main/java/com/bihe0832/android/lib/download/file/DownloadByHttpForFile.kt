@@ -29,9 +29,8 @@ import java.io.File
 class DownloadByHttpForFile(
     innerDownloadListener: DownloadListener,
     maxNum: Int,
-    isDebug: Boolean = false,
-    downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
-) : DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug, downloadClientConfig) {
+    isDebug: Boolean = false
+) : DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug) {
 
     fun startDownload(info: DownloadItem) {
         ZLog.e(TAG, "开始下载:${info}")

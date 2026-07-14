@@ -21,9 +21,8 @@ import com.bihe0832.android.lib.log.ZLog
 open class DownloadByHttpForRange(
     private val innerDownloadListener: DownloadListener,
     maxNum: Int,
-    isDebug: Boolean = false,
-    downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
-) : DownloadByHttpBase(maxNum, isDebug, downloadClientConfig) {
+    isDebug: Boolean = false
+) : DownloadByHttpBase(maxNum, isDebug) {
 
     override fun onFail(item: DownloadItem, errorCode: Int, msg: String) {
         if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {

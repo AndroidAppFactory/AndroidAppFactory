@@ -92,9 +92,6 @@ abstract class DownloadManager {
     internal var hasInit = false
     internal var isDebug = false
 
-    /** 下载配置实例，每个 DownloadManager 拥有独立配置 */
-    internal var downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
-
     private var netReceiver: BroadcastReceiver? = null
 
     private val msgHandler =
@@ -122,7 +119,7 @@ abstract class DownloadManager {
     }
 
     fun init(context: Context, isDebug: Boolean = false) {
-        init(context, DEFAULT_MAX_NUM, DownloadClientConfig.createDefault(), isDebug)
+        init(context, DEFAULT_MAX_NUM, isDebug)
     }
 
     fun hasInit(): Boolean {
@@ -138,16 +135,13 @@ abstract class DownloadManager {
      *
      * @param context 应用上下文
      * @param maxNum 最大并发下载数
-     * @param downloadClientConfig 下载配置，用于设置 HTTP/2、分片策略等
      * @param isDebug 是否开启调试模式
      */
     open fun init(
         context: Context,
         maxNum: Int,
-        downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault(),
         isDebug: Boolean = false
     ) {
-        this.downloadClientConfig = downloadClientConfig
         // 使用 ApplicationContext 避免内存泄漏
         initContext(context.applicationContext)
         this.maxNum = maxNum
@@ -161,22 +155,6 @@ abstract class DownloadManager {
         if (!hasInit) {
             hasInit = true
             DownloadInfoDBManager.init(context, isDebug)
-        }
-
-        // 日志输出当前配置
-        if (isDebug || downloadClientConfig.logProtocolInfo) {
-            ZLog.d(TAG, "下载管理器初始化配置:")
-            ZLog.d(TAG, "  - HTTP/2 支持: ${downloadClientConfig.enableHttp2}")
-            ZLog.d(TAG, "  - HTTP/2 最大分片: ${downloadClientConfig.http2MaxChunks}")
-            ZLog.d(TAG, "  - HTTP/1.1 最大分片: ${downloadClientConfig.http1MaxChunks}")
-            ZLog.d(
-                TAG,
-                "  - HTTP/2 最小分片大小: ${FileUtils.getFileLength(downloadClientConfig.http2MinChunkSize.toLong())}"
-            )
-            ZLog.d(
-                TAG,
-                "  - HTTP/1.1 最小分片大小: ${FileUtils.getFileLength(downloadClientConfig.http1MinChunkSize.toLong())}"
-            )
         }
 
         netReceiver = object : BroadcastReceiver() {
@@ -362,7 +340,7 @@ abstract class DownloadManager {
                 }
 
                 val response =
-                    OkHttpClientManager.executeRequest(request, downloadClientConfig.enableHttp2)
+                    OkHttpClientManager.executeRequest(request, info.downloadClientConfig.enableHttp2)
 
                 // 从 response 获取最终 URL（重定向后的实际 URL）
                 val realURL = response.request.url.toString()
@@ -371,16 +349,22 @@ abstract class DownloadManager {
                 info.realURL = realURL
                 info.protocol = response.protocol
 
-                // 记录原始 URL 和最终 URL 的协议版本
-                OkHttpClientManager.recordProtocolForUrl(info.downloadURL, response.protocol)
-                if (realURL != info.downloadURL) {
-                    OkHttpClientManager.recordProtocolForUrl(realURL, response.protocol)
-                }
-
                 ZLog.e(
                     TAG,
                     "获取文件长度，请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol}, 原始URL: ${info.downloadURL}, 最终URL: $realURL ~~~~~~~~~~~~~"
                 )
+
+                // 打印下载配置信息，便于排查分片策略
+                val clientConfig = info.downloadClientConfig
+                if (isDebug || clientConfig.logProtocolInfo) {
+                    ZLog.d(TAG, "下载配置信息:")
+                    ZLog.d(TAG, "  - HTTP/2 支持: ${clientConfig.enableHttp2}")
+                    ZLog.d(TAG, "  - 实际协议: ${response.protocol}")
+                    ZLog.d(TAG, "  - HTTP/2 最大分片: ${clientConfig.http2MaxChunks}")
+                    ZLog.d(TAG, "  - HTTP/1.1 最大分片: ${clientConfig.http1MaxChunks}")
+                    ZLog.d(TAG, "  - HTTP/2 最小分片大小: ${FileUtils.getFileLength(clientConfig.http2MinChunkSize.toLong())}")
+                    ZLog.d(TAG, "  - HTTP/1.1 最小分片大小: ${FileUtils.getFileLength(clientConfig.http1MinChunkSize.toLong())}")
+                }
 
                 // 调试模式下打印服务端返回的所有 header
                 if (isDebug) {

@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.download.wrapper;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.download.DownloadClientConfig;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadPauseType;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
@@ -55,8 +54,8 @@ public class DownloadFileUtils {
      * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
      * @param isDebug        是否开启调试模式
      */
-    public static void init(Context context, int maxDownloadNum, DownloadClientConfig downloadConfig, Boolean isDebug) {
-        DownloadFileManager.INSTANCE.init(context, maxDownloadNum, downloadConfig, isDebug);
+    public static void init(Context context, int maxDownloadNum, Boolean isDebug) {
+        DownloadFileManager.INSTANCE.init(context, maxDownloadNum, isDebug);
     }
 
     public static void init(Context context, boolean isDebug) {

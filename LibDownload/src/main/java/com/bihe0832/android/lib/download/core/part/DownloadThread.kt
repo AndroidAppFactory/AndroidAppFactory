@@ -9,7 +9,6 @@ import com.bihe0832.android.lib.download.core.DownloadExceptionAnalyzer
 import com.bihe0832.android.lib.download.core.addDownloadHeaders
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.getContentLength
-import com.bihe0832.android.lib.download.core.logRequestHeaderFields
 import com.bihe0832.android.lib.download.core.logResponseHeaderFields
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -178,12 +177,36 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     // 分析异常类型，记录错误码
                     val errorCode = DownloadExceptionAnalyzer.analyzeException(e)
                     mDownloadPartInfo.partErrorCode = errorCode
-                    
+
                     // 保存当前进度（partFinished 已经是最新值）
                     DownloadInfoDBManager.updateDownloadFinished(
                         mDownloadPartInfo.downloadPartID,
                         mDownloadPartInfo.partFinished,
                     )
+
+                    // HTTP/2 stream reset 等场景：文件已完整下载但连接异常关闭时，直接标记成功
+                    if (mDownloadPartInfo.partLength > 0 && mDownloadPartInfo.partFinished >= mDownloadPartInfo.partLength) {
+                        ZLog.w(
+                            TAG,
+                            "分片下载 第${mDownloadPartInfo.downloadPartID}分片已完整下载，忽略连接异常: $errorCode"
+                        )
+                        mDownloadPartInfo.partErrorCode = DownloadErrorCode.SUCC
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                        break
+                    }
+
+                    // HTTP/2 自动降级：遇到可恢复网络异常时，修改共享 config 的 enableHttp2 = false
+                    // 所有共用同一个 config 的分片都会自动降级
+                    // 线程安全说明：enableHttp2 标记为 @Volatile，此处仅做单一赋值 false（幂等操作），
+                    // 多线程同时执行不会产生竞态问题
+                    if (mDownloadPartInfo.isHttp2 && DownloadExceptionAnalyzer.isRecoverableError(errorCode)) {
+                        mDownloadPartInfo.downloadClientConfig?.enableHttp2 = false
+                        ZLog.w(
+                            TAG,
+                            "分片下载 第${mDownloadPartInfo.downloadPartID}分片 HTTP/2 异常降级 -> HTTP/1.1 (所有分片生效), errorCode: $errorCode"
+                        )
+                    }
+
                     sleep(3)
                     if (retryTimes < DOWNLOAD_RETRY_TIMES) {
                         retryTimes++
@@ -238,16 +261,13 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         val preferHttp2 = mDownloadPartInfo.isHttp2
         val response = OkHttpClientManager.executeRequest(request, preferHttp2)
 
-        // 如果实际协议与预期不同，更新缓存（保守策略）
-        if (response.protocol != mDownloadPartInfo.protocol) {
-            OkHttpClientManager.recordProtocolForUrl(
-                mDownloadPartInfo.realDownloadURL,
-                response.protocol
-            )
+        // 如果服务端实际使用 HTTP/1.1 但我们期望 HTTP/2，说明服务端不支持，自动降级
+        if (mDownloadPartInfo.isHttp2 && response.protocol == Protocol.HTTP_1_1) {
             ZLog.w(
-                TAG, "分片 ${mDownloadPartInfo.downloadPartID} 协议变化: " +
-                        "${mDownloadPartInfo.protocol} -> ${response.protocol}"
+                TAG, "分片 ${mDownloadPartInfo.downloadPartID} 服务端协议降级: " +
+                        "期望 HTTP/2 -> 实际 ${response.protocol}，自动关闭 HTTP/2"
             )
+            mDownloadPartInfo.downloadClientConfig?.enableHttp2 = false
         }
 
         ZLog.w(

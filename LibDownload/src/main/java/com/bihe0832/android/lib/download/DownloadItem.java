@@ -383,6 +383,18 @@ public class DownloadItem implements Serializable {
      * @see #isHttp2()
      */
     private Protocol protocol = Protocol.HTTP_1_1;
+
+    /**
+     * 下载客户端配置【可选，临时字段】
+     * <p>控制当前任务的下载行为：HTTP/2 开关、分片数量、分片大小等。
+     * <p>默认使用 {@link DownloadClientConfig} 的无参构造创建的实例。
+     * <p>如果服务端不支持 HTTP/2 多路复用，可通过此配置降级到 HTTP/1.1 模式。
+     * <p>transient 标记：不参与序列化，反序列化后需重新设置。
+     * 
+     * @see DownloadClientConfig
+     * @since 7.2.9
+     */
+    private transient DownloadClientConfig downloadClientConfig = new DownloadClientConfig();
     
     // ==================== 重试机制字段 ====================
     
@@ -1301,6 +1313,30 @@ public class DownloadItem implements Serializable {
     public boolean isHttp2() {
         return protocol == Protocol.HTTP_2;
     }
+
+    /**
+     * 获取下载客户端配置
+     * 
+     * <p>由于 downloadClientConfig 是 transient 字段，反序列化后可能为 null，
+     * 此处做防御性处理，确保永远不返回 null。
+     *
+     * @return 下载配置实例，永不为 null
+     */
+    public DownloadClientConfig getDownloadClientConfig() {
+        if (downloadClientConfig == null) {
+            downloadClientConfig = new DownloadClientConfig();
+        }
+        return downloadClientConfig;
+    }
+
+    /**
+     * 设置下载客户端配置
+     *
+     * @param config 下载配置实例，null 表示使用默认配置
+     */
+    public void setDownloadClientConfig(DownloadClientConfig config) {
+        this.downloadClientConfig = config;
+    }
     
     // ==================== 数据更新方法 ====================
 
@@ -1361,6 +1397,7 @@ public class DownloadItem implements Serializable {
             if (item.protocol != null) {
                 this.protocol = item.protocol;
             }
+            this.downloadClientConfig = item.downloadClientConfig;
             if (item.requestHeader != null) {
                 this.requestHeader = new HashMap<>(item.requestHeader);
             }
