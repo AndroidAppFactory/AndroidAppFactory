@@ -73,7 +73,7 @@ class BatchDownloader(
             }
 
             config.maxConcurrent > 10 -> {
-                ZLog.w(TAG, "maxConcurrent(${config.maxConcurrent}) > 5，已修正为 5")
+                ZLog.w(TAG, "maxConcurrent(${config.maxConcurrent}) > 10，已修正为 10")
                 10
             }
 
@@ -580,8 +580,13 @@ class BatchDownloader(
             val retryCount = retryCountMap.getOrDefault(url, 0)
             if (retryCount < config.maxRetryCount) {
                 retryCountMap[url] = retryCount + 1
-                ZLog.i(TAG, "handleRetryOrFail: 自动重试 $url, 第 ${retryCount + 1}/${config.maxRetryCount} 次")
-                DownloadFileUtils.resumeDownload(item.downloadID, !config.downloadWhenUseMobile)
+                val delayMs = 5000L * (retryCount + 1)
+                ZLog.i(TAG, "handleRetryOrFail: ${delayMs}ms 后第 ${retryCount + 1}/${config.maxRetryCount} 次自动重试 $url")
+                ThreadManager.getInstance().start({
+                    if (status != BatchStatus.CANCELLED && !isPaused) {
+                        DownloadFileUtils.resumeDownload(item.downloadID, !config.downloadWhenUseMobile)
+                    }
+                }, delayMs)
                 return
             }
         }

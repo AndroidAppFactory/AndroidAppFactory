@@ -525,7 +525,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibBatchDownload"   : [
-                "version"            : "8.6.3",
+                "version"            : "8.6.5",
                 "artifactId"         : "lib-batch-download",
                 "apidependenciesList": [
                         "LibDownload", "LibThread"
