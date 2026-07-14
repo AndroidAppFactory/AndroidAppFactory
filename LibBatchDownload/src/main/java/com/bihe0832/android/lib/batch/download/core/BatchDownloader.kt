@@ -72,15 +72,15 @@ class BatchDownloader(
                 1
             }
 
-            config.maxConcurrent > 5 -> {
+            config.maxConcurrent > 10 -> {
                 ZLog.w(TAG, "maxConcurrent(${config.maxConcurrent}) > 5，已修正为 5")
-                5
+                10
             }
 
             else -> config.maxConcurrent
         }
         // 重试次数校验
-        val maxRetryCount = config.maxRetryCount.coerceIn(0, 3)
+        val maxRetryCount = config.maxRetryCount.coerceIn(0, 10)
         // 进度回调间隔校验：100ms ~ 3000ms
         val progressIntervalMs = config.progressIntervalMs.coerceIn(100L, 3000L)
         this.config = config.copy(
