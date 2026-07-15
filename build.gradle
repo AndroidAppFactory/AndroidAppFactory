@@ -86,6 +86,12 @@ subprojects {
                     sourceCompatibility JavaVersion.VERSION_17
                     targetCompatibility JavaVersion.VERSION_17
                 }
+                packagingOptions {
+                    // 16KB 页面对齐：.so 以未压缩方式存储，由 AGP 自动按 16KB 对齐（Google Play 2025-11 强制要求）
+                    jniLibs {
+                        useLegacyPackaging = true
+                    }
+                }
             }
         }
         subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
