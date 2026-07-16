@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.DrawerState
@@ -30,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -73,6 +73,8 @@ fun ActivityThemeView(
     MaterialTheme(colorScheme = themeType) {
         val systemUiController = rememberSystemUiController()
         SideEffect {
+            systemUiController.statusBarDarkContentEnabled =
+                com.bihe0832.android.lib.color.utils.ColorUtils.isLightColor(themeType.primary.toArgb())
             systemUiController.setStatusBarColor(themeType.primary)
             systemUiController.setNavigationBarColor(themeType.surface)
         }
@@ -92,9 +94,7 @@ fun ActivityRootView(
         topBar()
     }, bottomBar = {
         bottomBar()
-    }, modifier = Modifier
-        .fillMaxSize()
-        .systemBarsPadding()
+    }, modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Surface(
             modifier = Modifier
@@ -131,7 +131,6 @@ fun ActivityRootViewWithDrawer(
             bottomBar()
         }, modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
         ) { innerPadding ->
             Surface(
                 modifier = Modifier
