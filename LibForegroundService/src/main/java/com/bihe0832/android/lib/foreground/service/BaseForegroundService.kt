@@ -4,6 +4,8 @@ import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.os.IBinder
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
@@ -89,7 +91,15 @@ abstract class BaseForegroundService : Service() {
         if (hasPermission || NotifyManager.areNotificationsEnabled(this)) {
             ZLog.d(TAG, "startForeground:${this.hashCode()}")
             try {
-                startForeground(getNoticeID(), getCurrentNotification(this))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    startForeground(
+                        getNoticeID(),
+                        getCurrentNotification(this),
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+                    )
+                } else {
+                    startForeground(getNoticeID(), getCurrentNotification(this))
+                }
                 hasForeground = true
             } catch (e: Exception) {
                 e.printStackTrace()

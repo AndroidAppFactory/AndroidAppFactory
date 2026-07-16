@@ -366,7 +366,12 @@ object FileAction {
         if (srcFile.absolutePath.equals(dstFile.absolutePath, ignoreCase = true)) {
             return true
         }
-        checkAndCreateFolder(dstFile.parentFile.absolutePath)
+        val parentDir = dstFile.parentFile
+        if (parentDir == null) {
+            ZLog.e("FileAction", "copyFile: dstFile.parentFile is null, dstFile=${dstFile.path}")
+            return false
+        }
+        checkAndCreateFolder(parentDir.absolutePath)
         return if (isMove) {
             srcFile.renameTo(dstFile)
         } else {

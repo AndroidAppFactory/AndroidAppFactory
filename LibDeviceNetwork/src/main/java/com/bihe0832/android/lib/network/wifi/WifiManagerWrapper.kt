@@ -539,7 +539,11 @@ object WifiManagerWrapper {
             foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         }
 
-        context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.applicationContext.registerReceiver(mWifiReceiver, foundFilter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
+        }
     }
 
     // 更新当前连接的wifi的信息

@@ -84,7 +84,12 @@ object NotifyManager {
         }
 
         try {
-            return PendingIntent.getActivity(context, generatorNoticeID(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val flags = if (BuildUtils.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
+            return PendingIntent.getActivity(context, generatorNoticeID(), intent, flags)
         } catch (e: Exception) {
             e.printStackTrace()
         }

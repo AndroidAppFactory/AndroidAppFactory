@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -36,7 +37,11 @@ public class CancelNoticeService extends Service {
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, LockScreenService.NOTICE_CHANNEL_ID);
             Notification notification = builder.setOngoing(true).setSmallIcon(com.bihe0832.android.lib.aaf.res.R.mipmap.icon).setPriority(PRIORITY_MIN).setCategory(Notification.CATEGORY_SERVICE).build();
-            startForeground(LockScreenService.NOTICE_ID, notification);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(LockScreenService.NOTICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            } else {
+                startForeground(LockScreenService.NOTICE_ID, notification);
+            }
         } else {
             startForeground(LockScreenService.NOTICE_ID, new Notification());
         }

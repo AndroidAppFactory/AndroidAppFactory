@@ -167,7 +167,11 @@ object NetworkChangeManager {
         if (canGetSSID || canGetBSSID) {
             intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
         }
-        ctx.registerReceiver(mNetReceiver, intentFilter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ctx.registerReceiver(mNetReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            ctx.registerReceiver(mNetReceiver, intentFilter)
+        }
 
         WifiManagerWrapper.setWifiChangedListener(object :
             WifiManagerWrapper.OnWifiChangerListener {

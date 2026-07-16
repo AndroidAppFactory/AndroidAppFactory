@@ -2,11 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.bihe0832.android.lib.foreground.service">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
     <application>
         <service
                 android:name="com.bihe0832.android.lib.foreground.service.AAFForegroundService"
                 android:enabled="true"
-                android:exported="true" />
+                android:exported="true"
+                android:foregroundServiceType="specialUse" />
     </application>
 
 </manifest>

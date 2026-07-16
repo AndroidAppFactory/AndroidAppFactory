@@ -52,7 +52,11 @@ public class PendingIntentUtils {
         }
         activityIntent.putExtras(finalBundle);
         activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        return PendingIntent.getActivity(context, requestCode, activityIntent, flags);
     }
 
     public static PendingIntent getUriPendingIntent(Context context, String uri, int requestCode, boolean needNewTask) {
@@ -61,6 +65,10 @@ public class PendingIntentUtils {
         if (needNewTask) {
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
-        return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        return PendingIntent.getActivity(context, requestCode, activityIntent, flags);
     }
 }

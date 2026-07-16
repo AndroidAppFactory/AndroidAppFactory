@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.os.Build
 
 /**
  *
@@ -21,7 +22,11 @@ object BatteryHelper {
         powerConnectedFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
         powerConnectedFilter.addAction(Intent.ACTION_BATTERY_LOW)
         powerConnectedFilter.addAction(Intent.ACTION_BATTERY_OKAY)
-        context?.registerReceiver(statusChangeReceiver, powerConnectedFilter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context?.registerReceiver(statusChangeReceiver, powerConnectedFilter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            context?.registerReceiver(statusChangeReceiver, powerConnectedFilter)
+        }
     }
 
     fun stopReceiveBatteryChanged(context: Context?, statusChangeReceiver: BroadcastReceiver) {

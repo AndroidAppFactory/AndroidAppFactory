@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -77,7 +78,11 @@ public abstract class LockScreenService extends Service {
             screenBroadcastReceiver = new ScreenBroadcastReceiver();
             final IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_SCREEN_OFF);
-            registerReceiver(screenBroadcastReceiver, filter);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(screenBroadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(screenBroadcastReceiver, filter);
+            }
         }
     }
 
@@ -90,7 +95,11 @@ public abstract class LockScreenService extends Service {
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
             Notification notification = builder.setOngoing(true).setSmallIcon(com.bihe0832.android.lib.aaf.res.R.mipmap.icon).setContentTitle(NOTICE_CHANNEL_NAME).build();
-            startForeground(NOTICE_ID, notification);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(NOTICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            } else {
+                startForeground(NOTICE_ID, notification);
+            }
         } else {
             startForeground(NOTICE_ID, new Notification());
         }

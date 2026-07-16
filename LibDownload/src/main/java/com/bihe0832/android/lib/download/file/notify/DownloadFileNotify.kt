@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPauseType
@@ -105,10 +106,18 @@ object DownloadFileNotify {
 
     fun init(context: Context) {
         mApplicationContext = context.applicationContext
-        mApplicationContext?.registerReceiver(
-            downloadReceiver,
-            IntentFilter(DownloadNotifyManager.getDownloadBroadcastFilter(context))
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mApplicationContext?.registerReceiver(
+                downloadReceiver,
+                IntentFilter(DownloadNotifyManager.getDownloadBroadcastFilter(context)),
+                Context.RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            mApplicationContext?.registerReceiver(
+                downloadReceiver,
+                IntentFilter(DownloadNotifyManager.getDownloadBroadcastFilter(context))
+            )
+        }
     }
 
     fun destroy() {

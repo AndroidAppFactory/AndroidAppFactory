@@ -33,7 +33,12 @@ open class AAFDebugWidgetWorkerDetail(context: Context, workerParams: WorkerPara
             val intent = Intent(context, CommonRootActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra(CommonRootActivity.DEBUG_MODULE_CLASS_NAME, DebugDeviceFragment::class.java.name)
-            remoteViews.setOnClickPendingIntent(R.id.widget_start_device, PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+            val flags = if (BuildUtils.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
+            remoteViews.setOnClickPendingIntent(R.id.widget_start_device, PendingIntent.getActivity(context, 0, intent, flags))
 
             //通过远程对象修改textview
             remoteViews.setTextViewText(R.id.widget_text_title, "提取时间：" + DateUtil.getCurrentDateEN())
