@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.6.6",
+                "version"            : "8.6.8",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -170,7 +170,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibWorker"           : [
-                "version"            : "8.6.6",
+                "version"            : "8.6.8",
                 "artifactId"         : "lib-worker-task",
                 "apidependenciesList": [
                         "LibLog", "LibConfig", "LibOS", "LibForegroundService", ext.androidsupport.worker
@@ -503,7 +503,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibForegroundService": [
-                "version"            : "8.6.6",
+                "version"            : "8.6.8",
                 "artifactId"         : "lib-foreground-service",
                 "apidependenciesList": [
                         "LibNotification", "LibThread", "LibLog", "LibAAFResource"
