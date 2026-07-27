@@ -12,7 +12,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonDebugCompose"    : [
-                "version"                : "8.6.8",
+                "version"                : "8.6.9",
                 "artifactId"             : "common-compose-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperCompose","CommonPermission", "LibDebug"
