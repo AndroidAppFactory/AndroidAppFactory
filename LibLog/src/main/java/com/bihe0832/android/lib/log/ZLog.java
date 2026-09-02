@@ -89,7 +89,7 @@ public final class ZLog {
                     if (i + sLogLineLength < log.length()) {
                         i(tag, log.substring(i, i + sLogLineLength));
                     } else {
-                        i(tag, log);
+                        i(tag, log.substring(i));
                     }
                 }
             } else {
