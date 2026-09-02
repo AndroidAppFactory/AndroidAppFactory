@@ -38,7 +38,11 @@ fun DebugLogComposeView() {
             ZLog.w(LOG_TAG, "testw")
             ZLog.e(LOG_TAG, "teste")
             ZLog.info(LOG_TAG, "testinfo")
-            ZLog.info(LOG_TAG, TextFactoryUtils.getRandomString(3000))
+            ZLog.i(LOG_TAG, "超长日志测试i：" + TextFactoryUtils.getRandomString(4001))
+            ZLog.d(LOG_TAG, "超长日志测试d：" + TextFactoryUtils.getRandomString(4001))
+            ZLog.w(LOG_TAG, "超长日志测试w：" + TextFactoryUtils.getRandomString(4001))
+            ZLog.e(LOG_TAG, "超长日志测试e：" + TextFactoryUtils.getRandomString(4001))
+            ZLog.info(LOG_TAG, "超长日志测试info：" + TextFactoryUtils.getRandomString(4001))
         }
         DebugItem("关闭Logcat") { context -> ZLog.closeLogcat() }
         DebugItem(
