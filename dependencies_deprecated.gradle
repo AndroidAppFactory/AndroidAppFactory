@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "8.6.8",
+                "version"            : "8.6.10",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "CommonCompose", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
@@ -10,26 +10,26 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "CommonAbout"           : [
-                "version"            : "8.6.8",
+                "version"            : "8.6.10",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "CommonList"
                 ]
         ],
         "CommonMessage"         : [
-                "version"            : "8.6.8",
+                "version"            : "8.6.10",
                 "artifactId"         : "common-message",
                 "apidependenciesList": [
                         "CommonList", "CommonMessageCompose"
                 ]
         ],
         "CommonNavigationDrawer": [
-                "version"            : "8.6.8",
+                "version"            : "8.6.10",
                 "artifactId"         : "common-navigation-drawer",
                 "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
         ],
         "LibFragmentation_core"     : [
-                "version"            : "8.4.2",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-fragmentation-core",
                 "apidependenciesList": [
                         ext.androidsupport.appcompat,
@@ -37,21 +37,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFragmentation"          : [
-                "version"            : "8.4.2",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-fragmentation",
                 "apidependenciesList": [
                         "LibFragmentation_core"
                 ]
         ],
         "LibFragmentation_swipeback": [
-                "version"            : "8.4.2",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-fragmentation-swipeback",
                 "apidependenciesList": [
                         "LibFragmentation"
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "8.6.6",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         ext.androidsupport.androidxcorenew,
@@ -59,7 +59,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibAdapter"                : [
-                "version"            : "8.2.0",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
                         ext.androidsupport.recyclerview,
@@ -67,21 +67,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibRefresh"                : [
-                "version"            : "8.2.0",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-refresh",
                 "apidependenciesList": [
                         "LibAdapter"
                 ]
         ],
         "LibRecycleviewExt"         : [
-                "version"            : "8.5.0",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-recycleview-ext",
                 "apidependenciesList": [
                         "LibRefresh", "LibTheme"
                 ]
         ],
         "LibBottomTab"              : [
-                "version"            : "8.5.0",
+                "version"            : "8.6.10",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
