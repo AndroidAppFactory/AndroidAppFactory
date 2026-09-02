@@ -668,7 +668,13 @@ def getHelpCommand() {
 }
 
 def isApplicationModule(String projectName) {
-    return projectName == "APPTest"
+    if (projectName == "APPTest") {
+        return true
+    }
+    if (projectName.startsWith("Pub")) {
+        return rootProject.ext.pubModuleIsApplication as boolean
+    }
+    return false
 }
 
 def isDebugModule(String projectName) {
